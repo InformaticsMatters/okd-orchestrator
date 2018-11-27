@@ -117,10 +117,9 @@ def _main(cli_args, deployment_name):
         cmd = 'ansible-playbook' \
               ' ../ansible/bastion/site.yaml' \
               ' -e keypair_name={}' \
-              ' -e deployment={}' \
-              ' -e orchestrator_version={}'.format(deployment['cluster']['keypair_name'],
-                                                   deployment_name,
-                                                   deployment['orchestrator']['version'])
+              ' -e deployment={}'.format(deployment['cluster']['keypair_name'],
+                                         deployment_name,
+                                         deployment['orchestrator']['version'])
         cwd = 'openshift'
         rv = io.run(cmd, cwd, cli_args.quiet)
         if not rv:

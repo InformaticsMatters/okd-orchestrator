@@ -1,0 +1,61 @@
+# -----------------------------------------------------------------------------
+# Templating
+# -----------------------------------------------------------------------------
+
+# -------------------------
+# The AWS Ansible Inventory
+# -------------------------
+
+data "template_file" "inventory" {
+  template = "${file("${var.openshift_dir}/inventories/${var.deployment}/inventory.tpl")}"
+
+  vars {
+
+    {% if cluster.public_hostname %}
+    public_hostname = "{{ cluster.public_hostname }}"
+    {% else %}
+    public_hostname = "${aws_instance.master.0.public_dns}"
+    {% endif %}
+    {% if cluster.router_basename %}
+    router_basename = "{{ cluster.router_basename }}"
+    {% else %}
+    router_basename = "${aws_instance.infra.0.public_dns}"
+    {% endif %}
+
+    {% for item in range(cluster.master.count) %}
+    master{{ item + 1 }} = "${aws_instance.master.{{ item }}.private_dns}"
+    {% endfor %}
+
+    {% for item in range(cluster.infra.count) %}
+    infra{{ item + 1 }} = "${aws_instance.infra.{{ item }}.private_dns}"
+    {% endfor %}
+
+    {% for item in range(cluster.node.count) %}
+    node{{ '%03d'|format(item + 1) }} = "${aws_instance.node.{{ item }}.private_dns}"
+    {% endfor %}
+
+  }
+}
+
+resource "local_file" "inventory" {
+  content = "${data.template_file.inventory.rendered}"
+  filename = "${var.openshift_dir}/inventories/${var.deployment}/inventory"
+}
+
+# ---------------------
+# The Ansible Inventory (post-os Ansible plays)
+# ---------------------
+
+data "template_file" "post_os_inventory" {
+  template = "${file("${var.ansible_dir}/post-os/inventory.tpl")}"
+
+  vars {
+    cli-node-ip = "${aws_instance.master.0.private_dns}"
+    ansible-user = "centos"
+  }
+}
+
+resource "local_file" "post_os_inventory" {
+  content = "${data.template_file.post_os_inventory.rendered}"
+  filename = "${var.ansible_dir}/post-os/inventory"
+}

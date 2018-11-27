@@ -1,0 +1,8 @@
+ansible == 2.6.7
+jinja2 == 2.10
+pyyaml == 3.13
+passlib == 1.7.1
+sphinx == 1.8.1
+sphinx_rtd_theme == 0.4.2
+
+matildapeak-yacker >= 2018.5

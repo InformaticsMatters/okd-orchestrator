@@ -1,0 +1,140 @@
+---
+
+# This playbook interacts with the bastion node.
+
+# It includes installation of `terraform` - a tool required to
+# orchestrate the cluster. Binary tools are installed in
+# the user's `~/bin` directory if they don't already exist.
+
+- hosts: bastion
+
+  vars:
+
+    terraform_version: 0.11.10
+    terraform_base_url: https://releases.hashicorp.com/terraform/{{ terraform_version }}/
+    terraform_pkg: terraform_{{ terraform_version }}_linux_amd64.zip
+    terraform_version_str: Terraform v{{ terraform_version }}
+
+  tasks:
+
+  # --------
+  # Preamble
+  # --------
+
+  # Install some additional packages...
+
+  - name: Install packages
+    package:
+      name: "{{ item }}"
+    loop:
+      - git
+      - unzip
+    become: true
+
+  - name: Install modules
+    pip:
+      name: "{{ item.name }}"
+      version: "{{ item.version }}"
+    loop:
+      - { name: 'ansible', version: '2.6.7' }
+    become: true
+
+    # And directories...
+
+  - name: Create a HOME/bin directory
+    file:
+      path: "{{ ansible_env.HOME }}/bin"
+      state: directory
+
+  - name: Create remote_tmp
+    file:
+      path: "{{ ansible_env.HOME }}/.ansible/tmp"
+      state: directory
+      mode: 0755
+
+  # And files...
+
+  - name: Install SSH private key
+    copy:
+      src: "{{ lookup('env','HOME') }}/.ssh/{{ keypair_name }}"
+      dest: "{{ ansible_env.HOME }}/.ssh/id_rsa"
+      mode: 0600
+
+  # Default environment variables
+
+  # The path to the deployment[specific directory
+  # is relative to thios (ansible/bastion) directory.
+  - name: Install bastion.sh
+    copy:
+      src: "../../openshift/inventories/{{ deployment }}/bastion.sh"
+      dest: "/etc/profile.d/bastion.sh"
+      mode: 0644
+    become: true
+
+  # ---------
+  # Terraform
+  # ---------
+
+  - name: Set default value of terraform_install_needed
+    set_fact:
+      terraform_install_needed: false
+    changed_when: False
+
+  - name: Check terraform exists
+    stat:
+      path: ~/bin/terraform
+    register: terraform_result
+    changed_when: False
+
+  - name: Check terraform version
+    shell: ~/bin/terraform version
+    register: terraform_version_check
+    changed_when: False
+    when: terraform_result.stat.exists
+
+  - name: Is terraform installatiin needed?
+    set_fact:
+      terraform_install_needed: true
+    when: not terraform_result.stat.exists or
+          not terraform_version_check.stdout | regex_search(terraform_version_str, multiline=True)
+
+  - name: Create terraform directories
+    file:
+      path: "{{ item }}"
+      state: directory
+      mode: 0755
+    with_items:
+      - ~/bin
+      - ~/cache/terraform
+    when: terraform_install_needed
+
+  - name: Fetch terraform
+    get_url: url={{ terraform_base_url }}{{ terraform_pkg }}
+             dest=~/cache/terraform/{{ terraform_pkg }}
+    when: terraform_install_needed
+
+  - name: Unpack terraform
+    unarchive:
+      src: ~/cache/terraform/{{ terraform_pkg }}
+      dest: ~/bin
+      copy: no
+    when: terraform_install_needed
+
+  # ----------------
+  # The Orchestrator
+  # ----------------
+
+  - name: Clone the orchestrator
+    git:
+      repo: 'https://github.com/InformaticsMatters/okd-orchestrator.git'
+      dest: "{{ ansible_env.HOME }}/okd-orchestrator"
+      version: "{{ orchestrator_version }}"
+
+  # --------
+  # Packages
+  # --------
+
+  - name: Install the libselinux-python package
+    yum:
+      name: libselinux-python
+      state: present

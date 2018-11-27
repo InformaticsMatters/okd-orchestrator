@@ -1,0 +1,38 @@
+{% extends "provisioner.yaml.j2" %}
+
+{% block specifics %}
+{% raw %}
+
+# Packer OpenStack machine image configuration.
+#
+# This ia a YAML file (which allows us to use comments) that
+# can be used by the Packer-wrapper, yacker.
+
+variables:
+
+  aws_access_key: "{{env `TF_VAR_aws_access_key`}}"
+  aws_secret_key: "{{env `TF_VAR_aws_secret_key`}}"
+  aws_user: centos
+  aws_i_type: t2.micro
+  our_name: IM Base Image
+  base_ami_name: im-os39-machine-image-01
+  base_description: |-
+    CentOS Linux 7 x86_64 HVM EBS for OpenShift 3.9 with Docker 1.13.1
+
+builders:
+
+# AWS Builder - Frankfurt
+
+- access_key: "{{user `aws_access_key`}}"
+  secret_key: "{{user `aws_secret_key`}}"
+  type: amazon-ebs
+  region: eu-central-1
+  source_ami: ami-dd3c0f36
+  instance_type: "{{user `aws_i_type`}}"
+  ssh_username: "{{user `aws_user`}}"
+  name: "{{user `our_name`}} Frankfurt"
+  ami_name: "{{user `base_ami_name`}}"
+  ami_description: "{{user `description`}}"
+
+{% endraw %}
+{% endblock %}

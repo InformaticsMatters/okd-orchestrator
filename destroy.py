@@ -45,8 +45,19 @@ def _main(cli_args, deployment_name):
     # Hello
     # -----
     io.banner(deployment['name'], quiet=False)
+
+    # Caution if bastion
+    if cli_args.bastion:
+        print()
+        print('CAUTION You are about to destroy the bastion.')
+        print('------- Have you destroyed all the clusters created from it?')
+        print('        If not you risk leaving a large number of cloud objects')
+        print('        that might otherwise be difficult to delete.')
+        print('        Are you sure you want to destroy the bastion?')
+        print()
+
     confirmation_word =io.get_confirmation_word()
-    confirmation = raw_input('Enter "{}" to DESTROY this cluster: '.
+    confirmation = raw_input('Enter "{}" to DESTROY this deployment: '.
                              format(confirmation_word))
     if confirmation != confirmation_word:
         print('Phew! That was close!')

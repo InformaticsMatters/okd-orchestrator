@@ -25,7 +25,7 @@ def get_confirmation_word():
     :returns: A word from a selection
     :rtype: ``str``
     """
-    return random.choice(['fine', 'go', 'ok', 'okay', 'yes'])
+    return random.choice(['fine', 'go', 'ok', 'okay', 'start', 'yes'])
 
 
 def banner(heading, quiet=False):

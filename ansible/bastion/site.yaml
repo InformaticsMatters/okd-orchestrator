@@ -7,6 +7,7 @@
 # the user's `~/bin` directory if they don't already exist.
 
 - hosts: bastion
+  gather_facts: no
 
   vars:
 
@@ -20,6 +21,19 @@
   # --------
   # Preamble
   # --------
+
+  # Wait for the the host...
+  - name: Wait for SSH
+    wait_for:
+      host: "{{ ansible_ssh_host }}"
+      port: 22
+      search_regex: OpenSSH
+      delay: 5
+    vars:
+      ansible_connection: local
+
+  - name: Gathering facts
+    setup:
 
   # Install some additional packages...
 

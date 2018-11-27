@@ -109,11 +109,6 @@ def _main(cli_args, deployment_name):
 
     if cli_args.bastion:
 
-        if not cli_args.skip_terraform:
-            io.banner('time.sleep({})'.format(_PRE_ANSIBLE_PAUSE_S),
-                      cli_args.quiet)
-            time.sleep(_PRE_ANSIBLE_PAUSE_S)
-
         cmd = 'ansible-playbook' \
               ' ../ansible/bastion/site.yaml' \
               ' -e keypair_name={}' \

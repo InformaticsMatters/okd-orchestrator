@@ -2,10 +2,6 @@
 
 name: Simple AWS Deployment (OpenShift 3.9)
 
-orchestrator:
-
-  version: 1.0.0
-
 openshift:
 
   ansible_tag: openshift-ansible-3.9.54-1

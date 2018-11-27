@@ -128,7 +128,6 @@
     git:
       repo: 'https://github.com/InformaticsMatters/okd-orchestrator.git'
       dest: "{{ ansible_env.HOME }}/okd-orchestrator"
-      version: "{{ orchestrator_version }}"
 
   # --------
   # Packages

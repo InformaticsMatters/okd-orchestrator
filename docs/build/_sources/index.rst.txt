@@ -52,7 +52,7 @@ Building the Documentation
 .. highlight:: none
 
 A pre-built HTML rendition of the documentation can be found in the
-``docs/build/`` directory, where you'll find an ``index.html`` file.
+``docs/build`` directory, where you'll find an ``index.html`` file.
 
 The source of this documentation can be found in the orchestrator's
 ``docs/source`` directory. It is written using `Sphinx`_ and, once you have
@@ -66,7 +66,6 @@ directory and execute the following::
 
 The resultant index page will be called ``build/html/index.html`` and it and
 the rest of the generated files must be committed to revision control as
-changes to the documentation are made as it is used to form the Project's
-**GitHub Pages**.
+changes to the documentation are made.
 
 .. _Sphinx: http://www.sphinx-doc.org/en/master/#

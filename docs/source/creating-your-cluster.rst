@@ -70,14 +70,29 @@ run ``create.py``::
     cd okd-orchestrator
     ./create.py
 
+You will be asked for confirmation before the deployment commences.
+Confirm with the prompted phrase to continue.
+
 If there's more than one deployment configuration in the project
 you'll need to name the one you want to use, e.g.::
 
     ./create.py simple-aws-frankfurt-3.9
 
+You will be prompted for a password to be assigned to the OKD admin account
+once the cluster has been created. Choose a password and keep a record of it
+so that you can login to the cluster console once OKD has been deployed.
+
+    To avoid being prompted for a password you can set one in the
+    environment variable ``TF_VAR_okd_admin_password`` before running
+    ``create.py`` with something like
+    ``TF_VAR_okd_admin_password=blob1234 ./create.py``
+
 Once it's complete, your OKD Cluster should be installed, with a console
 available on the IP address or domain name that's routed to the Master node,
 i.e. the address used for the deployment's ``cluster.public_hostname``.
+
+You should be able to login as ``admin`` using the password chosen
+when you created the cluster.
 
     The Bastion is no longer needed once your cluster has been deployed and
     so you can **stop** it, if your cloud provider provides this functionality.

@@ -217,14 +217,26 @@ run <code class="docutils literal notranslate"><span class="pre">create.py</span
 ./create.py
 </pre></div>
 </div>
+<p>You will be asked for confirmation before the deployment commences.
+Confirm with the prompted phrase to continue.</p>
 <p>If there’s more than one deployment configuration in the project
 you’ll need to name the one you want to use, e.g.:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./create.py simple-aws-frankfurt-3.9
 </pre></div>
 </div>
+<p>You will be prompted for a password to be assigned to the OKD admin account
+once the cluster has been created. Choose a password and keep a record of it
+so that you can login to the cluster console once OKD has been deployed.</p>
+<blockquote>
+<div>To avoid being prompted for a password you can set one in the
+environment variable <code class="docutils literal notranslate"><span class="pre">TF_VAR_okd_admin_password</span></code> before running
+<code class="docutils literal notranslate"><span class="pre">create.py</span></code> with something like
+<code class="docutils literal notranslate"><span class="pre">TF_VAR_okd_admin_password=blob1234</span> <span class="pre">./create.py</span></code></div></blockquote>
 <p>Once it’s complete, your OKD Cluster should be installed, with a console
 available on the IP address or domain name that’s routed to the Master node,
 i.e. the address used for the deployment’s <code class="docutils literal notranslate"><span class="pre">cluster.public_hostname</span></code>.</p>
+<p>You should be able to login as <code class="docutils literal notranslate"><span class="pre">admin</span></code> using the password chosen
+when you created the cluster.</p>
 <blockquote>
 <div>The Bastion is no longer needed once your cluster has been deployed and
 so you can <strong>stop</strong> it, if your cloud provider provides this functionality.

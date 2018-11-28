@@ -40,7 +40,7 @@ variable "cluster_id" {
 # The Cluster Node AMIs, indexed by region (that were built with Packer)
 variable "node_ami" {
   description = "The image AMI"
-  default = "{{ cluster.machine_image.uuid }}"
+  default = "{{ cluster.machine_image.id }}"
 }
 
 # /22 == 1,024 addresses

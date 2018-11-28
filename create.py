@@ -48,16 +48,17 @@ def _main(cli_args, deployment_name):
     # There must be an openshift/inventories/<deployment> directory
     if not os.path.isdir('openshift/inventories/{}'.format(deployment_name)):
         io.error('Missing "openshift/inventories" directory')
-        print('Expected to find the directory "{}" but it was not there.'.format(deployment_name))
+        print('Expected to find the directory "{}" but it was not there.'.
+              format(deployment_name))
         print('Every deployment must have a matching "inventories" directory')
         return False
 
     # -----
     # Hello
     # -----
-    io.banner(deployment['name'], quiet=False)
+    io.banner(deployment['name'], full_heading=True, quiet=False)
     if not cli_args.auto_approve:
-        confirmation_word =io.get_confirmation_word()
+        confirmation_word = io.get_confirmation_word()
         confirmation = raw_input('Enter "{}" to CREATE this cluster: '.
                                  format(confirmation_word))
         if confirmation != confirmation_word:
@@ -310,7 +311,7 @@ if __name__ == '__main__':
     config_file = 'deployments/{}.yaml'.format(deployment_file)
     if not os.path.exists(config_file):
         io.error('No config file ({}) for an "{}" deployment'.
-               format(config_file, deployment_file))
+                 format(config_file, deployment_file))
         sys.exit(1)
 
     # Go...

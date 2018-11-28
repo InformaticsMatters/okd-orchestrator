@@ -1,6 +1,6 @@
 ---
 
-name: Simple AWS Deployment (OpenShift 3.9)
+name: Simple AWS Deployment (OpenShift 3.9) [Frankfurt]
 
 openshift:
 
@@ -23,8 +23,7 @@ ansible:
 bastion:
 
   machine_image:
-    name: im-os39-machine-image-01
-    uuid: ami-0d0a3359cf1e9f026
+    id: ami-0d0a3359cf1e9f026
 
   type: t2.small
 
@@ -34,17 +33,16 @@ cluster:
   name_prefix: orn
   name_suffix:
   ssh_user: centos
-  keypair_name: abc-im
+  keypair_name: aws-keypair
   region: eu-central-1
   zone: eu-central-1a
-  # The external address/domain-name of the Master
+  # The external IP address or domain-name of the Master
   public_hostname: 18.196.144.77
-  # The external address/domain-name of the Infrastructure
+  # The external IP address or domain-name of the Infrastructure
   router_basename: 3.121.242.74
 
   machine_image:
-    name: im-os39-machine-image-01
-    uuid: ami-0d0a3359cf1e9f026
+    id: ami-0d0a3359cf1e9f026
 
   master:
     count: 1

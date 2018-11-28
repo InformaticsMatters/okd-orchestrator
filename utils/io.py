@@ -20,7 +20,7 @@ def error(msg):
 def get_confirmation_word():
     """Returns a confirmation word, that has to be entered by the user
     in order to continue the utility. This helps provide a safety mechanism
-    to avoid installing or destoryin the wrong deployment.
+    to avoid installing or destroying the wrong deployment.
 
     :returns: A word from a selection
     :rtype: ``str``
@@ -28,7 +28,7 @@ def get_confirmation_word():
     return random.choice(['fine', 'go', 'ok', 'okay', 'start', 'yes'])
 
 
-def banner(heading, quiet=False):
+def banner(heading, full_heading=False, quiet=False):
     """Prints the string in a banner if not quiet. If not quiet,
     and given 'Blob' it prints:
 
@@ -42,14 +42,24 @@ def banner(heading, quiet=False):
 
     :param heading: The message to turn into a banner.
     :type heading: ``str``
+    :param full_heading: True to avoid creating a short heading.
+                         This is ignored if 'quiet' is True.
+    :type full_heading: ``bool``
     :param quiet: True if quiet (changes banner to more distinctive)
     :type quiet: ``bool``
     """
     if not quiet:
-        heading_w = len(heading)
+        if full_heading:
+            the_heading = heading
+        else:
+            # Just the first two words (to avoid messy wrapping banners)
+            the_heading = " ".join(heading.split()[:2])
+            if the_heading != heading:
+                the_heading += ' ...'
+        heading_w = len(the_heading)
         print('')
         print('+' + '-' * (heading_w + 2) + '+')
-        print('| {} |'.format(heading))
+        print('| {} |'.format(the_heading))
         print('+' + '-' * (heading_w + 2) + '+')
     else:
         print('> {}'.format(heading))

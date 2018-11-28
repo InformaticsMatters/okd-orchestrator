@@ -37,26 +37,28 @@ def _main(cli_args, deployment_name):
     # There must be an openshift/inventories/<deployment> directory
     if not os.path.isdir('openshift/inventories/{}'.format(deployment_name)):
         io.error('Missing "openshift/inventories" directory')
-        print('Expected to find the directory "{}" but it was nto there.'.format(deployment_name))
+        print('Expected to find the directory "{}" but it was nto there.'.
+              format(deployment_name))
         print('Every deployment must have a matching "inventories" directory')
         return False
 
     # -----
     # Hello
     # -----
-    io.banner(deployment['name'], quiet=False)
+    io.banner(deployment['name'], full_heading=True, quiet=False)
 
     # Caution if bastion
     if cli_args.bastion:
         print()
         print('CAUTION You are about to destroy the bastion.')
         print('------- Have you destroyed all the clusters created from it?')
-        print('        If not you risk leaving a large number of cloud objects')
-        print('        that might otherwise be difficult to delete.')
+        print('        If not you risk leaving a large number of cloud')
+        print('        objects orphaned that might otherwise be difficult to')
+        print('        delete.')
         print('        Are you sure you want to destroy the bastion?')
         print()
 
-    confirmation_word =io.get_confirmation_word()
+    confirmation_word = io.get_confirmation_word()
     confirmation = raw_input('Enter "{}" to DESTROY this deployment: '.
                              format(confirmation_word))
     if confirmation != confirmation_word:
@@ -98,7 +100,8 @@ def _main(cli_args, deployment_name):
         return False
 
     t_dir = deployment['terraform']['dir']
-    cmd = '~/bin/terraform destroy -force -state=.terraform.{}'.format(deployment_name)
+    cmd = '~/bin/terraform destroy -force -state=.terraform.{}'.\
+        format(deployment_name)
     cwd = 'terraform/{}/{}'.format(t_dir, tf_sub_dir)
     rv = io.run(cmd, cwd, cli_args.quiet)
 

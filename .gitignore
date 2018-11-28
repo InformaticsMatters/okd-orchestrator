@@ -34,10 +34,6 @@ terraform/scaleway/cluster/variables.tf
 **/*.retry
 **/ansible.log
 
-# Packer material...
-packer/**/*.json
-packer/**/*.yaml
-
 # IDEA material...
 .idea/
 

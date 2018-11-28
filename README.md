@@ -1,5 +1,7 @@
 # The OKD Orchestrator
 
+[![Build Status](https://travis-ci.org/InformaticsMatters/okd-orchestrator.svg?branch=master)](https://travis-ci.org/InformaticsMatters/okd-orchestrator)
+
 Refer to this project's [GitHub Pages] for detailed documentation.
 
 ## Using Sphinx and GitHub pages.

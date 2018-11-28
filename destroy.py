@@ -154,7 +154,11 @@ if __name__ == '__main__':
     # user to specify the deployment.
     if not ARGS.deployment:
         print('ERROR: You need to supply the name of a deployment.'
-              ' Use --display-deployments to list them.')
+              ' The following are available:')
+        for deployment in deployments:
+            # Display the deployment without the path
+            # and removing the '.yaml' suffix.
+            print(os.path.basename(deployment)[:-5])
         sys.exit(1)
     else:
         deployment_file = ARGS.deployment

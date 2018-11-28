@@ -11,7 +11,8 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "1.46.0"
 
-  name = "experiment"
+  enable_dns_hostnames = true
+  single_nat_gateway = true
 
   cidr = "10.0.0.0/16"
 

@@ -11,8 +11,10 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "1.46.0"
 
-  default_vpc_enable_dns_hostnames = true
+#  default_vpc_enable_dns_hostnames = true
+#  default_vpc_enable_dns_support = true
   enable_dns_hostnames = true
+  enable_dns_support = true
   single_nat_gateway = true
 
   cidr = "10.0.0.0/16"

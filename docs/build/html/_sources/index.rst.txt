@@ -62,7 +62,7 @@ you can be build it from that directory.
 To build the HTML version of this documentation move to the ``docs``
 directory and execute the following::
 
-    sphinx-build -b html source build
+    sphinx-build -b html source build/html
 
 The resultant index page will be called ``build/html/index.html`` and it and
 the rest of the generated files must be committed to revision control as

@@ -8,7 +8,7 @@ resource "aws_instance" "bastion" {
   key_name = "${var.keypair_name}"
   vpc_security_group_ids = ["${aws_security_group.ssh.id}",
                             "${aws_security_group.outbound-general.id}"]
-  subnet_id = "${aws_subnet.public-subnet.id}"
+  subnet_id = "${module.vpc.public_subnets[0]}"
   associate_public_ip_address = true
   source_dest_check = false
 

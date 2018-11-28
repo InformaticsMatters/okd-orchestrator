@@ -29,8 +29,9 @@ data "template_file" "sh" {
   vars {
     aws_access_key = "${var.aws_access_key}"
     aws_secret_key = "${var.aws_secret_key}"
-    vpc_id = "${aws_vpc.bastion.id}"
-    subnet_id = "${aws_subnet.public-subnet.id}"
+    vpc_id = "${module.vpc.vpc_id}"
+    public_subnet_id = "${module.vpc.public_subnets[0]}"
+    private_subnet_id = "${module.vpc.private_subnets[0]}"
   }
 }
 

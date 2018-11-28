@@ -34,6 +34,9 @@ terraform/scaleway/cluster/variables.tf
 **/*.retry
 **/ansible.log
 
+# Python
+*.pyc
+
 # IDEA material...
 .idea/
 

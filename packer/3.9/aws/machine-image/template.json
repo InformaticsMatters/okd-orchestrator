@@ -23,8 +23,8 @@
     "aws_secret_key": "{{env `TF_VAR_aws_secret_key`}}",
     "aws_user": "centos",
     "aws_i_type": "t2.micro",
-    "our_name": "IM Base Image",
-    "base_ami_name": "im-os39-machine-image-01",
+    "our_name": "OpenShift 3.9 Base Image",
+    "base_ami_name": "os39-machine-image-01",
     "base_description": "CentOS Linux 7 x86_64 HVM EBS for OpenShift 3.9 with Docker 1.13.1"
   },
   "builders": [

@@ -58,9 +58,11 @@ def _main(cli_args, deployment_name):
     # -----
     io.banner(deployment['name'], full_heading=True, quiet=False)
     if not cli_args.auto_approve:
+
+        target = 'Bastion machine' if cli_args.bastion else 'OpenShift Cluster'
         confirmation_word = io.get_confirmation_word()
-        confirmation = raw_input('Enter "{}" to CREATE this cluster: '.
-                                 format(confirmation_word))
+        confirmation = raw_input('Enter "{}" to CREATE the {}: '.
+                                 format(confirmation_word, target))
         if confirmation != confirmation_word:
             print('Phew! That was close!')
             return True

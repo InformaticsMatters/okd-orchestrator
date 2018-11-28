@@ -23,7 +23,7 @@ ansible:
 bastion:
 
   machine_image:
-    id: ami-0d0a3359cf1e9f026
+    id: ami-053727c1459b188a2
 
   type: t2.small
 
@@ -42,7 +42,7 @@ cluster:
   router_basename: 3.121.242.74
 
   machine_image:
-    id: ami-0d0a3359cf1e9f026
+    id: ami-053727c1459b188a2
 
   master:
     count: 1

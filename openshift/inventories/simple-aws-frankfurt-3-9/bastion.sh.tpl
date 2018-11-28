@@ -7,5 +7,3 @@ export TF_VAR_aws_secret_key=${aws_secret_key}
 
 export TF_VAR_vpc_id=${vpc_id}
 export TF_VAR_subnet_id=${subnet_id}
-
-export TF_VAR_okd_admin_password=${okd_admin_password}

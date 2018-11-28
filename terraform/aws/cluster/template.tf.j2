@@ -51,6 +51,7 @@ data "template_file" "post_os_inventory" {
 
   vars {
     cli-node-ip = "${aws_instance.master.0.private_dns}"
+    okd_admin_password = "${okd_admin_password}"
     ansible-user = "centos"
   }
 }

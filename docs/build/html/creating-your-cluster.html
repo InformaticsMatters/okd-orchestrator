@@ -176,6 +176,13 @@ on.</p>
 From there you should be able to manage a number of individual OKD
 clusters.   As long as you’re happy that they share the same network,
 which in AWS terms, means a common <code class="docutils literal notranslate"><span class="pre">VPC</span></code> and <code class="docutils literal notranslate"><span class="pre">SubNet</span></code>.</div></blockquote>
+<p>If the SSH key-pair you are using is not your default (<cite>id_rsa</cite>) then you
+will probably need to install <cite>ssh-agent</cite> to allow some stages of creation
+to run without prompting:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>eval $(ssh-agent)
+ssh-add -i ~/.ssh/aws-keypair
+</pre></div>
+</div>
 <p>To create the Bastion, from the root of the project run the <code class="docutils literal notranslate"><span class="pre">create.py</span></code>
 utility:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./create.py --bastion
@@ -189,17 +196,15 @@ you’ll need to name thewone to use, e.g.:</p>
 <p>You’ll be prompted to confirm the actions before the creation process
 continues.</p>
 <p>Creating the Bastion will take a few minutes.</p>
-<p>Once created you can SSH to the Bastion n order to continue with the second
+<p>Once created you can SSH to the Bastion in order to continue with the second
 step, creating the <strong>Cluster</strong>. The address of the Bastion should be available
 in the final steps of the Ansible playbook used to create it:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PLAY RECAP ****************************************************************
 35.158.128.232             : ok=16   changed=9    unreachable=0    failed=0
 </pre></div>
 </div>
-<p>You will need to use the key-pair used in the deployment. If you’re deploying
-the <em>simple AWS</em> example this is likely to be named <code class="docutils literal notranslate"><span class="pre">aws-keypair</span></code>.</p>
 <p>SSH to the Bastion:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ssh -i ~/.ssh/aws-keypair centos@35.158.128.232
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ssh centos@35.158.128.232
 </pre></div>
 </div>
 </div>

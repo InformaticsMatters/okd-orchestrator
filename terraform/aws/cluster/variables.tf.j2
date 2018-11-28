@@ -9,12 +9,15 @@
 # - TF_VAR_aws_secret_key                 Your AWS secret key
 # - TF_VAR_vpc_id                         The VPC ID (assigned at Bastion phase)
 # - TF_VAR_subnet_id                      The Subnet ID (assigned at Bastion phase)
+# - TF_VAR_oc_admin_password              Your desired OKD admin user password
 
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
 
 variable "vpc_id" {}
 variable "subnet_id" {}
+
+variable "okd_admin_password" {}
 
 # -----------------------------------------------------------------------------
 # DEFAULT VARIABLES (AWS)

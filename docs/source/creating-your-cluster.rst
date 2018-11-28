@@ -26,6 +26,13 @@ on.
     clusters.   As long as you're happy that they share the same network,
     which in AWS terms, means a common ``VPC`` and ``SubNet``.
 
+If the SSH key-pair you are using is not your default (`id_rsa`) then you
+will probably need to install `ssh-agent` to allow some stages of creation
+to run without prompting::
+
+    eval $(ssh-agent)
+    ssh-add -i ~/.ssh/aws-keypair
+
 To create the Bastion, from the root of the project run the ``create.py``
 utility::
 
@@ -42,19 +49,16 @@ continues.
 
 Creating the Bastion will take a few minutes.
 
-Once created you can SSH to the Bastion n order to continue with the second
+Once created you can SSH to the Bastion in order to continue with the second
 step, creating the **Cluster**. The address of the Bastion should be available
 in the final steps of the Ansible playbook used to create it::
 
     PLAY RECAP ****************************************************************
     35.158.128.232             : ok=16   changed=9    unreachable=0    failed=0
 
-You will need to use the key-pair used in the deployment. If you're deploying
-the *simple AWS* example this is likely to be named ``aws-keypair``.
-
 SSH to the Bastion::
 
-    ssh -i ~/.ssh/aws-keypair centos@35.158.128.232
+    ssh centos@35.158.128.232
 
 Creating the Cluster
 ====================

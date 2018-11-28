@@ -31,7 +31,6 @@ data "template_file" "sh" {
     aws_secret_key = "${var.aws_secret_key}"
     vpc_id = "${aws_vpc.bastion.id}"
     subnet_id = "${aws_subnet.public-subnet.id}"
-    okd_admin_password = "${var.okd_admin_password}"
   }
 }
 

@@ -24,8 +24,6 @@
 
   - name: Create Admin user
     shell: htpasswd -bc /etc/origin/master/htpasswd admin {{ admin_password }}
-    vars:
-      admin_password: "{{ lookup('env', 'TF_VAR_okd_admin_password') }}"
     become: yes
     when: not user_result.stdout | regex_search('^admin\s', multiline=True)
 

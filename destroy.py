@@ -149,13 +149,13 @@ if __name__ == '__main__':
             print(os.path.basename(deployment)[:-5])
         sys.exit(0)
 
-    # We must have a deployment defined if we get here...
+    # We must have a deployment defined if we get here.
+    # Even if there is just one, it's safe to force the
+    # user to specify the deployment.
     if not ARGS.deployment:
-        if len(deployments) > 1:
-            print('ERROR: You need to supply the name of a deployment.'
-                  ' Use --display-deployments to list them.')
-            sys.exit(1)
-        deployment_file = os.path.basename(deployments[0])[:-5]
+        print('ERROR: You need to supply the name of a deployment.'
+              ' Use --display-deployments to list them.')
+        sys.exit(1)
     else:
         deployment_file = ARGS.deployment
 

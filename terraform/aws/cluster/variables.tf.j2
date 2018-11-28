@@ -48,12 +48,12 @@ variable "node_ami" {
 
 variable "master_aws_elastic_ip_allocation_id" {
   description = "The allocated Elastic IP to be used for the master."
-  default = "{{ cluster.master_1.fixed_ip }}"
+  default = "{{ cluster.master_1.fixed_ip_id }}"
 }
 
 variable "infra_aws_elastic_ip_allocation_id" {
   description = "The allocated Elastic IP to be used for the infrastructure"
-  default = "{{ cluster.infra_1.fixed_ip }}"
+  default = "{{ cluster.infra_1.fixed_ip_id }}"
 }
 
 # -----------------------------------------------------------------------------

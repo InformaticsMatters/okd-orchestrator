@@ -4,6 +4,8 @@ name: Simple AWS Deployment (OpenShift 3.9) [Frankfurt]
 
 openshift:
 
+  # The version tag for OpenShift Origin/OKD ansible playbooks
+  # used to deploy it and the playbooks to run to complete the task.
   ansible_tag: openshift-ansible-3.9.54-1
   play:
   - prerequisites.yml
@@ -11,17 +13,20 @@ openshift:
 
 terraform:
 
+  # The Terraform templates
+  # used to build the Bastion and cluster.
   dir: aws
 
 ansible:
 
+  # The Ansible version required to deploy the cluster.
   version: 2.6.7
-  play:
-    pre_os_create:
-    pre_os_destroy:
 
 bastion:
 
+  # The machine image ID for the Bastion instance.
+  # This the value produced by Packer when the image is built for
+  # the cloud provider. For AWS this will be the 'ami-` ID.
   machine_image:
     id: ami-053727c1459b188a2
 
@@ -29,33 +34,56 @@ bastion:
 
 cluster:
 
-  id: im-frankfurt-39
+  # A unique name fo your cluster.
+  # ALl your clusters must have s different ID.
+  id: simple-frankfurt-39
+  # Name prefix and suffix values for the names of each cluster instance.
+  # Use this to quickly distinguish between instances.
   name_prefix: orn
   name_suffix:
-  ssh_user: centos
+  # The SSH key-pair name known by the cloud provider.
+  # Instances will be created using this key-pair and ou will
+  # need it to connect to them.
   keypair_name: aws-keypair
+  # The region and zone used for cluster instances.
+  # At the moment all instances are created in the same zone.
   region: eu-central-1
   zone: eu-central-1a
-  # The external IP address or domain-name of the Master
+  # The external IP address or domain-name of the Master node
   public_hostname: 18.196.144.77
-  # The external IP address or domain-name of the Infrastructure
+  # The external IP address or domain-name of the Infrastructure node
   router_basename: 3.121.242.74
 
+  # The machine image ID for each compute instance in the cluster.
+  # This the value produced by Packer when the images are built for
+  # the cloud provider. For AWS this will be the 'ami-` ID.
   machine_image:
     id: ami-053727c1459b188a2
 
+  # Details of the Master nodes.
+  # A count, type and, for the first master,
+  # its pre-assigned fixed/floating IP value.
+  #
+  # At the moment only one master instance is supported.
   master:
     count: 1
     type: t2.xlarge
   master_1:
-    fixed_ip: eipalloc-0efc2014938d49941
+    fixed_ip_id: eipalloc-0efc2014938d49941
 
+  # Details of the Infrastructure nodes.
+  # A count, type and, for the first instance,
+  # its pre-assigned fixed/floating IP value.
+  #
+  # At the moment only one master instance is supported.
   infra:
     count: 1
     type: t2.xlarge
   infra_1:
-    fixed_ip: eipalloc-07dc85d27405c319a
+    fixed_ip_id: eipalloc-07dc85d27405c319a
 
+  # Details of the Infrastructure nodes.
+  # A count and type.
   node:
     count: 1
     type: t2.xlarge

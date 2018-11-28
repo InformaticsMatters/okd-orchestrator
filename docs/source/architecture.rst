@@ -15,8 +15,21 @@ an OpenShift Origin-based compute cluster with minimal effort.
 The Concept
 ===========
 
+The orchestrator is designed to allow the deployment of **Clusters** and their
+**Bastion** control servers with minimal effort from the comfort of a
+development laptop.
+
+Creation and destruction is handled by logic managed from within
+two Python command-line modules; ``create.py`` and ``destroy.py``. The modules
+call upon a number of underlying processes (essentially carried out by
+**Terraform** and **Ansible**) in order to create and destroy your hardware.
+
+With a few utilities installed on your development host you should be able to
+create and manage clusters across a wide-variety of cloud providers using
+just these two modules.
+
 The Components
-===============
+==============
 
 The orchestrator consists of: -
 
@@ -51,10 +64,33 @@ Packer templates
 
 In ``packer/``.
 
+**Packer** is used to create base images for the compute instances.
+It is driven by JSON files that describe installation instructions that
+are executed on a base Operating System like CentOS in order to form
+an OS and utilities suitable for OKD.
+
+The JSON *template* files are organised in directories relating to OKD
+version and cloud provider. For example there is an AWS *machine image*
+template for OKD 3.9 in ``packer/3.9/aws``.
+
+**Packer** is employed once per OKD release and cloud provider combination.
+The images produced are suitable for any cluster for the given OKD release on
+that cloud provider.
+
 Terraform Templates
 -------------------
 
 In ``terraform/``.
+
+**Terraform** is used to create and destroy the OKD cluster hardware.
+It is a form of IaC tool that automates the construction of cloud infrastructure
+including additional volumes, networks, subnets and security groups.
+
+It's language is declarative, meaning that you simply need to describe what is
+connected to what and it manages the creation of objects and their connections.
+
+Once you've described your cluster you have access to Terraform commands like
+**apply** to build the cluster and **destroy** to delete it.
 
 Jinja2 Rendering Process
 ------------------------

@@ -174,6 +174,16 @@ The goal is to provide a simple and rapid and automated means of instantiating
 an OpenShift Origin-based compute cluster with minimal effort.</p>
 <div class="section" id="the-concept">
 <h2>The Concept<a class="headerlink" href="#the-concept" title="Permalink to this headline">¶</a></h2>
+<p>The orchestrator is designed to allow the deployment of <strong>Clusters</strong> and their
+<strong>Bastion</strong> control servers with minimal effort from the comfort of a
+development laptop.</p>
+<p>Creation and destruction is handled by logic managed from within
+two Python command-line modules; <code class="docutils literal notranslate"><span class="pre">create.py</span></code> and <code class="docutils literal notranslate"><span class="pre">destroy.py</span></code>. The modules
+call upon a number of underlying processes (essentially carried out by
+<strong>Terraform</strong> and <strong>Ansible</strong>) in order to create and destroy your hardware.</p>
+<p>With a few utilities installed on your development host you should be able to
+create and manage clusters across a wide-variety of cloud providers using
+just these two modules.</p>
 </div>
 <div class="section" id="the-components">
 <h2>The Components<a class="headerlink" href="#the-components" title="Permalink to this headline">¶</a></h2>
@@ -201,10 +211,27 @@ OpenShift cluster.</p>
 <div class="section" id="packer-templates">
 <h3>Packer templates<a class="headerlink" href="#packer-templates" title="Permalink to this headline">¶</a></h3>
 <p>In <code class="docutils literal notranslate"><span class="pre">packer/</span></code>.</p>
+<p><strong>Packer</strong> is used to create base images for the compute instances.
+It is driven by JSON files that describe installation instructions that
+are executed on a base Operating System like CentOS in order to form
+an OS and utilities suitable for OKD.</p>
+<p>The JSON <em>template</em> files are organised in directories relating to OKD
+version and cloud provider. For example there is an AWS <em>machine image</em>
+template for OKD 3.9 in <code class="docutils literal notranslate"><span class="pre">packer/3.9/aws</span></code>.</p>
+<p><strong>Packer</strong> is employed once per OKD release and cloud provider combination.
+The images produced are suitable for any cluster for the given OKD release on
+that cloud provider.</p>
 </div>
 <div class="section" id="terraform-templates">
 <h3>Terraform Templates<a class="headerlink" href="#terraform-templates" title="Permalink to this headline">¶</a></h3>
 <p>In <code class="docutils literal notranslate"><span class="pre">terraform/</span></code>.</p>
+<p><strong>Terraform</strong> is used to create and destroy the OKD cluster hardware.
+It is a form of IaC tool that automates the construction of cloud infrastructure
+including additional volumes, networks, subnets and security groups.</p>
+<p>It’s language is declarative, meaning that you simply need to describe what is
+connected to what and it manages the creation of objects and their connections.</p>
+<p>Once you’ve described your cluster you have access to Terraform commands like
+<strong>apply</strong> to build the cluster and <strong>destroy</strong> to delete it.</p>
 </div>
 <div class="section" id="jinja2-rendering-process">
 <h3>Jinja2 Rendering Process<a class="headerlink" href="#jinja2-rendering-process" title="Permalink to this headline">¶</a></h3>

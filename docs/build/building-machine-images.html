@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building Machine Images &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Creating a Cluster" href="creating-your-cluster.html" />
+    <link rel="prev" title="Getting Started with AWS" href="getting-started-aws.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> The OKD Orchestrator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Building Machine Images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#building-machine-images-for-aws">Building Machine Images for AWS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">The OKD Orchestrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Building Machine Images</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/building-machine-images.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-machine-images">
+<h1>Building Machine Images<a class="headerlink" href="#building-machine-images" title="Permalink to this headline">¶</a></h1>
+<p>The OKD cluster (and its Bastion machine) are formed from hardware
+provided by your cloud provider. As the base image for each of our
+physical machines needs some pre-installed software it’s often
+easier to build a dedicated base image that all our compute instances
+will use.</p>
+<p>To do this we use <a class="reference external" href="https://www.packer.io">packer</a>, a HashiCorp tool dedicated to the the
+automated construction of machine images.</p>
+<p>The images we create, more specifically a Unique ID that is used to refer to
+them, are written to the deployment configuration file. If you’re
+building AWS images for the simple example this would be
+<code class="docutils literal notranslate"><span class="pre">deployments/simple-aws-frankfurt-3.9.yaml</span></code></p>
+<p><strong>Packer</strong> configurations are defined <em>template</em> files written in JSON.
+Without going into great detail the files consist of <code class="docutils literal notranslate"><span class="pre">variables</span></code>,
+<code class="docutils literal notranslate"><span class="pre">builders</span></code> and <code class="docutils literal notranslate"><span class="pre">provisioners</span></code> sections.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">provisioners</span></code> section contains the list of instructions that are
+executed on top of a base images. The cloud-specific details are held
+in the <code class="docutils literal notranslate"><span class="pre">builders</span></code> section and the <code class="docutils literal notranslate"><span class="pre">variables</span></code> provide some dynamic control.</p>
+<p>The Packer templates are located in the <code class="docutils literal notranslate"><span class="pre">packer</span></code> project directory
+where you’ll find templates organised according to OKD release and
+cloud provider. For example, the AWS EC2 template for OpenShift/3.9
+can be found in the <code class="docutils literal notranslate"><span class="pre">packer/3.9/aws/machine-image</span></code> directory. This image
+is valid for any OKD 3.9 deployment on AWS and may be shared between
+deployments.</p>
+<div class="section" id="building-machine-images-for-aws">
+<h2>Building Machine Images for AWS<a class="headerlink" href="#building-machine-images-for-aws" title="Permalink to this headline">¶</a></h2>
+<p>Before you start, as Packer will be creating a small EC2 compute instance
+upon which it will run the build, you will need suitable AWS API Keys
+(See <a class="reference internal" href="getting-started-aws.html"><span class="doc">Getting Started with AWS</span></a>). These need to be defined in the following
+environment variables:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>export TF_VAR_aws_access_key=&lt;myAccessKey&gt;
+export TF_VAR_aws_secret_key=&lt;mySecretKy&gt;
+</pre></div>
+</div>
+<p>To build the OKD 3.9 machine image, navigate to the appropriate template
+directory and run the following packer command, which will validate the
+template file:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd packer/3.9/aws/machine-image
+packer validate template.json
+</pre></div>
+</div>
+<p>Then, if successful, start the build:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>packer build template.json
+</pre></div>
+</div>
+<p>This may take a minute or two but, at the end you should be presented with
+an Amazon Machine Image ID (or AMI) in at the output of the packer build.
+Here’s the example output for <code class="docutils literal notranslate"><span class="pre">ami-01234567012345670</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>==&gt; Builds finished. The artifacts of successful builds are:
+--&gt; OpenShift 3.9 Base Image Frankfurt: AMIs were created:
+eu-central-1: ami-01234567012345670
+</pre></div>
+</div>
+<p>Packer, in a single execution, can build images for as many regions as you
+like. You simply need a <code class="docutils literal notranslate"><span class="pre">builders</span></code> section for each region. At the moment
+the packer file in our example simply builds an image for the Frankfurt region.</p>
+<p>Copy the <code class="docutils literal notranslate"><span class="pre">ami</span></code> identity (including the leading <code class="docutils literal notranslate"><span class="pre">ami-</span></code>) and replace the
+values for the <code class="docutils literal notranslate"><span class="pre">bastion.machine_image.id</span></code> and <code class="docutils literal notranslate"><span class="pre">cluster.machine_image.id</span></code>
+in your deployment configuration.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="creating-your-cluster.html" class="btn btn-neutral float-right" title="Creating a Cluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="getting-started-aws.html" class="btn btn-neutral" title="Getting Started with AWS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Informatics Matters
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

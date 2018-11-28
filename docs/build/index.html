@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The OKD Orchestrator &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Architecture" href="architecture.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> The OKD Orchestrator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building-machine-images.html">Building Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">The OKD Orchestrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>The OKD Orchestrator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-okd-orchestrator">
+<h1>The OKD Orchestrator<a class="headerlink" href="#the-okd-orchestrator" title="Permalink to this headline">¶</a></h1>
+<p>A Cluster Orchestrator for OpenShift Origin (OKD).</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="building-machine-images.html">Building Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+</div>
+<p>The <strong>OKD Orchestrator</strong> is a tool to simplify the cloud-deployment of
+the OpenShift Origin <a class="reference external" href="https://www.okd.io">OKD</a> container runtime. The project contains tools to
+build base images for cloud providers and then deploy, with minimal effort,
+a Bastion and OpenShift cluster based on those images.</p>
+<blockquote>
+<div><p>The reader should have some familiarity with cloud environments
+(like the AWS <a class="reference external" href="https://aws.amazon.com/ec2/">EC2</a> platform) and the RedHat OpenShift Origin/OKD framework.</p>
+<p>To run the <em>Simple AWS</em> example discussed in the <a class="reference internal" href="getting-started-aws.html"><span class="doc">Getting Started with AWS</span></a>,
+the user is required to have an AWS EC2 account and credentials to allow
+API access.</p>
+</div></blockquote>
+<p>The OKD Orchestrator is inspired by the open-source <a class="reference external" href="https://github.com/kubenow/KubeNow">KubeNow</a> project,
+a cloud-agnostic platform for Docker and Kubernetes.</p>
+<p><strong>Don’t Panic!</strong> There’s a lot of stuff in this repository but, depending on
+what you expect to do, you may not need to understand everything that’s going
+on here.</p>
+<ul class="simple">
+<li>If you’re new to the OKD Orchestrator, start by familiarising yourself
+with the <a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a> document. Then, before building your first
+cluster follow the <a class="reference internal" href="getting-started.html"><span class="doc">Getting Started</span></a> guide</li>
+<li>Once you’re setup follow the guide for your chosen cloud provider<ul>
+<li>For Amazon’s cloud service read <a class="reference internal" href="getting-started-aws.html"><span class="doc">Getting Started with AWS</span></a></li>
+</ul>
+</li>
+</ul>
+<div class="section" id="building-the-documentation">
+<h2>Building the Documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h2>
+<p>A pre-built HTML rendition of the documentation can be found in the
+<code class="docutils literal notranslate"><span class="pre">docs/build/</span></code> directory, where you’ll find an <code class="docutils literal notranslate"><span class="pre">index.html</span></code> file.</p>
+<p>The source of this documentation can be found in the orchestrator’s
+<code class="docutils literal notranslate"><span class="pre">docs/source</span></code> directory. It is written using <a class="reference external" href="http://www.sphinx-doc.org/en/master/#">Sphinx</a> and, once you have
+installed the basic tools described in the <a class="reference internal" href="getting-started.html"><span class="doc">Getting Started</span></a> section,
+you can be build it from that directory.</p>
+<p>To build the HTML version of this documentation move to the <code class="docutils literal notranslate"><span class="pre">docs</span></code>
+directory and execute the following:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sphinx-build -b html source build
+</pre></div>
+</div>
+<p>The resultant index page will be called <code class="docutils literal notranslate"><span class="pre">build/html/index.html</span></code> and it and
+the rest of the generated files must be committed to revision control as
+changes to the documentation are made as it is used to form the Project’s
+<strong>GitHub Pages</strong>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="architecture.html" class="btn btn-neutral float-right" title="Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Informatics Matters
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

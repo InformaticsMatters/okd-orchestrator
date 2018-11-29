@@ -49,7 +49,7 @@
   - name: Install bastion.sh
     copy:
       src: "../../openshift/inventories/{{ deployment }}/bastion.sh"
-      dest: "/etc/profile.d/bastion.sh"
+      dest: "/etc/profile.d/okd.sh"
       mode: 0644
     become: true
 

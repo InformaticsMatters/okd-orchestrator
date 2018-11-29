@@ -1,0 +1,39 @@
+provisioners:
+
+- type: shell
+  inline:
+  - sudo yum -y install wget git net-tools yum-utils bind-utils
+  - sudo yum -y install iptables-services ntp bridge-utils bash-completion
+  - sudo yum -y install kexec-tools sos psacct pyOpenSSL etcd flannel
+  - sudo yum -y install docker-1.13.1
+  - sudo rpm -V docker-1.13.1
+  - sudo systemctl enable docker
+  - sudo systemctl start docker
+  - sudo yum -y install NetworkManager
+  - sudo systemctl enable NetworkManager
+  - sudo systemctl start NetworkManager
+  - sudo easy_install pip
+  - sudo pip install ansible==2.6.7
+
+variables:
+
+  aws_access_key: '{{env `TF_VAR_aws_access_key`}}'
+  aws_i_type: t2.micro
+  aws_secret_key: '{{env `TF_VAR_aws_secret_key`}}'
+  aws_user: centos
+  base_ami_name: os39-machine-image-01
+  base_description: CentOS Linux 7 x86_64 HVM EBS for OpenShift 3.9 with Docker 1.13.1
+  our_name: OpenShift 3.9 Base Image
+
+builders:
+
+- access_key: '{{user `aws_access_key`}}'
+  ami_description: '{{user `description`}}'
+  ami_name: '{{user `base_ami_name`}}'
+  instance_type: '{{user `aws_i_type`}}'
+  name: '{{user `our_name`}} Frankfurt'
+  region: eu-central-1
+  secret_key: '{{user `aws_secret_key`}}'
+  source_ami: ami-dd3c0f36
+  ssh_username: '{{user `aws_user`}}'
+  type: amazon-ebs

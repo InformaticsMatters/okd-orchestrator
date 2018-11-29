@@ -36,21 +36,9 @@ variable "cluster_id" {
 }
 
 # The Cluster Node AMIs, indexed by region (that were built with Packer)
-variable "node_ami" {
+variable "bastion_ami" {
   description = "The image AMI"
-  default = "{{ cluster.machine_image.id }}"
-}
-
-# /22 == 1,024 addresses
-variable "vpc_cidr" {
-  description = "CIDR for the whole VPC"
-  default = "10.0.0.0/22"
-}
-
-# /27 == 32 addresses
-variable "public_subnet_cidr" {
-  description = "CIDR for the Public Subnet"
-  default = "10.0.1.0/27"
+  default = "{{ bastion.machine_image.id }}"
 }
 
 # -----------------------------------------------------------------------------

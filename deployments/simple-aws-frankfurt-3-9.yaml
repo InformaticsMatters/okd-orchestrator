@@ -28,7 +28,7 @@ bastion:
   # This the value produced by Packer when the image is built for
   # the cloud provider. For AWS this will be the 'ami-` ID.
   machine_image:
-    id: ami-053727c1459b188a2
+    id: ami-071abb6303e09ce6c
 
   type: t2.small
 

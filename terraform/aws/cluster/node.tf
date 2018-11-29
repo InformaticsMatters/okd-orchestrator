@@ -10,10 +10,8 @@ resource "aws_instance" "node" {
   vpc_security_group_ids = ["${aws_security_group.openshift.id}",
                             "${aws_security_group.ssh.id}",
                             "${aws_security_group.outbound-general.id}"]
-  subnet_id = "${var.subnet_id}"
+  subnet_id = "${var.private_subnet_id}"
   source_dest_check = false
-
-  associate_public_ip_address = true
 
   root_block_device {
     volume_size = 10

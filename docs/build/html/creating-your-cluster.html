@@ -180,7 +180,7 @@ which in AWS terms, means a common <code class="docutils literal notranslate"><s
 will probably need to install <cite>ssh-agent</cite> to allow some stages of creation
 to run without prompting:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>eval $(ssh-agent)
-ssh-add -i ~/.ssh/aws-keypair
+ssh-add ~/.ssh/aws-keypair
 </pre></div>
 </div>
 <p>To create the Bastion, from the root of the project run the <code class="docutils literal notranslate"><span class="pre">create.py</span></code>

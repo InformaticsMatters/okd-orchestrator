@@ -31,7 +31,7 @@ will probably need to install `ssh-agent` to allow some stages of creation
 to run without prompting::
 
     eval $(ssh-agent)
-    ssh-add -i ~/.ssh/aws-keypair
+    ssh-add ~/.ssh/aws-keypair
 
 To create the Bastion, from the root of the project run the ``create.py``
 utility::

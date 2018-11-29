@@ -22,6 +22,9 @@ terraform/aws/bastion/variables.tf
 terraform/scaleway/cluster/template.tf
 terraform/scaleway/cluster/variables.tf
 
+# Packer material
+packer/**/*.json
+
 # Terraform material...
 *.tfstate
 *.tfstate.backup

@@ -38,7 +38,7 @@ variable "cluster_id" {
 # The Cluster Node AMIs, indexed by region (that were built with Packer)
 variable "bastion_ami" {
   description = "The image AMI"
-  default = "{{ cluster.bastion_image.id }}"
+  default = "{{ bastion.machine_image.id }}"
 }
 
 # -----------------------------------------------------------------------------

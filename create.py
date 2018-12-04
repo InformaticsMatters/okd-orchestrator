@@ -67,29 +67,45 @@ def _main(cli_args, deployment_name):
         if not rv:
             return False
 
+    # -------
+    # Ansible (A specific version)
+    # -------
+    # Install the ansible version name in the deployment file
+
+    cmd = 'pip install --upgrade pip'
+    rv, _ = io.run(cmd, '.', cli_args.quiet)
+    if not rv:
+        return False
+
+    cmd = 'pip install ansible=={}'. \
+        format(deployment['ansible']['version'])
+    rv, _ = io.run(cmd, '.', cli_args.quiet)
+    if not rv:
+        return False
+
     # ---------
     # Terraform
     # ---------
     # Create compute instances for the cluster.
 
     t_dir = deployment['terraform']['dir']
-    if not cli_args.skip_terraform:
-
-        cmd = '~/bin/terraform init'
-        cwd = 'terraform/{}/cluster'.format(t_dir)
-        rv, _ = io.run(cmd, cwd, cli_args.quiet)
-        if not rv:
-            return False
-
-        cmd = '~/bin/terraform apply' \
-              ' -auto-approve' \
-              ' -state=.terraform.{}'.format(deployment_name)
-        cwd = 'terraform/{}/cluster'.format(t_dir)
-        rv, _ = io.run(cmd, cwd, cli_args.quiet)
-        if not rv:
-            return False
-
     if cli_args.cluster:
+
+        if not cli_args.skip_terraform:
+
+            cmd = '~/bin/terraform init'
+            cwd = 'terraform/{}/cluster'.format(t_dir)
+            rv, _ = io.run(cmd, cwd, cli_args.quiet)
+            if not rv:
+                return False
+
+            cmd = '~/bin/terraform apply' \
+                  ' -auto-approve' \
+                  ' -state=.terraform.{}'.format(deployment_name)
+            cwd = 'terraform/{}/cluster'.format(t_dir)
+            rv, _ = io.run(cmd, cwd, cli_args.quiet)
+            if not rv:
+                return False
 
         # Get this working copy's remote origin.
         # We clone that repo in the master.
@@ -122,7 +138,7 @@ def _main(cli_args, deployment_name):
             return False
 
         # Now expose the Bastion's IP
-        cmd = 'terraform output' \
+        cmd = '~/bin/terraform output' \
               ' -state=.terraform.{}' \
               ' bastion_ip'.format(deployment_name)
         cwd = 'terraform/{}/cluster'.format(t_dir)
@@ -134,22 +150,6 @@ def _main(cli_args, deployment_name):
         return True
 
     if not cli_args.skip_initialisation:
-
-        # -------
-        # Ansible (A specific version)
-        # -------
-        # Install the ansible version name in the deployment file
-
-        cmd = 'pip install --upgrade pip --user'
-        rv, _ = io.run(cmd, '.', cli_args.quiet)
-        if not rv:
-            return False
-
-        cmd = 'pip install ansible=={} --user'. \
-            format(deployment['ansible']['version'])
-        rv, _ = io.run(cmd, '.', cli_args.quiet)
-        if not rv:
-            return False
 
         # --------
         # Checkout (OpenShift Ansible)

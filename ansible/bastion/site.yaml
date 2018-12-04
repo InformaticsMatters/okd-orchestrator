@@ -38,7 +38,7 @@
 
   - name: Install SSH private key
     copy:
-      src: "{{ lookup('env','HOME') }}/.ssh/{{ keypair_name }}"
+      src: "{{ lookup('env','HOME') }}/.ssh/id_rsa"
       dest: "{{ ansible_env.HOME }}/.ssh/id_rsa"
       mode: 0600
 
@@ -57,7 +57,7 @@
   # The Orchestrator
   # ----------------
 
-  - name: Clone the orchestrator
+  - name: Clone this orchestrator
     git:
       repo: "{{ git_repo }}"
       dest: "{{ ansible_env.HOME }}/okd-orchestrator"

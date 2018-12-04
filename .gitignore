@@ -25,6 +25,12 @@ terraform/scaleway/cluster/variables.tf
 # Packer material
 packer/**/*.json
 
+# Keypair for the dockerfile
+docker/keypair
+
+# Provider Variables
+provider-env/setenv-aws.sh
+
 # Terraform material...
 *.tfstate
 *.tfstate.backup

@@ -37,6 +37,7 @@ provider-env/setenv-aws.sh
 *.tfstate.lock.info
 **/.terraform/
 **/.terraform.*
+terraform/**/*.svg
 
 # Ansible material...
 **/facts/

@@ -6,6 +6,7 @@
 from __future__ import print_function
 
 import argparse
+from builtins import input
 import glob
 import os
 import sys

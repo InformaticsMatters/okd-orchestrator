@@ -9,11 +9,13 @@
 # - TF_VAR_aws_secret_key                 Your AWS secret key
 # - TF_VAR_aws_os_ami                     The AMI for OpenShift base images
 # - TF_VAR_aws_bastion_ami                The AMI for the bastion base image
+# - TF_VAR_okd_admin_password             The initial OpenShift admin user password
 
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
 variable "aws_os_ami" {}
 variable "aws_bastion_ami" {}
+variable "okd_admin_password" {}
 
 # -----------------------------------------------------------------------------
 # DEFAULT VARIABLES (AWS)

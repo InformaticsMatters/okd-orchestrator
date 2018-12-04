@@ -6,6 +6,7 @@
 from __future__ import print_function
 
 import argparse
+from builtins import input
 import glob
 import os
 import sys
@@ -116,7 +117,7 @@ def _main(cli_args, deployment_name):
         rv, proc = io.run(cmd, cwd, True)
         if not rv:
             return False
-        upstream_repo = proc.stdout.readline().strip()
+        upstream_repo = proc.stdout.readline().decode("utf-8").strip()
         if not upstream_repo:
             print('Could not get the OKD repository.\n'
                   'Are you running this form a working copy'

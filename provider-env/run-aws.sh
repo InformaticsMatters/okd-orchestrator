@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # With the docker image built,
-# environment set with `source setenv-aws.sh`
+# and environment set with `source setenv-aws.sh`,
 # the OKD Orchestrator image can be run with this command...
 docker run -it -v `pwd`/..:/okd \
     -e TF_VAR_aws_os_ami=${TF_VAR_aws_os_ami} \

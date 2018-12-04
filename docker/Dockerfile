@@ -44,10 +44,12 @@ FROM python:3.6.7
 COPY requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
 
-# Install unzip and Terraform
+# Install some required tools
 RUN apt-get -y update && \
-    apt-get install -y unzip && \
-    curl https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip --output /tmp/terraform.zip && \
+    apt-get install -y unzip graphviz
+
+# Install Terraform
+RUN curl https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip --output /tmp/terraform.zip && \
     unzip /tmp/terraform.zip -d $HOME/bin && \
     chmod 0700 $HOME/bin/terraform
 

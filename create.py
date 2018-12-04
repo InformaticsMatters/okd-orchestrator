@@ -14,6 +14,7 @@ import yaml
 
 from utils import io
 
+
 def _main(cli_args, deployment_name):
     """Deployment entry point.
 
@@ -48,8 +49,9 @@ def _main(cli_args, deployment_name):
     if not cli_args.auto_approve:
 
         confirmation_word = io.get_confirmation_word()
-        confirmation = raw_input('Enter "{}" to CREATE the Cluster: '.
-                                 format(confirmation_word))
+        target = 'CREATE the Cluster' if cli_args.cluster else 'INSTALL OpenShift'
+        confirmation = input('Enter "{}" to {}: '.
+                             format(confirmation_word, target))
         if confirmation != confirmation_word:
             print('Phew! That was close!')
             return True

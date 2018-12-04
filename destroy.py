@@ -53,8 +53,8 @@ def _main(cli_args, deployment_name):
     print()
 
     confirmation_word = io.get_confirmation_word()
-    confirmation = raw_input('Enter "{}" to DESTROY this deployment: '.
-                             format(confirmation_word))
+    confirmation = input('Enter "{}" to DESTROY this deployment: '.
+                         format(confirmation_word))
     if confirmation != confirmation_word:
         print('Phew! That was close!')
         return True

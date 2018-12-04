@@ -50,7 +50,8 @@ def _main(cli_args, deployment_name):
     if not cli_args.auto_approve:
 
         confirmation_word = io.get_confirmation_word()
-        target = 'CREATE the Cluster' if cli_args.cluster else 'INSTALL OpenShift'
+        target = 'CREATE the Cluster' \
+            if cli_args.cluster else 'INSTALL OpenShift'
         confirmation = input('Enter "{}" to {}: '.
                              format(confirmation_word, target))
         if confirmation != confirmation_word:

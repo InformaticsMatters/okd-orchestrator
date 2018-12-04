@@ -197,7 +197,7 @@ def _main(cli_args, deployment_name):
 
         for play in deployment['openshift']['play']:
             cmd = 'ansible-playbook ../openshift-ansible/playbooks/{}' \
-                  ' -i inventories/{}/inventory'.format(deployment_name, play)
+                  ' -i inventories/{}/inventory'.format(play, deployment_name)
             cwd = 'openshift'
             rv, _ = io.run(cmd, cwd, cli_args.quiet)
             if not rv:

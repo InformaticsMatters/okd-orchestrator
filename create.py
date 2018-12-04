@@ -9,22 +9,10 @@ import argparse
 import glob
 import os
 import sys
-import time
 
 import yaml
 
 from utils import io
-
-# Time (in seconds) to pause after creating cluster instances
-# before invoking any ansible playbook. Added to give cluster
-# time to fully initialise prior to installing OpenShift.
-# (Not sure it's actually needed)
-#
-# But I do find the occasional inability to ssh.
-# and when I re-run the affected part of the playbook all is fine.
-# So maybe the machines are still initialising?
-_PRE_ANSIBLE_PAUSE_S = 60.0
-
 
 def _main(cli_args, deployment_name):
     """Deployment entry point.
@@ -59,10 +47,9 @@ def _main(cli_args, deployment_name):
     io.banner(deployment['name'], full_heading=True, quiet=False)
     if not cli_args.auto_approve:
 
-        target = 'Bastion machine' if cli_args.bastion else 'OpenShift Cluster'
         confirmation_word = io.get_confirmation_word()
-        confirmation = raw_input('Enter "{}" to CREATE the {}: '.
-                                 format(confirmation_word, target))
+        confirmation = raw_input('Enter "{}" to CREATE the Cluster: '.
+                                 format(confirmation_word))
         if confirmation != confirmation_word:
             print('Phew! That was close!')
             return True
@@ -76,7 +63,7 @@ def _main(cli_args, deployment_name):
 
         cmd = './render.py {}'.format(deployment_name)
         cwd = '.'
-        rv = io.run(cmd, cwd, cli_args.quiet)
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
             return False
 
@@ -85,76 +72,95 @@ def _main(cli_args, deployment_name):
     # ---------
     # Create compute instances for the cluster.
 
+    t_dir = deployment['terraform']['dir']
     if not cli_args.skip_terraform:
 
-        # The 'terraform' sub-directory.
-        # The sub-directory where execution material is located.
-        # For terraform the files either relate to the bastion or cluster
-        # and are in subdirectories 'bastion' and 'cluster'.
-        # The same applies to the ansible playbook - one will be
-        # in 'bastion' and one will be in 'cluster'
-        tf_sub_dir = 'bastion' if cli_args.bastion else 'cluster'
-
-        t_dir = deployment['terraform']['dir']
         cmd = '~/bin/terraform init'
-        cwd = 'terraform/{}/{}'.format(t_dir, tf_sub_dir)
-        rv = io.run(cmd, cwd, cli_args.quiet)
+        cwd = 'terraform/{}/cluster'.format(t_dir)
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
             return False
 
         cmd = '~/bin/terraform apply' \
               ' -auto-approve' \
               ' -state=.terraform.{}'.format(deployment_name)
-        cwd = 'terraform/{}/{}'.format(t_dir, tf_sub_dir)
-        rv = io.run(cmd, cwd, cli_args.quiet)
+        cwd = 'terraform/{}/cluster'.format(t_dir)
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
             return False
 
-    if cli_args.bastion:
+    if cli_args.cluster:
+
+        # Get this working copy's remote origin.
+        # We clone that repo in the master.
+        cmd = 'git config --get remote.origin.url'
+        cwd = '.'
+        rv, proc = io.run(cmd, cwd, True)
+        if not rv:
+            return False
+        upstream_repo = proc.stdout.readline().strip()
+        if not upstream_repo:
+            print('Could not get the OKD repository.\n'
+                  'Are you running this form a working copy'
+                  ' of a git repository?')
+            return False
+
+        print('Upstream repository = %s' % upstream_repo)
 
         cmd = 'ansible-playbook' \
               ' ../ansible/bastion/site.yaml' \
+              ' -i inventories/{}/bastion.inventory' \
+              ' -e git_repo={}' \
               ' -e keypair_name={}' \
-              ' -e deployment={}'.format(deployment['cluster']['keypair_name'],
+              ' -e deployment={}'.format(deployment_name,
+                                         upstream_repo,
+                                         deployment['cluster']['keypair_name'],
                                          deployment_name)
         cwd = 'openshift'
-        rv = io.run(cmd, cwd, cli_args.quiet)
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
+        if not rv:
+            return False
+
+        # Now expose the Bastion's IP
+        cmd = 'terraform output' \
+              ' -state=.terraform.{}' \
+              ' bastion_ip'.format(deployment_name)
+        cwd = 'terraform/{}/cluster'.format(t_dir)
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
             return False
 
         # Done
         return True
 
-    # -------
-    # Ansible (A specific version)
-    # -------
-    # Install the ansible version name in the deployment file
-
     if not cli_args.skip_initialisation:
 
+        # -------
+        # Ansible (A specific version)
+        # -------
+        # Install the ansible version name in the deployment file
+
         cmd = 'pip install --upgrade pip --user'
-        rv = io.run(cmd, '.', cli_args.quiet)
+        rv, _ = io.run(cmd, '.', cli_args.quiet)
         if not rv:
             return False
 
         cmd = 'pip install ansible=={} --user'. \
             format(deployment['ansible']['version'])
-        rv = io.run(cmd, '.', cli_args.quiet)
+        rv, _ = io.run(cmd, '.', cli_args.quiet)
         if not rv:
             return False
 
-    # --------
-    # Checkout (OpenShift Ansible)
-    # --------
-    # Updates our OpenShift-Ansible sub-module
-    # and checks out the revision defined by the deployment tag.
-
-    if not cli_args.skip_initialisation:
+        # --------
+        # Checkout (OpenShift Ansible)
+        # --------
+        # Updates our OpenShift-Ansible sub-module
+        # and checks out the revision defined by the deployment tag.
 
         # Git sub-module initialisation
         cmd = 'git submodule update --init --remote'
         cwd = '.'
-        rv = io.run(cmd, cwd, cli_args.quiet)
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
             return False
 
@@ -162,20 +168,9 @@ def _main(cli_args, deployment_name):
         cmd = 'git checkout tags/{}'. \
             format(deployment['openshift']['ansible_tag'])
         cwd = 'openshift-ansible'
-        rv = io.run(cmd, cwd, cli_args.quiet)
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
             return False
-
-    # -----------------
-    # Pre-Ansible Pause
-    # -----------------
-    # Pre-OpenShift playbook.
-
-    if not cli_args.skip_terraform and not cli_args.skip_openshift:
-
-        io.banner('time.sleep({})'.format(_PRE_ANSIBLE_PAUSE_S),
-                  cli_args.quiet)
-        time.sleep(_PRE_ANSIBLE_PAUSE_S)
 
     # -------
     # Ansible (Pre-OpenShift)
@@ -188,7 +183,7 @@ def _main(cli_args, deployment_name):
 
             cmd = 'ansible-playbook {}.yaml'.format(pre_os_create)
             cwd = 'ansible/pre-os'
-            rv = io.run(cmd, cwd, cli_args.quiet)
+            rv, _ = io.run(cmd, cwd, cli_args.quiet)
             if not rv:
                 return False
 
@@ -201,10 +196,10 @@ def _main(cli_args, deployment_name):
     if not cli_args.skip_openshift:
 
         for play in deployment['openshift']['play']:
-            cmd = 'ansible-playbook ../openshift-ansible/playbooks/{}'.\
-                format(play)
+            cmd = 'ansible-playbook ../openshift-ansible/playbooks/{}' \
+                  ' -i inventories/{}/inventory'.format(deployment_name, play)
             cwd = 'openshift'
-            rv = io.run(cmd, cwd, cli_args.quiet)
+            rv, _ = io.run(cmd, cwd, cli_args.quiet)
             if not rv:
                 return False
 
@@ -216,7 +211,7 @@ def _main(cli_args, deployment_name):
 
         cmd = 'ansible-playbook site.yaml'
         cwd = 'ansible/post-os'
-        rv = io.run(cmd, cwd, cli_args.quiet)
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
             return False
 
@@ -241,8 +236,8 @@ if __name__ == '__main__':
                         help='Decrease output verbosity',
                         action='store_true')
 
-    PARSER.add_argument('-b', '--bastion',
-                        help='Only create the bastion node',
+    PARSER.add_argument('-c', '--cluster',
+                        help='Create the cluster, do not install OpenShift',
                         action='store_true')
 
     PARSER.add_argument('-d', '--display-deployments',

@@ -14,7 +14,7 @@ openshift:
 terraform:
 
   # The Terraform templates
-  # used to build the Bastion and cluster.
+  # used to build the Bastion and its Cluster.
   dir: aws
 
 ansible:
@@ -24,66 +24,47 @@ ansible:
 
 bastion:
 
-  # The machine image ID for the Bastion instance.
-  # This the value produced by Packer when the image is built for
-  # the cloud provider. For AWS this will be the 'ami-` ID.
-  machine_image:
-    id: ami-071abb6303e09ce6c
-
   type: t2.small
 
 cluster:
 
-  # A unique name fo your cluster.
-  # ALl your clusters must have s different ID.
+  # A unique name for your cluster.
+  # All your clusters must have a different ID.
   id: simple-frankfurt-39
   # Name prefix and suffix values for the names of each cluster instance.
   # Use this to quickly distinguish between instances.
   name_prefix: orn
   name_suffix:
   # The SSH key-pair name known by the cloud provider.
-  # Instances will be created using this key-pair and ou will
+  # Instances will be created using this key-pair and you will
   # need it to connect to them.
   keypair_name: aws-keypair
   # The region and zone used for cluster instances.
   # At the moment all instances are created in the same zone.
   region: eu-central-1
   zone: eu-central-1a
-  # The external IP address or domain-name of the Master node
-  public_hostname: 18.196.144.77
-  # The external IP address or domain-name of the Infrastructure node
-  router_basename: 3.121.242.74
-
-  # The machine image ID for each compute instance in the cluster.
-  # This the value produced by Packer when the images are built for
-  # the cloud provider. For AWS this will be the 'ami-` ID.
-  machine_image:
-    id: ami-053727c1459b188a2
+  # The external IP address or domain-name of the Master node.
+  # If not set the master public DNS will be used.
+  public_hostname:
+  # The external IP address or domain-name of the Infrastructure node.
+  # If not set the master public DNS will be used.
+  router_basename:
 
   # Details of the Master nodes.
-  # A count, type and, for the first master,
-  # its pre-assigned fixed/floating IP value.
   #
   # At the moment only one master instance is supported.
   master:
     count: 1
     type: t2.xlarge
-  master_1:
-    fixed_ip_id: eipalloc-0efc2014938d49941
 
   # Details of the Infrastructure nodes.
-  # A count, type and, for the first instance,
-  # its pre-assigned fixed/floating IP value.
   #
   # At the moment only one master instance is supported.
   infra:
     count: 1
     type: t2.xlarge
-  infra_1:
-    fixed_ip_id: eipalloc-07dc85d27405c319a
 
-  # Details of the Infrastructure nodes.
-  # A count and type.
+  # Details of the cluster compute nodes.
   node:
     count: 1
     type: t2.xlarge

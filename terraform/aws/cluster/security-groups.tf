@@ -40,7 +40,7 @@ resource "aws_security_group" "openshift" {
     self = true
   }
 
-  vpc_id = "${var.vpc_id}"
+  vpc_id = "${module.vpc.vpc_id}"
 
   tags {
     Name = "${var.resource_tag}"
@@ -70,7 +70,7 @@ resource "aws_security_group" "ssh" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  vpc_id = "${var.vpc_id}"
+  vpc_id = "${module.vpc.vpc_id}"
 
   tags {
     Name = "${var.resource_tag}"
@@ -94,7 +94,7 @@ resource "aws_security_group" "outbound-general" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  vpc_id = "${var.vpc_id}"
+  vpc_id = "${module.vpc.vpc_id}"
 
   tags {
     Name = "${var.resource_tag}"

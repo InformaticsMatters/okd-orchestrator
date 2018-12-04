@@ -66,16 +66,18 @@ def banner(heading, full_heading=False, quiet=False):
 
 
 def run(cmd, cwd, quiet=False):
-    """Run a command using subprocess.Popen() returning True on success.
+    """Run a command using subprocess.Popen() returning True on success
+    along with the process object.
 
     :param cmd: The command string
     :type cmd: ``str``
     :param cwd: The execution directory
     :type cwd: ``str``
-    :param quiet: True if quiet
+    :param quiet: True if quiet. If quiet the the stdout/stderr streams
+                  will be available in the returned process object.
     :type quiet: ``bool``
-    :return: True on success
-    :rtype: ``bool``
+    :return: A typle of success and process object
+    :rtype: ``tuple``
     """
     expnaded_cmd = os.path.expanduser(cmd)
     banner(expnaded_cmd, quiet)
@@ -92,6 +94,6 @@ def run(cmd, cwd, quiet=False):
             with process.stderr as err:
                 for line in err:
                     print('# {}'.format(line.strip()))
-        return False
+        return False, process
 
-    return True
+    return True, process

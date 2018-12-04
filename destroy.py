@@ -47,16 +47,10 @@ def _main(cli_args, deployment_name):
     # -----
     io.banner(deployment['name'], full_heading=True, quiet=False)
 
-    # Caution if bastion
-    if cli_args.bastion:
-        print()
-        print('CAUTION You are about to destroy the bastion.')
-        print('------- Have you destroyed all the clusters created from it?')
-        print('        If not you risk leaving a large number of cloud')
-        print('        objects orphaned that might otherwise be difficult to')
-        print('        delete.')
-        print('        Are you sure you want to destroy the bastion?')
-        print()
+    print()
+    print('CAUTION You are about to destroy the cluster.')
+    print('------- Are you sure you want to do this?')
+    print()
 
     confirmation_word = io.get_confirmation_word()
     confirmation = raw_input('Enter "{}" to DESTROY this deployment: '.
@@ -65,36 +59,14 @@ def _main(cli_args, deployment_name):
         print('Phew! That was close!')
         return True
 
-    # -------
-    # Ansible
-    # -------
-    if ('play' in deployment['ansible'] and
-            'pre_os_destroy' in deployment['ansible']['play']):
-        # Undo local (bastion) /etc/hosts?
-        pre_os_destroy = deployment['ansible']['play']['pre_os_destroy']
-        if pre_os_destroy:
-            cmd = 'ansible-playbook {}.yaml'.format(pre_os_destroy)
-            cwd = 'ansible/pre-os'
-            rv = io.run(cmd, cwd, cli_args.quiet)
-            if not rv:
-                return False
-
     # ---------
     # Terraform
     # ---------
     # Destroy the cluster.
 
-    # The 'action' sub-directory.
-    # The sub-directory where execution material is located.
-    # For terraform the files either relate to the bastion or cluster
-    # and are in subdirectories 'bastion' and 'cluster'.
-    # The same applies to the ansible playbook - one will be
-    # in 'bastion' and one will be in 'cluster'
-    tf_sub_dir = 'bastion' if cli_args.bastion else 'cluster'
-
     t_dir = deployment['terraform']['dir']
     cmd = '~/bin/terraform init'
-    cwd = 'terraform/{}/{}'.format(t_dir, tf_sub_dir)
+    cwd = 'terraform/{}/cluster'.format(t_dir)
     rv = io.run(cmd, cwd, cli_args.quiet)
     if not rv:
         return False
@@ -102,7 +74,7 @@ def _main(cli_args, deployment_name):
     t_dir = deployment['terraform']['dir']
     cmd = '~/bin/terraform destroy -force -state=.terraform.{}'.\
         format(deployment_name)
-    cwd = 'terraform/{}/{}'.format(t_dir, tf_sub_dir)
+    cwd = 'terraform/{}/cluster'.format(t_dir)
     rv = io.run(cmd, cwd, cli_args.quiet)
 
     return rv
@@ -117,11 +89,6 @@ if __name__ == '__main__':
                                    ' platform.')
 
     PARSER.add_argument('-q', '--quiet', help="Decrease output verbosity",
-                        action='store_true')
-
-    PARSER.add_argument('-b', '--bastion',
-                        help='Destroy the bastion node.'
-                             ' If not set the compute cluster is destroyed.',
                         action='store_true')
 
     PARSER.add_argument('-d', '--display-deployments',

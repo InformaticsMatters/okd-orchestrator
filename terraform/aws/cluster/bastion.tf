@@ -1,9 +1,9 @@
 # -----------------------------------------------------------------------------
-# General compute-node definitions
+# The Bastion node definition
 # -----------------------------------------------------------------------------
 
 resource "aws_instance" "bastion" {
-  ami = "${var.bastion_ami}"
+  ami = "${var.aws_bastion_ami}"
   instance_type = "${var.bastion_image_type}"
   key_name = "${var.keypair_name}"
   vpc_security_group_ids = ["${aws_security_group.ssh.id}",

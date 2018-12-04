@@ -7,17 +7,15 @@
 #
 # - TF_VAR_aws_access_key                 Your AWS access token
 # - TF_VAR_aws_secret_key                 Your AWS secret key
-# - TF_VAR_vpc_id                         The VPC ID (assigned at Bastion phase)
-# - TF_VAR_private_subnet_id              The Private Subnet ID (assigned at Bastion phase)
-# - TF_VAR_public_subnet_id               The Public Subnet ID (assigned at Bastion phase)
+# - TF_VAR_aws_os_ami                     The AMI for OpenShift base images
+# - TF_VAR_aws_bastion_ami                The AMI for the bastion base image
+#
 # - TF_VAR_oc_admin_password              Your desired OKD admin user password
 
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
-
-variable "vpc_id" {}
-variable "private_subnet_id" {}
-variable "public_subnet_id" {}
+variable "aws_os_ami" {}
+variable "aws_bastion_ami" {}
 
 variable "okd_admin_password" {}
 
@@ -43,22 +41,6 @@ variable "aws_zone" {
 variable "cluster_id" {
   description = "A unique ID for this cluster on AWS"
   default = "{{ cluster.id }}"
-}
-
-# The Cluster Node AMIs, indexed by region (that were built with Packer)
-variable "node_ami" {
-  description = "The image AMI"
-  default = "{{ cluster.machine_image.id }}"
-}
-
-variable "master_aws_elastic_ip_allocation_id" {
-  description = "The allocated Elastic IP to be used for the master."
-  default = "{{ cluster.master_1.fixed_ip_id }}"
-}
-
-variable "infra_aws_elastic_ip_allocation_id" {
-  description = "The allocated Elastic IP to be used for the infrastructure"
-  default = "{{ cluster.infra_1.fixed_ip_id }}"
 }
 
 # -----------------------------------------------------------------------------
@@ -95,10 +77,6 @@ variable "master_count" {
   default = {{ cluster.master.count }}
 }
 
-variable "master_image_name" {
-  default = "{{ cluster.machine_image.name }}"
-}
-
 variable "master_image_type" {
   default = "{{ cluster.master.type }}"
 }
@@ -109,10 +87,6 @@ variable "master_image_type" {
 variable "infra_count" {
   description = "The number of OpenShift infrastructure nodes, at least 1."
   default = "{{ cluster.infra.count }}"
-}
-
-variable "infra_image_name" {
-  default = "{{ cluster.machine_image.name }}"
 }
 
 variable "infra_image_type" {
@@ -127,10 +101,13 @@ variable "node_count" {
   default = {{ cluster.node.count }}
 }
 
-variable "node_image_name" {
-  default = "{{ cluster.machine_image.name }}"
-}
-
 variable "node_image_type" {
   default = "{{ cluster.node.type }}"
+}
+
+# -----------------------------------------------------------------------------
+# DEFAULT VARIABLES (Bastion Node)
+
+variable "bastion_image_type" {
+  default = "{{ bastion.type }}"
 }

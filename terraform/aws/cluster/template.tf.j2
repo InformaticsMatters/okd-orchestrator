@@ -60,3 +60,38 @@ resource "local_file" "post_os_inventory" {
   content = "${data.template_file.post_os_inventory.rendered}"
   filename = "${var.ansible_dir}/post-os/inventory"
 }
+
+# -------------------------
+# The AWS Bastion Inventory
+# -------------------------
+
+data "template_file" "bastion-inventory" {
+  template = "${file("${var.openshift_dir}/inventories/${var.deployment}/bastion.inventory.tpl")}"
+
+  vars {
+    bastion = "${aws_instance.bastion.0.public_ip}"
+  }
+}
+
+resource "local_file" "bastion-inventory" {
+  content = "${data.template_file.bastion-inventory.rendered}"
+  filename = "${var.openshift_dir}/inventories/${var.deployment}/bastion.inventory"
+}
+
+# -------------------------------------
+# The AWS Bastion Environment Variables
+# -------------------------------------
+
+data "template_file" "sh" {
+  template = "${file("${var.openshift_dir}/inventories/${var.deployment}/bastion.sh.tpl")}"
+
+  vars {
+    aws_access_key = "${var.aws_access_key}"
+    aws_secret_key = "${var.aws_secret_key}"
+  }
+}
+
+resource "local_file" "bastion-sh" {
+  content = "${data.template_file.sh.rendered}"
+  filename = "${var.openshift_dir}/inventories/${var.deployment}/bastion.sh"
+}

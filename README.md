@@ -6,8 +6,9 @@ A project sponsored by OpenRiskNet.
 
 >   OpenRiskNet: Open e-Infrastructure to Support Data Sharing,
     Knowledge Integration and in silico Analysis and Modelling in Risk Assessment
-    ![](docs/images/eu-96x64.png)
     Project Number 731075
+    
+>   ![](docs/images/eu-96x64.png)
 
 Refer to this project's [GitHub Pages] for detailed documentation.
 

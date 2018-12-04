@@ -1,6 +1,6 @@
 ansible == 2.6.7
 jinja2 == 2.10
-matildapeak-yacker >= 2018.5
+matildapeak-yacker == 2018.5
 passlib == 1.7.1
 pyyaml == 3.13
 flake8 == 3.6.0

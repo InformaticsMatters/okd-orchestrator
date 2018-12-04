@@ -43,6 +43,8 @@ FROM python:3.6.7
 
 COPY requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
+ENV HOME=/root
+ENV YACKER_PACKER_PATH=$HOME/bin
 
 # Install some required tools
 RUN apt-get -y update && \

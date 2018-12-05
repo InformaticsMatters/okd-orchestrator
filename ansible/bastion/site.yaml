@@ -38,7 +38,7 @@
 
   - name: Install SSH private key
     copy:
-      src: "{{ lookup('env','HOME') }}/.ssh/id_rsa"
+      src: "{{ lookup('env','HOME') }}/.ssh/{{ keypair_name }}"
       dest: "{{ ansible_env.HOME }}/.ssh/id_rsa"
       mode: 0600
 

@@ -61,7 +61,8 @@ def _main(cli_args, deployment_name):
     # ------
     # Render (jinja2 files)
     # ------
-    # Translate content of jinja2 template files.
+    # Translate content of Jinja2 template files
+    # using the deployment configuration's YAML file content.
 
     if not cli_args.skip_rendering:
 
@@ -87,13 +88,13 @@ def _main(cli_args, deployment_name):
     if not rv:
         return False
 
-    # ---------
-    # Terraform
-    # ---------
-    # Create compute instances for the cluster.
-
     t_dir = deployment['terraform']['dir']
     if cli_args.cluster:
+
+        # ---------
+        # Terraform
+        # ---------
+        # Create compute instances for the cluster.
 
         if not cli_args.skip_terraform:
 
@@ -111,8 +112,11 @@ def _main(cli_args, deployment_name):
             if not rv:
                 return False
 
+        # -------
+        # Ansible
+        # -------
         # Get this working copy's remote origin.
-        # We clone that repo in the master.
+        # We clone that repo's master branch to the Bastion.
         cmd = 'git config --get remote.origin.url'
         cwd = '.'
         rv, proc = io.run(cmd, cwd, True)
@@ -150,31 +154,37 @@ def _main(cli_args, deployment_name):
         if not rv:
             return False
 
-        # Done
+        # If we're simply creating the cluster
+        # there's nothing more to do here.
+        #
+        # Leave.
         return True
 
-    if not cli_args.skip_initialisation:
+    # We're not creating the cluster (that is assumed to exist)
+    # so we m,ust be creating the OpenShift environment.
+    #
+    # From this point we're installing and configuring OpenShift...
 
-        # --------
-        # Checkout (OpenShift Ansible)
-        # --------
-        # Updates our OpenShift-Ansible sub-module
-        # and checks out the revision defined by the deployment tag.
+    # --------
+    # Checkout (OpenShift Ansible)
+    # --------
+    # Updates our OpenShift-Ansible sub-module
+    # and checks out the revision defined by the deployment tag.
 
-        # Git sub-module initialisation
-        cmd = 'git submodule update --init --remote'
-        cwd = '.'
-        rv, _ = io.run(cmd, cwd, cli_args.quiet)
-        if not rv:
-            return False
+    # Git sub-module initialisation
+    cmd = 'git submodule update --init --remote'
+    cwd = '.'
+    rv, _ = io.run(cmd, cwd, cli_args.quiet)
+    if not rv:
+        return False
 
-        # OpenShift Ansible
-        cmd = 'git checkout tags/{}'. \
-            format(deployment['openshift']['ansible_tag'])
-        cwd = 'openshift-ansible'
-        rv, _ = io.run(cmd, cwd, cli_args.quiet)
-        if not rv:
-            return False
+    # OpenShift Ansible
+    cmd = 'git checkout tags/{}'. \
+        format(deployment['openshift']['ansible_tag'])
+    cwd = 'openshift-ansible'
+    rv, _ = io.run(cmd, cwd, cli_args.quiet)
+    if not rv:
+        return False
 
     # -------
     # Ansible (Pre-OpenShift)
@@ -182,6 +192,7 @@ def _main(cli_args, deployment_name):
 
     if ('play' in deployment['ansible'] and
             'pre_os_create' in deployment['ansible']['play']):
+
         pre_os_create = deployment['ansible']['play']['pre_os_create']
         if not cli_args.skip_pre_openshift and pre_os_create:
 
@@ -244,12 +255,13 @@ if __name__ == '__main__':
                         help='Create the cluster, do not install OpenShift',
                         action='store_true')
 
-    PARSER.add_argument('-d', '--display-deployments',
-                        help='Display known deployments',
+    PARSER.add_argument('-o', '--open-shift',
+                        help='Create the OpenShift installation'
+                             ' (on an existing cluster)',
                         action='store_true')
 
-    PARSER.add_argument('-si', '--skip-initialisation',
-                        help='Skip the initialisation stage',
+    PARSER.add_argument('-d', '--display-deployments',
+                        help='Display known deployments',
                         action='store_true')
 
     PARSER.add_argument('-sr', '--skip-rendering',
@@ -282,10 +294,15 @@ if __name__ == '__main__':
 
     ARGS = PARSER.parse_args()
 
+    # User must have specified 'cluster' or 'open-shift'
+    if not ARGS.cluster and not ARGS.open_shift:
+        print('Must specify --cluster or --open-shift')
+        sys.exit(1)
+
     deployments = glob.glob('deployments/*.yaml')
     # If there are no deployments, we can do nothing!
     if not deployments:
-        print('The deployments directory is empty.')
+        print('The deployments directory is empty')
         sys.exit(1)
 
     # Deal with special cases...
@@ -301,8 +318,8 @@ if __name__ == '__main__':
     # then the user must name one...
     if not ARGS.deployment:
         if len(deployments) > 1:
-            print('ERROR: You need to supply the name of a deployment.'
-                  ' The following are available:')
+            print('ERROR: You need to supply the name of a deployment.\n'
+                  '       The following are available:')
             for deployment in deployments:
                 # Display the deployment without the path
                 # and removing the '.yaml' suffix.

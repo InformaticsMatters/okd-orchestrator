@@ -1,5 +1,9 @@
 ---
 
+# To build the stable docker image: -
+#
+#   IMAGE_TAG=stable docker-compose build
+
 version: '3.6'
 
 services:
@@ -7,5 +11,5 @@ services:
   okd-orchestrator:
     build:
       context: .
-    image: "okd-orchestrator:${IMAGE_TAG:-latest}"
+    image: "informaticsmatters/okd-orchestrator:${IMAGE_TAG:-latest}"
     container_name: okd-orchestrator

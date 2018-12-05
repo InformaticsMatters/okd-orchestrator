@@ -66,14 +66,14 @@ def _main(cli_args, deployment_name):
     # Destroy the cluster.
 
     t_dir = deployment['terraform']['dir']
-    cmd = '~/bin/terraform init'
+    cmd = 'terraform init'
     cwd = 'terraform/{}/cluster'.format(t_dir)
     rv = io.run(cmd, cwd, cli_args.quiet)
     if not rv:
         return False
 
     t_dir = deployment['terraform']['dir']
-    cmd = '~/bin/terraform destroy -force -state=.terraform.{}'.\
+    cmd = 'terraform destroy -force -state=.terraform.{}'.\
         format(deployment_name)
     cwd = 'terraform/{}/cluster'.format(t_dir)
     rv = io.run(cmd, cwd, cli_args.quiet)

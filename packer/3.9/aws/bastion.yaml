@@ -14,11 +14,11 @@
 provisioners:
 
 - type: file
-  source: ../../../files/bastion.sh
+  source: ../../files/bastion.sh
   destination: /tmp/bastion.sh
 
 - type: file
-  source: ../../files/bastion-requirements.txt
+  source: ../files/bastion-requirements.txt
   destination: /tmp/requirements.txt
 
 - type: shell

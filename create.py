@@ -97,13 +97,13 @@ def _main(cli_args, deployment_name):
 
         if not cli_args.skip_terraform:
 
-            cmd = '~/bin/terraform init'
+            cmd = 'terraform init'
             cwd = 'terraform/{}/cluster'.format(t_dir)
             rv, _ = io.run(cmd, cwd, cli_args.quiet)
             if not rv:
                 return False
 
-            cmd = '~/bin/terraform apply' \
+            cmd = 'terraform apply' \
                   ' -auto-approve' \
                   ' -state=.terraform.{}'.format(deployment_name)
             cwd = 'terraform/{}/cluster'.format(t_dir)
@@ -142,7 +142,7 @@ def _main(cli_args, deployment_name):
             return False
 
         # Now expose the Bastion's IP
-        cmd = '~/bin/terraform output' \
+        cmd = 'terraform output' \
               ' -state=.terraform.{}' \
               ' bastion_ip'.format(deployment_name)
         cwd = 'terraform/{}/cluster'.format(t_dir)

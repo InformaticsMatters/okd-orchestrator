@@ -102,4 +102,4 @@
     shell: ./create.py --openshift --auto-acknowledge
     args:
       chdir: okd-orchestrator
-    when: install_openshift
+    when: install_openshift|lower == 'yes'

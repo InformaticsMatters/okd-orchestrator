@@ -32,12 +32,12 @@ ${master1}
 {# --- nodes --------------------------------------------------------------- #}
 
 {%- block nodes -%}
-${master1} openshift_hostname=${master1}
+${master1} openshift_hostname=${master1_hostname}
 {%- if cluster.infra.count %}
-${infra1} openshift_hostname=${infra1} openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
+${infra1} openshift_hostname=${infra1_hostname} openshift_node_labels="{'region': 'infra', 'zone': 'default'}"
 {%- endif %}
 {%- for item in range(1, cluster.node.count + 1) %}
-${node{{ '%03d'|format(item) }}} openshift_hostname=${node{{ '%03d'|format(item) }}} openshift_node_labels="{'region': 'primary', 'zone': 'default'}"
+${node{{ '%03d'|format(item) }}} openshift_hostname=${node{{ '%03d'|format(item) }}_hostname} openshift_node_labels="{'region': 'primary', 'zone': 'default'}"
 {%- endfor %}
 {%- endblock -%}
 

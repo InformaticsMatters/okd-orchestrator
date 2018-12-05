@@ -13,7 +13,7 @@ will use.
 Once an image has been compiled for a cloud provider region it can be used
 for any number of clusters for that provider's region.
 
-To compile imageswe use `yacker`_ a YAML wrapper for `packer`_,
+To compile images we use `yacker`_ a YAML wrapper for `packer`_,
 a HashiCorp tool dedicated to the the automated construction of machine images.
 
 .. epigraph::

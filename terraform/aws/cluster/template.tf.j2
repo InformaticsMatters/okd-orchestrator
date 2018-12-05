@@ -14,24 +14,33 @@ data "template_file" "inventory" {
     {% if cluster.public_hostname %}
     public_hostname = "{{ cluster.public_hostname }}"
     {% else %}
-    public_hostname = "${aws_instance.master.0.public_dns}"
+    public_hostname = "${aws_eip.master.public_ip}"
     {% endif %}
     {% if cluster.router_basename %}
     router_basename = "{{ cluster.router_basename }}"
     {% else %}
-    router_basename = "${aws_instance.infra.0.public_dns}"
+    router_basename = "${aws_eip.infra.public_ip}"
     {% endif %}
 
-    {% for item in range(cluster.master.count) %}
-    master{{ item + 1 }} = "${aws_instance.master.{{ item }}.private_dns}"
+    master1 = "${aws_eip.master.public_ip}"
+    master1_hostname = "${aws_instance.master.0.private_dns}"
+
+    {% for item in range(1, cluster.master.count) %}
+    master{{ item + 1 }} = "${aws_instance.master.{{ item }}.private_ip}"
+    master{{ item + 1 }}_hostname = "${aws_instance.master.{{ item }}.private_dns}"
     {% endfor %}
 
-    {% for item in range(cluster.infra.count) %}
-    infra{{ item + 1 }} = "${aws_instance.infra.{{ item }}.private_dns}"
+    infra1 = "${aws_eip.infra.public_ip}"
+    infra1_hostname = "${aws_instance.infra.0.private_dns}"
+
+    {% for item in range(1, cluster.infra.count) %}
+    infra{{ item + 1 }} = "${aws_instance.infra.{{ item }}.private_ip}"
+    infra{{ item + 1 }}_hostname = "${aws_instance.infra.{{ item }}.private_dns}"
     {% endfor %}
 
     {% for item in range(cluster.node.count) %}
-    node{{ '%03d'|format(item + 1) }} = "${aws_instance.node.{{ item }}.private_dns}"
+    node{{ '%03d'|format(item + 1) }} = "${aws_instance.node.{{ item }}.private_ip}"
+    node{{ '%03d'|format(item + 1) }}_hostname = "${aws_instance.node.{{ item }}.private_dns}"
     {% endfor %}
 
   }

@@ -15,7 +15,7 @@ provider environment script (e.g. ``setenv.sh``).
     ``builders`` section for each region in the template file. The template files
     in our example build images for the **Frankfurt** region.
 
-To build the OKD 3.9 machine images, set your environment variables and
+To compile the OKD 3.9 machine images, set your environment variables and
 launch the orchestrator container. You will not need to define all the
 environment variables at this stage, only those required for compiling machine
 images.
@@ -25,8 +25,13 @@ from the root of the project::
 
     $ ./orc-start.sh
 
-If this is the first time you;re running the orchestrator the container image
-will need to be downloaded from Docker. This might take a moment before
+It is important to realise that the ``orc-start.sh`` script maps your
+orchestrator working directory to the container directory
+``$HOME/okd-orchestrator`` and your ``~/.ssh``
+directory to the container directory ``$HOME/.ssh``.
+
+If this is the first time you're running the orchestrator the container image
+will need to be downloaded from Docker. This might take a moment or two before
 you eventually enter the container.
 
 From the orchestrator container, move to the orchestration directory,

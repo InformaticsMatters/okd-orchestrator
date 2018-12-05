@@ -7,43 +7,19 @@
 # from within the container.
 #
 # You will need to define suitable environment variables for your
-# cloud-provider: -
+# cloud-provide and, when orchestrating the image IDs for the Bastion and
+# Cluster nodes and the OpenShift initial admin account password.
 #
-# - Credentials
-#
-# And, when orchestrating: -
-#
-# - The image IDs for the Bastion and Cluster nodes
-# - The OpenShift initial admin account password
-#
-# A typical container launch for AWS from your orchestrator directory would be
-# (if you've set your enviornment variables): -
+# A typical container launch for AWS from your orchestrator directory
+# would be: -
 #
 #   docker run -it \
 #     -v `pwd`/..:/home/okdo/okd-orchestrator \
 #     -v ~/.ssh:/home/okdo/.ssh \
-#     -e TF_VAR_aws_os_ami=${TF_VAR_aws_os_ami} \
-#     -e TF_VAR_aws_bastion_ami=${TF_VAR_aws_bastion_ami} \
-#     -e TF_VAR_aws_secret_key=${TF_VAR_aws_secret_key} \
-#     -e TF_VAR_aws_access_key=${TF_VAR_aws_access_key} \
-#     -e TF_VAR_okd_admin_password=${TF_VAR_okd_admin_password} \
 #     --rm informaticsmatters/okd-orchestrator:stable /bin/bash
 #
-# Base images for cloud providers can be built from within the container
-# using yacker. For OpenShift 3.9 on AWS: -
-#
-#   cd $HOME/okd-orchestrator/packer/3.9/aws
-#   yacker build bastion.yaml
-#   yacker build os.yaml
-#
-# Then, from within the container you can build the cluster with the following
-# commands executed from your orchestrator volume. The following assumes your
-# private keypair file is `aws-keypair`, not the default `id_rsa`: -
-#
-#   cd $HOME/okd-orchestrator
-#   eval $(ssh-agent)
-#   ssh-add ~/.ssh/aws-keypair
-#   ./create.py --cluster simple-aws-frankfurt-3-9
+# Refer to the project's documention for a detailed discussiomn of
+# the orchestrator.
 
 FROM python:3.6.7
 

@@ -134,6 +134,7 @@ def _main(cli_args, deployment_name):
         # Run the bastion site file (on the bastion)
         # optionally continuing to install OpenShift.
         install_openshift = 'yes' if cli_args.openshift else 'no'
+        keypair_name = os.environ['TF_VAR_keypair_name']
         cmd = 'ansible-playbook' \
               ' ../ansible/bastion/site.yaml' \
               ' -i inventories/{}/bastion.inventory' \
@@ -142,7 +143,7 @@ def _main(cli_args, deployment_name):
               ' -e install_openshift={}' \
               ' -e deployment={}'.format(deployment_name,
                                          upstream_repo,
-                                         deployment['cluster']['keypair_name'],
+                                         keypair_name,
                                          install_openshift,
                                          deployment_name)
         cwd = 'openshift'

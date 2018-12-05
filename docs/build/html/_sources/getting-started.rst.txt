@@ -2,99 +2,50 @@
 Getting Started
 ###############
 
-.. highlight:: none
-
 The orchestrator is designed to simplify the construction of an OpenShift
-cluster and various cloud providers. At the moment we have working solutions
+cluster on various cloud providers. At the moment we have working solutions
 for Amazon *EC2*, *OpenStack* and *Scaleway* and a working example for
 *EC2* that we use as a tutorial.
 
-Before you can use the orchestrator you will need to install a number
-of tools on your host machine you'll be using to create your clusters,
-e.g. your laptop or desktop. Ideally you will be starting with a linux host as
-distributions for the various tools is generally better for macOS and Linux
-(and we really only support Linux-like environments).
+The tools required by the orchestrator are packaged into a convenient
+Docker image that you can run on your laptop or desktop. The essential
+tools you *will* need are: -
 
-You will need to install: -
+-  **Git** (and a fork of the OKD Orchestrator repository)
+-  **Docker**
 
--   **Git** (and clone this repository)
--   **Python** ``v2.7.15``
--   **Packer** (``v1.3.2``) and **Terraform** (``v0.11.10``)
--   A utility that allows you to generate SSH key pairs
-
-Git (and this repository)
--------------------------
+Git
+---
 
 In order to use the orchestrator, an open source software project, you will
-need the `Git`_ version control system installed. Using Git you can start
-with copy of the orchestrator by *cloning* the main repository or, a more
-common approach, allowing you to make changes to the deployments to suite
-your environment, would be to *fork* it and then clone your forked copy.
+need the `Git`_ version control system installed. Using Git you should start
+with a clone of a **fork** of the orchestrator project. A fork is preferred
+because you may need to make changes to the configuration files or
+create your own configurations.
 
--  After installing Git, visit the `orchestrator repository`_, fork it
-   and clone it to your development host.
+#. Install Git
+#. Visit the `orchestrator repository`_. Fork it and clone it to your
+   development host.
+
+You will be working from the clone of this project so start by navigating to
+the root of your working copy.
 
 .. _Git: https://git-scm.com
 .. _Orchestrator Repository: https://github.com/InformaticsMatters/okd-orchestrator
 
-Python (and Ansible)
---------------------
+Docker
+------
 
-The orchestrator currently supports Python 2 so you will need to install that
-and PIP if it is not part of it.
+We use `Docker`_ because it is a tool designed to make it easier to create,
+deploy, and run applications by using containers. Containers allow a developer
+to package up an application with all of the parts it needs, such as libraries
+and other dependencies, and ship it all out as one package.
 
--   Install `Python 2.7.15`_
+#. Install Docker. You can refer to Docker's installation guide,
+   which includes guides for various platforms.
 
-    You might want to follow this by creating a Python or Conda
-    *virtual environment* so that you can isolate the orchestrator's Python
-    dependencies from any others you may be using.
+We have been using Docker **18.09.0** but any recent version should be
+suitable.
 
-Ansible, a tool used by the orchestrator, is a Python-based utility and it
-and other modules used are installed using a conventional ``requirements.txt``
-file and ``pip``.
-
-``pip`` may be installed as part of your chosen Python distribution.
-Try running ``pip``. If it cannot be found you may need to install it::
-
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    sudo python get-pip.py
-    rm get-pip.py
-
-You can now install Ansible and the dependent modules by running ``pip``
-from the root directory of your clone of this project::
-
-    pip install --upgrade pip
-    pip install -r requirements.txt
-
-.. _Python 2.7.15: https://www.python.org/downloads/release/python-2715/
-
-Packer and Terraform
---------------------
-
-You should visit the HashiCorp site where downloads of `Packer`_ and
-`Terraform`_ should be available.
-
-    Although the precise version of Packer is not terribly important
-    (``v1.3.2`` or later should be fine) the version of Terraform you install
-    *is*. The terraform templates we use make explicit references to the version
-    of the application and it is vital you install the right version, which
-    is ``v0.11.10``.
-
-.. _Terraform: https://www.terraform.io
-.. _Packer: https://www.packer.io
-
-Generating SSH Keys
--------------------
-
-Ensure that you're able to create SSH keys, using a utility like
-``ssh-keygen``.
-
-Checking the Installation
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-If you've installed everything then you should have cloned this repository
-and be able to run the following commands::
-
-    ansible --version
-    packer --version
-    terraform --version
+.. _docker: https://www.docker.com
+.. _installation guide: https://docs.docker.com/install/

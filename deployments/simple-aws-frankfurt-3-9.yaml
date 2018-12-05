@@ -35,9 +35,6 @@ cluster:
   # Use this to quickly distinguish between instances.
   name_prefix: orn
   name_suffix:
-  # The SSH key-pair name known by the cloud provider.
-  # Instances will be created using this key-pair and you will
-  # need it to connect to them.
   keypair_name: aws-keypair
   # The region and zone used for cluster instances.
   # At the moment all instances are created in the same zone.

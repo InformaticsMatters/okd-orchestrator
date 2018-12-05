@@ -82,17 +82,12 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#git-and-this-repository">Git (and this repository)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#python-and-ansible">Python (and Ansible)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#packer-and-terraform">Packer and Terraform</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#generating-ssh-keys">Generating SSH Keys</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#checking-the-installation">Checking the Installation</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#git">Git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#docker">Docker</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building-machine-images.html">Building Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
@@ -163,86 +158,43 @@
   <div class="section" id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <p>The orchestrator is designed to simplify the construction of an OpenShift
-cluster and various cloud providers. At the moment we have working solutions
+cluster on various cloud providers. At the moment we have working solutions
 for Amazon <em>EC2</em>, <em>OpenStack</em> and <em>Scaleway</em> and a working example for
 <em>EC2</em> that we use as a tutorial.</p>
-<p>Before you can use the orchestrator you will need to install a number
-of tools on your host machine you’ll be using to create your clusters,
-e.g. your laptop or desktop. Ideally you will be starting with a linux host as
-distributions for the various tools is generally better for macOS and Linux
-(and we really only support Linux-like environments).</p>
-<p>You will need to install: -</p>
+<p>The tools required by the orchestrator are packaged into a convenient
+Docker image that you can run on your laptop or desktop. The essential
+tools you <em>will</em> need are: -</p>
 <ul class="simple">
-<li><strong>Git</strong> (and clone this repository)</li>
-<li><strong>Python</strong> <code class="docutils literal notranslate"><span class="pre">v2.7.15</span></code></li>
-<li><strong>Packer</strong> (<code class="docutils literal notranslate"><span class="pre">v1.3.2</span></code>) and <strong>Terraform</strong> (<code class="docutils literal notranslate"><span class="pre">v0.11.10</span></code>)</li>
-<li>A utility that allows you to generate SSH key pairs</li>
+<li><strong>Git</strong> (and a fork of the OKD Orchestrator repository)</li>
+<li><strong>Docker</strong></li>
 </ul>
-<div class="section" id="git-and-this-repository">
-<h2>Git (and this repository)<a class="headerlink" href="#git-and-this-repository" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="git">
+<h2>Git<a class="headerlink" href="#git" title="Permalink to this headline">¶</a></h2>
 <p>In order to use the orchestrator, an open source software project, you will
-need the <a class="reference external" href="https://git-scm.com">Git</a> version control system installed. Using Git you can start
-with copy of the orchestrator by <em>cloning</em> the main repository or, a more
-common approach, allowing you to make changes to the deployments to suite
-your environment, would be to <em>fork</em> it and then clone your forked copy.</p>
-<ul class="simple">
-<li>After installing Git, visit the <a class="reference external" href="https://github.com/InformaticsMatters/okd-orchestrator">orchestrator repository</a>, fork it
-and clone it to your development host.</li>
-</ul>
+need the <a class="reference external" href="https://git-scm.com">Git</a> version control system installed. Using Git you should start
+with a clone of a <strong>fork</strong> of the orchestrator project. A fork is preferred
+because you may need to make changes to the configuration files or
+create your own configurations.</p>
+<ol class="arabic simple">
+<li>Install Git</li>
+<li>Visit the <a class="reference external" href="https://github.com/InformaticsMatters/okd-orchestrator">orchestrator repository</a>. Fork it and clone it to your
+development host.</li>
+</ol>
+<p>You will be working from the clone of this project so start by navigating to
+the root of your working copy.</p>
 </div>
-<div class="section" id="python-and-ansible">
-<h2>Python (and Ansible)<a class="headerlink" href="#python-and-ansible" title="Permalink to this headline">¶</a></h2>
-<p>The orchestrator currently supports Python 2 so you will need to install that
-and PIP if it is not part of it.</p>
-<ul>
-<li><p class="first">Install <a class="reference external" href="https://www.python.org/downloads/release/python-2715/">Python 2.7.15</a></p>
-<p>You might want to follow this by creating a Python or Conda
-<em>virtual environment</em> so that you can isolate the orchestrator’s Python
-dependencies from any others you may be using.</p>
-</li>
-</ul>
-<p>Ansible, a tool used by the orchestrator, is a Python-based utility and it
-and other modules used are installed using a conventional <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>
-file and <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">pip</span></code> may be installed as part of your chosen Python distribution.
-Try running <code class="docutils literal notranslate"><span class="pre">pip</span></code>. If it cannot be found you may need to install it:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-sudo python get-pip.py
-rm get-pip.py
-</pre></div>
-</div>
-<p>You can now install Ansible and the dependent modules by running <code class="docutils literal notranslate"><span class="pre">pip</span></code>
-from the root directory of your clone of this project:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install --upgrade pip
-pip install -r requirements.txt
-</pre></div>
-</div>
-</div>
-<div class="section" id="packer-and-terraform">
-<h2>Packer and Terraform<a class="headerlink" href="#packer-and-terraform" title="Permalink to this headline">¶</a></h2>
-<p>You should visit the HashiCorp site where downloads of <a class="reference external" href="https://www.packer.io">Packer</a> and
-<a class="reference external" href="https://www.terraform.io">Terraform</a> should be available.</p>
-<blockquote>
-<div>Although the precise version of Packer is not terribly important
-(<code class="docutils literal notranslate"><span class="pre">v1.3.2</span></code> or later should be fine) the version of Terraform you install
-<em>is</em>. The terraform templates we use make explicit references to the version
-of the application and it is vital you install the right version, which
-is <code class="docutils literal notranslate"><span class="pre">v0.11.10</span></code>.</div></blockquote>
-</div>
-<div class="section" id="generating-ssh-keys">
-<h2>Generating SSH Keys<a class="headerlink" href="#generating-ssh-keys" title="Permalink to this headline">¶</a></h2>
-<p>Ensure that you’re able to create SSH keys, using a utility like
-<code class="docutils literal notranslate"><span class="pre">ssh-keygen</span></code>.</p>
-<div class="section" id="checking-the-installation">
-<h3>Checking the Installation<a class="headerlink" href="#checking-the-installation" title="Permalink to this headline">¶</a></h3>
-<p>If you’ve installed everything then you should have cloned this repository
-and be able to run the following commands:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ansible --version
-packer --version
-terraform --version
-</pre></div>
-</div>
-</div>
+<div class="section" id="docker">
+<h2>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h2>
+<p>We use <a class="reference external" href="https://www.docker.com">Docker</a> because it is a tool designed to make it easier to create,
+deploy, and run applications by using containers. Containers allow a developer
+to package up an application with all of the parts it needs, such as libraries
+and other dependencies, and ship it all out as one package.</p>
+<ol class="arabic simple">
+<li>Install Docker. You can refer to Docker’s installation guide,
+which includes guides for various platforms.</li>
+</ol>
+<p>We have been using Docker <strong>18.09.0</strong> but any recent version should be
+suitable.</p>
 </div>
 </div>
 

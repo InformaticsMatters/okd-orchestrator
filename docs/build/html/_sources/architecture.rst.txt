@@ -34,7 +34,8 @@ The Components
 The orchestrator consists of: -
 
 *   **Deployment configuration** files
-*   **Packer** templates
+*   **Provider Variables**
+*   **Yacker** templates
 *   **Terraform** templates
 *   A **Jinja2** rendering process
 *   Ansible **playbooks**
@@ -59,21 +60,26 @@ Deployment files are located in the ``deployments`` directory.
 
 .. _YAML: http://yaml.org
 
-Packer templates
+Provider Variables
+------------------
+
+In ``provider-env``.
+
+Yacker templates
 ----------------
 
-In ``packer/``.
+In ``yacker/``.
 
-**Packer** is used to create base images for the compute instances.
-It is driven by JSON files that describe installation instructions that
-are executed on a base Operating System like CentOS in order to form
-an OS and utilities suitable for OKD.
+**Yacker** is used to create base images for the compute instances.
+It is a YAML wrapper around **Packer**. It is driven by YAML files that
+describe installation instructions that are executed on a base Operating System
+like CentOS in order to form an OS and utilities suitable for OKD.
 
-The JSON *template* files are organised in directories relating to OKD
-version and cloud provider. For example there is an AWS *machine image*
-template for OKD 3.9 in ``packer/3.9/aws``.
+The YAML *template* files are organised in directories relating to OKD
+version and cloud provider. For example there is an AWS *bastion image*
+template for OKD 3.9 in ``yacker/3.9/aws``.
 
-**Packer** is employed once per OKD release and cloud provider combination.
+**Yacker** is employed once per OKD release and cloud provider combination.
 The images produced are suitable for any cluster for the given OKD release on
 that cloud provider.
 

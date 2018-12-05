@@ -1,11 +1,35 @@
 # Environment variables for AWS Cluster deployment.
 #
-# Copy as `setenv-aws.sh`, edit and then install with
-# `source setenv-aws.sh`
+# Copy as `setenv.sh`, edit and then install with
+# `source setenv.sh`
 
-export TF_VAR_aws_os_ami=SetMe
-export TF_VAR_aws_bastion_ami=SetMe
-export TF_VAR_aws_secret_key=SetMe
+# -----------------------------------------------------------------------------
+# The following variables are required to compile machine images
+# and orchestrate the cluster
+# -----------------------------------------------------------------------------
+
+# AWS API access and secret keys.
+# Required by the orchestrator to create AWS resources.
 export TF_VAR_aws_access_key=SetMe
+export TF_VAR_aws_secret_key=SetMe
 
+# -----------------------------------------------------------------------------
+# The following variables are required to orchestrate the cluster
+# -----------------------------------------------------------------------------
+
+# The SSH key-pair name known by the cloud provider.
+# Instances will be created using this key-pair and you will
+# need it to connect to them.
+export TF_VAR_keypair_name=SetMe
+
+# THe AWS AMIs for the Bastion and OpenShift cluster nodes
+export TF_VAR_aws_ami_os=SetMe
+export TF_VAR_aws_ami_bastion=SetMe
+
+# -----------------------------------------------------------------------------
+# The following variables are required to install OpenShift
+# -----------------------------------------------------------------------------
+
+# The password for the initial admin account
+# that wil be cerated on the OpenShift cluster.
 export TF_VAR_okd_admin_password=SetMe

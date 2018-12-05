@@ -27,7 +27,7 @@ packer/**/*.json
 .packer.d/
 
 # Provider Variables
-provider-env/setenv-aws.sh
+provider-env/setenv.sh
 
 # Terraform material...
 *.tfstate

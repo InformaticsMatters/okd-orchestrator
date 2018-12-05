@@ -7,14 +7,18 @@
 #
 # - TF_VAR_aws_access_key                 Your AWS access token
 # - TF_VAR_aws_secret_key                 Your AWS secret key
-# - TF_VAR_aws_os_ami                     The AMI for OpenShift base images
-# - TF_VAR_aws_bastion_ami                The AMI for the bastion base image
+# - TF_VAR_aws_ami_os                     The AMI for OpenShift base images
+# - TF_VAR_aws_ami_bastion                The AMI for the bastion base image
+#
+# - TF_VAR_keypair_name                   The cluster keypair name
+#
 # - TF_VAR_okd_admin_password             The initial OpenShift admin user password
 
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
-variable "aws_os_ami" {}
-variable "aws_bastion_ami" {}
+variable "aws_ami_os" {}
+variable "aws_ami_bastion" {}
+variable "keypair_name" {}
 variable "okd_admin_password" {}
 
 # -----------------------------------------------------------------------------
@@ -47,11 +51,6 @@ variable "cluster_id" {
 variable "deployment" {
   description = "The name of the Deployment"
   default = "{{ deployment }}"
-}
-
-variable "keypair_name" {
-  description = "The name of the Key Pair, as known by AWS"
-  default = "{{ cluster.keypair_name }}"
 }
 
 variable "resource_tag" {

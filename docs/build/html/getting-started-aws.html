@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Building Machine Images" href="building-machine-images.html" />
+    <link rel="next" title="Compiling Machine Images" href="compiling-machine-images.html" />
     <link rel="prev" title="Getting Started" href="getting-started.html" /> 
 
   
@@ -83,17 +83,17 @@
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started with AWS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#provider-environment-variables">Provider Environment Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#account-preparation">Account Preparation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#account">Account</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#api-access-keys">API Access Keys</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ssh-key-pair">SSH Key Pair</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#elastic-ip-preparation">Elastic IP Preparation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#building-a-machine-image">Building a machine image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-your-cluster">Building your Cluster</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="building-machine-images.html">Building Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
@@ -163,19 +163,19 @@
             
   <div class="section" id="getting-started-with-aws">
 <h1>Getting Started with AWS<a class="headerlink" href="#getting-started-with-aws" title="Permalink to this headline">¶</a></h1>
-<p>At this stage, although we’ll be working with a built-in example
-you will need to make some minor changes to the files in order to
+<p>At this stage, although we’ll be working with a built-in example,
+you may need to make some changes to the configuration files in order to
 create your own cluster from them. It’s therefore essential that you
-work on a clone of your own <em>fork</em> of the OKD Orchestrator.
+work on a clone of your own <strong>fork</strong> of the OKD Orchestrator.
 You will then be able to commit the changes you make and start to craft
-your own deployments without being disturbed by changes in this, the
-upstream project.</p>
-<p>Here we’re going to deploy the built-in OKD 3.9 release on a small cluster at
+your own deployment configurations without being disturbed by changes in this,
+the upstream project.</p>
+<p>Here we’re going to deploy an example OKD 3.9 release on a small cluster at
 AWS. The deployment configuration is called <code class="docutils literal notranslate"><span class="pre">simple-aws-frankfurt-3-9</span></code>.</p>
-<p>We will be creating a small (<code class="docutils literal notranslate"><span class="pre">t2.small</span></code>) Bastion node from where we’ll
-deploy the OKD cluster using one <em>Master</em> node, one <em>Infrastructure</em> node and
-one <em>Compute</em> node.</p>
-<p>Once done we’ll tear-down the Cluster and the Bastion.</p>
+<p>The orchestrator will be creating the bastion node, the cluster network,
+the cluster and installing OpenShift, all from within a Docker container
+hosting the orchestrator’s run-time tools.</p>
+<p>At the end we’ll tear-down the cluster using the orchestrator.</p>
 <blockquote>
 <div><p>Some familiarity with with the Amazon <strong>Elastic Compute Cloud</strong>,
 commonly referred to as <a class="reference external" href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html">EC2</a>, is assumed here and costs will
@@ -184,8 +184,15 @@ be incurred when following this example.</p>
 provides comprehensive documentation.</p>
 </div></blockquote>
 <p>Before you can create Amazon (AWS) resources you will need to prepare an
-<strong>EC2 Account</strong> and, for the example cluster, two <strong>Elastic IP</strong> instances that
-the orchestrator will attach to the <em>Master</em> and <em>Infrastructure</em> nodes.</p>
+<strong>EC2 Account</strong>.</p>
+<div class="section" id="provider-environment-variables">
+<h2>Provider Environment Variables<a class="headerlink" href="#provider-environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>A number of parameters are required by the orchestrator. These are
+defined in a cloud-provider-specific <em>template</em> file in the <code class="docutils literal notranslate"><span class="pre">provider-env</span></code>
+directory.</p>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">setenv-aws-template.sh</span></code> as <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code>. You’ll be using this file
+throughout this example.</p>
+</div>
 <div class="section" id="account-preparation">
 <h2>Account Preparation<a class="headerlink" href="#account-preparation" title="Permalink to this headline">¶</a></h2>
 <p>You use different types of security credentials depending on how you
@@ -195,8 +202,7 @@ interact with AWS and, in order to use the orchestrator, you will need: -</p>
 <li><strong>API Access keys</strong> that allow the orchestrator to make programmatic calls to
 the AWS API on your behalf</li>
 <li>An <strong>SSH Key Pair</strong> that you and the OKD Orchestrator can use to create
-and access EC2 objects. If you don’t want to make too many changes to the
-example then create a Key Pair named <code class="docutils literal notranslate"><span class="pre">aws-keypair</span></code>.</li>
+and access EC2 objects.</li>
 </ul>
 <div class="section" id="account">
 <h3>Account<a class="headerlink" href="#account" title="Permalink to this headline">¶</a></h3>
@@ -208,10 +214,10 @@ sign-up.</p>
 <p><strong>Access Keys</strong> and <strong>Key Pairs</strong> are described on the Amazon <a class="reference external" href="https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys">Access Keys</a>
 page. You will need both the access <code class="docutils literal notranslate"><span class="pre">key</span></code> and the corresponding <code class="docutils literal notranslate"><span class="pre">secret</span></code>
 value.</p>
-<p>Create and export two environment variables for the access keys. These will
-be used by the <code class="docutils literal notranslate"><span class="pre">terraform</span></code> utility when creating your cluster:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>export TF_VAR_aws_access_key=&lt;myAccessKey&gt;
-export TF_VAR_aws_secret_key=&lt;mySecretKy&gt;
+<p>Put the access <code class="docutils literal notranslate"><span class="pre">key</span></code> and <code class="docutils literal notranslate"><span class="pre">secret</span></code> in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> script.
+These should replace any existing values for:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TF_VAR_aws_access_key</span>
+<span class="n">TF_VAR_aws_secret_key</span>
 </pre></div>
 </div>
 </div>
@@ -219,58 +225,30 @@ export TF_VAR_aws_secret_key=&lt;mySecretKy&gt;
 <h3>SSH Key Pair<a class="headerlink" href="#ssh-key-pair" title="Permalink to this headline">¶</a></h3>
 <p>You can generate a key-pair that does not use a pass phrase for this example
 using the <code class="docutils literal notranslate"><span class="pre">ssh-keygen</span></code> tool:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ssh-keygen -f ~/.ssh/aws-keypair -t rsa -b 2048 -N &#39;&#39;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ssh-keygen -f ~/.ssh/aws-keypair -t rsa -b 2048 -N &#39;&#39;
 </pre></div>
 </div>
 <p>You should then upload the public (<code class="docutils literal notranslate"><span class="pre">.pub</span></code>) part to your AWS account.
 You will need to upload the key-pair to each <a class="reference external" href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html">region</a> that you intend to use.
-Our example assumes you’ll be deploying to <code class="docutils literal notranslate"><span class="pre">Frankfurt</span></code>.</p>
+Our example assumes you’ll be deploying to <strong>Frankfurt</strong>
+.</p>
+<p>Place the name of the keypair in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code>. The value
+should replace the existing value for:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TF_VAR_keypair_name</span>
+</pre></div>
 </div>
 </div>
-<div class="section" id="elastic-ip-preparation">
-<h2>Elastic IP Preparation<a class="headerlink" href="#elastic-ip-preparation" title="Permalink to this headline">¶</a></h2>
-<p>You will need to create two <em>Elastic IPs</em>, one that will be used by the
-orchestrator as the public IP address of the OpenShift <em>Master</em> node and the
-other for the <em>Infrastructure</em> node.</p>
-<p>You can create Elastic IPs form the AWS EC2 dashboard.</p>
-<p>In the region that you’ll be creating the cluster
-(<code class="docutils literal notranslate"><span class="pre">Frankfurt</span></code> in this example), create two Elastic IP instances. The IPs that
-have been assigned are not of particular use to the orchestrator but the
-<strong>Allocation IDs</strong> are.</p>
-<blockquote>
-<div>The IDs will begin <code class="docutils literal notranslate"><span class="pre">eipalloc-</span></code> followed by, typically, a 16-digit hex
-number.</div></blockquote>
-<p>For clarity you might want to provide a <code class="docutils literal notranslate"><span class="pre">Name</span></code> for each IP. One will be
-associated for the <strong>Master</strong> OpenShift node and one will be associated with
-the <strong>Infrastructure</strong> node. It might be beneficial to given them these names.</p>
-<p>The assigned IDs need to placed in the <strong>deployment</strong> file, in this example
-the file we’re using is <code class="docutils literal notranslate"><span class="pre">deployments/simple-aws-frankfurt-3.9.yaml</span></code>.</p>
-<p>Edit the deployment file and replace the <code class="docutils literal notranslate"><span class="pre">master1.fixed_ip_id</span></code> and
-<code class="docutils literal notranslate"><span class="pre">infra1.fixed_ip_id</span></code> values with your EIP allocation IDs. Then, replace the
-<code class="docutils literal notranslate"><span class="pre">public_hostname</span></code> and <code class="docutils literal notranslate"><span class="pre">cluster.router_basename</span></code> with the IPs from
-the Master and Infra IDs respectively.</p>
-<blockquote>
-<div>Remember that Elastic IPs not attached to EC2 instances incur a small cost.
-Once you have finished with the example cluster you may want to remove
-these objects from your EC2 account.</div></blockquote>
-<p>Normally you would have access to a domain through which you want to access
-your cluster, <code class="docutils literal notranslate"><span class="pre">mycluster.com</span></code> for example. Instead of placing the IP
-addresses in the <code class="docutils literal notranslate"><span class="pre">public_hostname</span></code> and <code class="docutils literal notranslate"><span class="pre">cluster.router_basename</span></code> you would
-normally route two sub-domains to those IPs. If you do theses domaain names
-would be used for the <code class="docutils literal notranslate"><span class="pre">public_hostname</span></code> and <code class="docutils literal notranslate"><span class="pre">cluster.router_basename</span></code>,
-i.e. <cite>openshift.mycluster.com`</cite> and <code class="docutils literal notranslate"><span class="pre">apps.mycluster.com</span></code>. For this example
-we’ll stick to the Elastic IP values.</p>
 </div>
-<div class="section" id="building-a-machine-image">
-<h2>Building a machine image<a class="headerlink" href="#building-a-machine-image" title="Permalink to this headline">¶</a></h2>
-<p>The final preparation step for AWS requires the building of base images for
-your cluster, the identities of which are copied into your deployment
-configuration.</p>
-<p>When you’re ready, follow the AWS instructions in the
-<a class="reference internal" href="building-machine-images.html"><span class="doc">Building Machine Images</span></a> guide.</p>
-<p>Once complete, with a machine image built and its ID in your deployment
-configuration, you’re ready to launch your Bastion and an OKD cluster,
-all of which is covered in the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a> guide.</p>
+<div class="section" id="building-your-cluster">
+<h2>Building your Cluster<a class="headerlink" href="#building-your-cluster" title="Permalink to this headline">¶</a></h2>
+<p>To build your cluster you will need to compile the base images for AWS
+before create your cluster.</p>
+<ul class="simple">
+<li>When you’re ready, follow the instructions for AWS in the
+<a class="reference internal" href="compiling-machine-images.html"><span class="doc">Compiling Machine Images</span></a> guide</li>
+<li>With base images compiled, you’re ready to create the OKD cluster,
+all of which is covered in the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a> guide</li>
+</ul>
 </div>
 </div>
 
@@ -282,7 +260,7 @@ all of which is covered in the <a class="reference internal" href="creating-your
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="building-machine-images.html" class="btn btn-neutral float-right" title="Building Machine Images" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="compiling-machine-images.html" class="btn btn-neutral float-right" title="Compiling Machine Images" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="getting-started.html" class="btn btn-neutral" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

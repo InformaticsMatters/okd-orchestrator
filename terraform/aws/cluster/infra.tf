@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 resource "aws_instance" "infra" {
-  ami = "${var.aws_os_ami}"
+  ami = "${var.aws_ami_os}"
   instance_type = "${var.infra_image_type}"
   count = "${var.infra_count}"
   key_name = "${var.keypair_name}"

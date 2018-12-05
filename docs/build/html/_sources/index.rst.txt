@@ -2,7 +2,17 @@
 The OKD Orchestrator
 ####################
 
-A Cluster Orchestrator for OpenShift Origin (OKD).
+A Cluster Orchestrator for OpenShift Origin (OKD). A project sponsored by
+`OpenRiskNet`_.
+
+.. epigraph::
+
+   OpenRiskNet: Open e-Infrastructure to Support Data Sharing,
+   Knowledge Integration and in silico Analysis and Modelling in Risk Assessment
+
+   -- Project Number 731075
+
+..  image:: ../images/eu-96x64.png
 
 ..  toctree::
     :maxdepth: 1
@@ -11,7 +21,8 @@ A Cluster Orchestrator for OpenShift Origin (OKD).
     architecture
     getting-started
     getting-started-aws
-    building-machine-images
+    compiling-machine-images
+    compiling-machine-images-for-aws
     creating-your-cluster
     destroying-your-cluster
     faq
@@ -45,6 +56,7 @@ on here.
 .. _okd: https://www.okd.io
 .. _ec2: https://aws.amazon.com/ec2/
 .. _kubenow: https://github.com/kubenow/KubeNow
+.. _openrisknet: https://openrisknet.org
 
 Building the Documentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

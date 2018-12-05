@@ -84,7 +84,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#the-concept">The Concept</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-components">The Components</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#deployments">deployments</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#packer-templates">Packer templates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#provider-variables">Provider Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yacker-templates">Yacker templates</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#terraform-templates">Terraform Templates</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#jinja2-rendering-process">Jinja2 Rendering Process</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ansible-playbooks">Ansible Playbooks</a></li>
@@ -96,7 +97,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building-machine-images.html">Building Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
@@ -190,7 +191,8 @@ just these two modules.</p>
 <p>The orchestrator consists of: -</p>
 <ul class="simple">
 <li><strong>Deployment configuration</strong> files</li>
-<li><strong>Packer</strong> templates</li>
+<li><strong>Provider Variables</strong></li>
+<li><strong>Yacker</strong> templates</li>
 <li><strong>Terraform</strong> templates</li>
 <li>A <strong>Jinja2</strong> rendering process</li>
 <li>Ansible <strong>playbooks</strong></li>
@@ -208,17 +210,21 @@ types of the compute instances used for your OpenShift nodes.</p>
 OpenShift cluster.</p>
 <p>Deployment files are located in the <code class="docutils literal notranslate"><span class="pre">deployments</span></code> directory.</p>
 </div>
-<div class="section" id="packer-templates">
-<h3>Packer templates<a class="headerlink" href="#packer-templates" title="Permalink to this headline">¶</a></h3>
-<p>In <code class="docutils literal notranslate"><span class="pre">packer/</span></code>.</p>
-<p><strong>Packer</strong> is used to create base images for the compute instances.
-It is driven by JSON files that describe installation instructions that
-are executed on a base Operating System like CentOS in order to form
-an OS and utilities suitable for OKD.</p>
-<p>The JSON <em>template</em> files are organised in directories relating to OKD
-version and cloud provider. For example there is an AWS <em>machine image</em>
-template for OKD 3.9 in <code class="docutils literal notranslate"><span class="pre">packer/3.9/aws</span></code>.</p>
-<p><strong>Packer</strong> is employed once per OKD release and cloud provider combination.
+<div class="section" id="provider-variables">
+<h3>Provider Variables<a class="headerlink" href="#provider-variables" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal notranslate"><span class="pre">provider-env</span></code>.</p>
+</div>
+<div class="section" id="yacker-templates">
+<h3>Yacker templates<a class="headerlink" href="#yacker-templates" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal notranslate"><span class="pre">yacker/</span></code>.</p>
+<p><strong>Yacker</strong> is used to create base images for the compute instances.
+It is a YAML wrapper around <strong>Packer</strong>. It is driven by YAML files that
+describe installation instructions that are executed on a base Operating System
+like CentOS in order to form an OS and utilities suitable for OKD.</p>
+<p>The YAML <em>template</em> files are organised in directories relating to OKD
+version and cloud provider. For example there is an AWS <em>bastion image</em>
+template for OKD 3.9 in <code class="docutils literal notranslate"><span class="pre">yacker/3.9/aws</span></code>.</p>
+<p><strong>Yacker</strong> is employed once per OKD release and cloud provider combination.
 The images produced are suitable for any cluster for the given OKD release on
 that cloud provider.</p>
 </div>

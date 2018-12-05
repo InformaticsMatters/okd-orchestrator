@@ -7,7 +7,7 @@
 # from within the container.
 #
 # You will need to define suitable environment variables for your
-# cloub-provider: -
+# cloud-provider: -
 #
 # - Credentials
 #

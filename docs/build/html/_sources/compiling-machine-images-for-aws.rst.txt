@@ -62,3 +62,38 @@ guide to create your cluster, but first return  to the project root from
 the yacker directory::
 
     $ cd ../../..
+
+Finding AWS Machine Images
+--------------------------
+
+The base image AMI that your Yacker template files use depends on the AWS
+region you wish to deploy your cluster to. The orchestrator images
+are based on an official CentOS Linux image. The example configuration uses
+the *FREE TIER* CentOS 7 image version **1805_01** that is available in
+Frankfurt called **"CentOS 7 (x86_64) - with Updates HVM"** (``ami-dd3c0f36``).
+
+When creating Yacker templates for other regions you will need a compatible
+CentOS 7 image.
+
+You can use the ``aws`` command-line utility in the orchestration
+container to find images on AWS. The command needs your API keys,
+passed to it during configuration::
+
+    $ aws configure
+
+You only need to provide your access and secret keys. The default region
+and output format can be left at **None**.
+
+Once configured you can find the AMI for **"Canada (Central)"**
+(``ca-central-1``) with the following comman"d::
+
+    $ aws --region ca-central-1 \
+        ec2 describe-images --owners aws-marketplace \
+        --filters Name=product-code,Values=aw0evgkw8e5c1q413zgy5pjce \
+        --filters Name=description,Values="CentOS Linux 7 x86_64 HVM EBS ENA 1805_01" \
+        | jq -r '.Images[0].ImageId'
+    ami-e802818c
+
+This value should be used in an appropriate ``source_ami`` **builders**
+section property in your Yacker YAML template file, where you will also
+need to adjust the ``name`` and ``region`` properties accordingly.

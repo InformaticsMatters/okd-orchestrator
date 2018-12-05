@@ -84,7 +84,10 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Compiling Machine Images for AWS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Compiling Machine Images for AWS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#finding-aws-machine-images">Finding AWS Machine Images</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
@@ -209,6 +212,37 @@ guide to create your cluster, but first return  to the project root from
 the yacker directory:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cd ../../..
 </pre></div>
+</div>
+<div class="section" id="finding-aws-machine-images">
+<h2>Finding AWS Machine Images<a class="headerlink" href="#finding-aws-machine-images" title="Permalink to this headline">¶</a></h2>
+<p>The base image AMI that your Yacker template files use depends on the AWS
+region you wish to deploy your cluster to. The orchestrator images
+are based on an official CentOS Linux image. The example configuration uses
+the <em>FREE TIER</em> CentOS 7 image version <strong>1805_01</strong> that is available in
+Frankfurt called <strong>“CentOS 7 (x86_64) - with Updates HVM”</strong> (<code class="docutils literal notranslate"><span class="pre">ami-dd3c0f36</span></code>).</p>
+<p>When creating Yacker templates for other regions you will need a compatible
+CentOS 7 image.</p>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">aws</span></code> command-line utility in the orchestration
+container to find images on AWS. The command needs your API keys,
+passed to it during configuration:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ aws configure
+</pre></div>
+</div>
+<p>You only need to provide your access and secret keys. The default region
+and output format can be left at <strong>None</strong>.</p>
+<p>Once configured you can find the AMI for <strong>“Canada (Central)”</strong>
+(<code class="docutils literal notranslate"><span class="pre">ca-central-1</span></code>) with the following comman”d:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ aws --region ca-central-1 \
+    ec2 describe-images --owners aws-marketplace \
+    --filters Name=product-code,Values=aw0evgkw8e5c1q413zgy5pjce \
+    --filters Name=description,Values=&quot;CentOS Linux 7 x86_64 HVM EBS ENA 1805_01&quot; \
+    | jq -r &#39;.Images[0].ImageId&#39;
+ami-e802818c
+</pre></div>
+</div>
+<p>This value should be used in an appropriate <code class="docutils literal notranslate"><span class="pre">source_ami</span></code> <strong>builders</strong>
+section property in your Yacker YAML template file, where you will also
+need to adjust the <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">region</span></code> properties accordingly.</p>
 </div>
 </div>
 

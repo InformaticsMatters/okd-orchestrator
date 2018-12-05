@@ -80,6 +80,10 @@ RUN chown -R okdo.okdo ${HOME}
 USER okdo
 WORKDIR ${HOME}
 
+ENV LANG C
+ENV LC_ALL C
+ENV LANGUAGE C
+
 # Force the binary layer of the stdout and stderr streams
 # to be unbuffered
 ENV PYTHONUNBUFFERED 1

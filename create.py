@@ -47,7 +47,7 @@ def _main(cli_args, deployment_name):
     # Hello
     # -----
     io.banner(deployment['name'], full_heading=True, quiet=False)
-    if not cli_args.auto_approve:
+    if not cli_args.auto_acknowledge:
 
         confirmation_word = io.get_confirmation_word()
         target = 'CREATE the Cluster' \
@@ -284,8 +284,8 @@ if __name__ == '__main__':
                         help='Skip the Post-OpenShift deployment stage',
                         action='store_true')
 
-    PARSER.add_argument('--auto-approve',
-                        help='Skip the confirmation question',
+    PARSER.add_argument('--auto-acknowledge',
+                        help='Skip the create confirmation question',
                         action='store_true')
 
     PARSER.add_argument('deployment', metavar='DEPLOYMENT',

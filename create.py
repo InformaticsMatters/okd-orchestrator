@@ -131,14 +131,19 @@ def _main(cli_args, deployment_name):
 
         print('Upstream repository = %s' % upstream_repo)
 
+        # Run the bastion site file (on the bastion)
+        # optionally continuing to install OpenShift.
+        install_openshift = 'yes' if args.openshift else 'no'
         cmd = 'ansible-playbook' \
               ' ../ansible/bastion/site.yaml' \
               ' -i inventories/{}/bastion.inventory' \
               ' -e git_repo={}' \
               ' -e keypair_name={}' \
+              ' -e install_openshift={}' \
               ' -e deployment={}'.format(deployment_name,
                                          upstream_repo,
                                          deployment['cluster']['keypair_name'],
+                                         install_openshift,
                                          deployment_name)
         cwd = 'openshift'
         rv, _ = io.run(cmd, cwd, cli_args.quiet)
@@ -147,21 +152,17 @@ def _main(cli_args, deployment_name):
 
         # Now expose the Bastion's IP
         cmd = 'terraform output' \
-              ' -state=.terraform.{}' \
-              ' bastion_ip'.format(deployment_name)
+              ' -state=.terraform.{}'.format(deployment_name)
         cwd = 'terraform/{}/cluster'.format(t_dir)
         rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
             return False
 
-        # If we're simply creating the cluster
-        # there's nothing more to do here.
-        #
         # Leave.
         return True
 
-    # We're not creating the cluster (that is assumed to exist)
-    # so we m,ust be creating the OpenShift environment.
+    # If we get here we're installing OpenShift
+    # (on a cluster that is assumed to exist).
     #
     # From this point we're installing and configuring OpenShift...
 
@@ -234,7 +235,8 @@ def _main(cli_args, deployment_name):
     # Success
     # -------
 
-    # OK if we get here...
+    # OK if we get here.
+    # Cluster created and OpenShift installed.
     return True
 
 
@@ -255,7 +257,7 @@ if __name__ == '__main__':
                         help='Create the cluster, do not install OpenShift',
                         action='store_true')
 
-    PARSER.add_argument('-o', '--open-shift',
+    PARSER.add_argument('-o', '--openshift',
                         help='Create the OpenShift installation'
                              ' (on an existing cluster)',
                         action='store_true')
@@ -295,8 +297,8 @@ if __name__ == '__main__':
     ARGS = PARSER.parse_args()
 
     # User must have specified 'cluster' or 'open-shift'
-    if not ARGS.cluster and not ARGS.open_shift:
-        print('Must specify --cluster or --open-shift')
+    if not ARGS.cluster and not ARGS.openshift:
+        print('Must specify --cluster or --openshift')
         sys.exit(1)
 
     deployments = glob.glob('deployments/*.yaml')

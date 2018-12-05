@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""A Python 2 jinja2-based template renderer.
+"""A Python 2/3 jinja2-based template renderer.
 
 This utility uses YAML-based _deployment_ configurations to size
 the cluster prior to its formation. The intention is to have

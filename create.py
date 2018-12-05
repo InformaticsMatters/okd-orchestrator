@@ -133,7 +133,7 @@ def _main(cli_args, deployment_name):
 
         # Run the bastion site file (on the bastion)
         # optionally continuing to install OpenShift.
-        install_openshift = 'yes' if args.openshift else 'no'
+        install_openshift = 'yes' if cli_args.openshift else 'no'
         cmd = 'ansible-playbook' \
               ' ../ansible/bastion/site.yaml' \
               ' -i inventories/{}/bastion.inventory' \

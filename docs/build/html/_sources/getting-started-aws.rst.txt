@@ -76,12 +76,14 @@ SSH Key Pair
 You can generate a key-pair that does not use a pass phrase for this example
 using the ``ssh-keygen`` tool::
 
-    $ ssh-keygen -f ~/.ssh/aws-keypair -t rsa -b 2048 -N ''
+    $ ssh-keygen -f okdo-keypair -t rsa -b 2048 -N ''
+
+The keypair should be present in the root of the orchestrator project,
+not in your ``.ssh`` directory.
 
 You should then upload the public (``.pub``) part to your AWS account.
 You will need to upload the key-pair to each `region`_ that you intend to use.
-Our example assumes you'll be deploying to **Frankfurt**
-.
+Our example assumes you'll be deploying to **Frankfurt**.
 
 Place the name of the keypair in your ``setenv.sh``. The value
 should replace the existing value for::

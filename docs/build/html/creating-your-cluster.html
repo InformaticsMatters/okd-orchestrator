@@ -165,11 +165,6 @@ All of this can be accomplished from within the orchestrator’s Docker
 container.</p>
 <div class="section" id="creating-the-cluster">
 <h2>Creating the Cluster<a class="headerlink" href="#creating-the-cluster" title="Permalink to this headline">¶</a></h2>
-<blockquote class="epigraph">
-<div>If you’ve made any local changes to the Orchestrator files you should
-commit them to revision control now. Your repository is cloned to the
-Bastion as the cluster ius created so checking them in now means it will
-get an <em>up to date</em> copy of your files.</div></blockquote>
 <p>If you’re not already in the orchestration container you can start and enter
 it with the convenient start script in the root of the project:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./orc-start.sh
@@ -186,7 +181,7 @@ the value for:</p>
 the default (i.e. <cite>id_rsa</cite>) then you will need to run <cite>ssh-agent</cite> in the
 container to allow some stages of orchestration to run without prompting:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ eval $(ssh-agent)
-$ ssh-add ~/.ssh/aws-keypair
+$ ssh-add okdo-keypair
 </pre></div>
 </div>
 <p>Now, to create the cluster (bastion, network and OpenShift nodes)
@@ -227,8 +222,9 @@ openshift_master_ip = 18.184.254.113
 </div>
 <div class="section" id="installing-openshift">
 <h2>Installing OpenShift<a class="headerlink" href="#installing-openshift" title="Permalink to this headline">¶</a></h2>
-<p>The cluster creation step places a clone of your orchestrator project is in the
-Bastion’s home directory. Installation of OpenShift takes place from there.</p>
+<p>The cluster creation step places a copy of key parts of your orchestrator
+project in the Bastion’s home directory. Installation of OpenShift takes place
+from there.</p>
 <p>You can <code class="docutils literal notranslate"><span class="pre">ssh</span></code> to the Bastion from within the orchestration container you’re
 currently in using the public IP address of the bastion presented to you in
 the previous step.</p>

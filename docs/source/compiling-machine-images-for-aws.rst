@@ -90,7 +90,7 @@ You only need to provide your access and secret keys. The default region
 and output format can be left at **None**.
 
 Once configured you can find the AMI for **"Canada (Central)"**
-(``ca-central-1``) with the following comman"d::
+(``ca-central-1``) with the following command::
 
     $ aws --region ca-central-1 \
         ec2 describe-images --owners aws-marketplace \

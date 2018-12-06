@@ -1,8 +1,9 @@
 ---
 
-# To build the stable docker image: -
+# To build and push the stable docker image: -
 #
 #   IMAGE_TAG=stable docker-compose build
+#   IMAGE_TAG=stable docker-compose push
 
 version: '3.3'
 

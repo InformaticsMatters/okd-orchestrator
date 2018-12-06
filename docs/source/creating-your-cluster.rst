@@ -12,13 +12,6 @@ container.
 Creating the Cluster
 ====================
 
-.. epigraph::
-
-   If you've made any local changes to the Orchestrator files you should
-   commit them to revision control now. Your repository is cloned to the
-   Bastion as the cluster ius created so checking them in now means it will
-   get an *up to date* copy of your files.
-
 If you're not already in the orchestration container you can start and enter
 it with the convenient start script in the root of the project::
 
@@ -78,8 +71,9 @@ The address of the bastion is needed for the next step::
 Installing OpenShift
 ====================
 
-The cluster creation step places a clone of your orchestrator project is in the
-Bastion's home directory. Installation of OpenShift takes place from there.
+The cluster creation step places a copy of key parts of your orchestrator
+project in the Bastion's home directory. Installation of OpenShift takes place
+from there.
 
 You can ``ssh`` to the Bastion from within the orchestration container you're
 currently in using the public IP address of the bastion presented to you in

@@ -94,6 +94,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images-for-aws.html">Compiling Machine Images for AWS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
@@ -225,13 +226,14 @@ These should replace any existing values for:</p>
 <h3>SSH Key Pair<a class="headerlink" href="#ssh-key-pair" title="Permalink to this headline">¶</a></h3>
 <p>You can generate a key-pair that does not use a pass phrase for this example
 using the <code class="docutils literal notranslate"><span class="pre">ssh-keygen</span></code> tool:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ssh-keygen -f ~/.ssh/aws-keypair -t rsa -b 2048 -N &#39;&#39;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ssh-keygen -f okdo-keypair -t rsa -b 2048 -N &#39;&#39;
 </pre></div>
 </div>
+<p>The keypair should be present in the root of the orchestrator project,
+not in your <code class="docutils literal notranslate"><span class="pre">.ssh</span></code> directory.</p>
 <p>You should then upload the public (<code class="docutils literal notranslate"><span class="pre">.pub</span></code>) part to your AWS account.
 You will need to upload the key-pair to each <a class="reference external" href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html">region</a> that you intend to use.
-Our example assumes you’ll be deploying to <strong>Frankfurt</strong>
-.</p>
+Our example assumes you’ll be deploying to <strong>Frankfurt</strong>.</p>
 <p>Place the name of the keypair in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code>. The value
 should replace the existing value for:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TF_VAR_keypair_name</span>

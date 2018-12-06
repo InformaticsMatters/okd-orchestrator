@@ -15,7 +15,7 @@ Creating the Cluster
 If you're not already in the orchestration container you can start and enter
 it with the convenient start script in the root of the project::
 
-    $ ./orc-start.sh
+    $ ./okdo-start.sh
 
 If you haven't done so already you need to set the password that will be
 assigned to the OpenShift **admin** account the orchestrator creates. Choose

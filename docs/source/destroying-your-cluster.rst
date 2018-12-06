@@ -17,7 +17,7 @@ If you're not in the orchestrator container then, from the working copy
 of the ``okd-orchestrator`` clone that you used to create your cluster,
 start and enter the orchestrator::
 
-    $ ./orc-start.sh
+    $ ./okdo-start.sh
 
 You're in the container as the built-in ``okdo`` user. To destroy the
 cluster you just need to set your environment variables and run

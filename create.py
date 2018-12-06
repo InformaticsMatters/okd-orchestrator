@@ -156,14 +156,17 @@ def _main(cli_args, deployment_name):
     # Clones OpenShift Ansible
     # and checks out the revision defined by the deployment tag.
 
-    # Clone OpenShift Ansible
-    cmd = 'git clone' \
-          ' https://github.com/openshift/openshift-ansible.git' \
-          ' --no-checkout'
-    cwd = '.'
-    rv, _ = io.run(cmd, cwd, cli_args.quiet)
-    if not rv:
-        return False
+    # If the expected clone directory does not exist
+    # then clone OpenShift Ansible.
+    if not os.path.exists('openshift-ansible'):
+
+        cmd = 'git clone' \
+              ' https://github.com/openshift/openshift-ansible.git' \
+              ' --no-checkout'
+        cwd = '.'
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
+        if not rv:
+            return False
 
     # Checkout the required OpenShift Ansible TAG
     cmd = 'git checkout tags/{}'. \

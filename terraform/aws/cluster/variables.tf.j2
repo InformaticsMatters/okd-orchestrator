@@ -48,9 +48,9 @@ variable "cluster_id" {
 # -----------------------------------------------------------------------------
 # DEFAULT VARIABLES (Generic)
 
-variable "deployment" {
-  description = "The name of the Deployment"
-  default = "{{ deployment }}"
+variable "inventory_dir" {
+  description = "The directory containing the OpenShift inventory files"
+  default = "{{ openshift.inventory_dir }}"
 }
 
 variable "resource_tag" {

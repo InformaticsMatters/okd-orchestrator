@@ -35,12 +35,13 @@ def _main(cli_args, deployment_name):
     with open(deployment_file, 'r') as stream:
         deployment = yaml.load(stream)
 
-    # There must be an openshift/inventories/<deployment> directory
-    if not os.path.isdir('openshift/inventories/{}'.format(deployment_name)):
+    # There must be an openshift/inventories directory
+    inventory_dir = deployment['openshift']['inventory_dir']
+    if not os.path.isdir('openshift/inventories/{}'.format(inventory_dir)):
         io.error('Missing "openshift/inventories" directory')
-        print('Expected to find the directory "{}" but it was not there.'.
-              format(deployment_name))
-        print('Every deployment must have a matching "inventories" directory')
+        print('Expected to find the inventory directory "{}"'
+              ' but it was not there.'.format(inventory_dir))
+        print('Every deployment must have an "inventories" directory')
         return False
 
     # -----
@@ -115,22 +116,6 @@ def _main(cli_args, deployment_name):
         # -------
         # Ansible
         # -------
-        # Get this working copy's remote origin.
-        # We clone that repo's master branch to the Bastion.
-        cmd = 'git config --get remote.origin.url'
-        cwd = '.'
-        rv, proc = io.run(cmd, cwd, True)
-        if not rv:
-            return False
-        upstream_repo = proc.stdout.readline().decode("utf-8").strip()
-        if not upstream_repo:
-            print('Could not get the OKD repository.\n'
-                  'Are you running this form a working copy'
-                  ' of a git repository?')
-            return False
-
-        print('Upstream repository = %s' % upstream_repo)
-
         # Run the bastion site file (on the bastion)
         # optionally continuing to install OpenShift.
         install_openshift = 'yes' if cli_args.openshift else 'no'
@@ -138,14 +123,12 @@ def _main(cli_args, deployment_name):
         cmd = 'ansible-playbook' \
               ' ../ansible/bastion/site.yaml' \
               ' -i inventories/{}/bastion.inventory' \
-              ' -e git_repo={}' \
               ' -e keypair_name={}' \
               ' -e install_openshift={}' \
-              ' -e deployment={}'.format(deployment_name,
-                                         upstream_repo,
+              ' -e deployment={}'.format(inventory_dir,
                                          keypair_name,
                                          install_openshift,
-                                         deployment_name)
+                                         inventory_dir)
         cwd = 'openshift'
         rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
@@ -167,20 +150,22 @@ def _main(cli_args, deployment_name):
     #
     # From this point we're installing and configuring OpenShift...
 
-    # --------
-    # Checkout (OpenShift Ansible)
-    # --------
-    # Updates our OpenShift-Ansible sub-module
+    # -----
+    # Clone (OpenShift Ansible)
+    # -----
+    # Clones OpenShift Ansible
     # and checks out the revision defined by the deployment tag.
 
-    # Git sub-module initialisation
-    cmd = 'git submodule update --init --remote'
+    # Clone OpenShift Ansible
+    cmd = 'git clone' \
+          ' https://github.com/openshift/openshift-ansible.git' \
+          ' --no-checkout'
     cwd = '.'
     rv, _ = io.run(cmd, cwd, cli_args.quiet)
     if not rv:
         return False
 
-    # OpenShift Ansible
+    # Checkout the required OpenShift Ansible TAG
     cmd = 'git checkout tags/{}'. \
         format(deployment['openshift']['ansible_tag'])
     cwd = 'openshift-ansible'
@@ -214,7 +199,7 @@ def _main(cli_args, deployment_name):
 
         for play in deployment['openshift']['play']:
             cmd = 'ansible-playbook ../openshift-ansible/playbooks/{}' \
-                  ' -i inventories/{}/inventory'.format(play, deployment_name)
+                  ' -i inventories/{}/inventory'.format(play, inventory_dir)
             cwd = 'openshift'
             rv, _ = io.run(cmd, cwd, cli_args.quiet)
             if not rv:

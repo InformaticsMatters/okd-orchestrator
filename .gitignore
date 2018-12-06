@@ -1,3 +1,6 @@
+# Expected ssh private key-pair files
+okdo-keypair
+
 # Sphinx material
 doc/build
 

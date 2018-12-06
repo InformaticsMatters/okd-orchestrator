@@ -35,10 +35,11 @@ def _main(cli_args, deployment_name):
     with open(deployment_file, 'r') as stream:
         deployment = yaml.load(stream)
 
-    # There must be an openshift/inventories/<deployment> directory
-    if not os.path.isdir('openshift/inventories/{}'.format(deployment_name)):
+    # There must be an openshift/inventories directory
+    inventory_dir = deployment['openshift']['inventory_dir']
+    if not os.path.isdir('openshift/inventories/{}'.format(inventory_dir)):
         io.error('Missing "openshift/inventories" directory')
-        print('Expected to find the directory "{}" but it was nto there.'.
+        print('Expected to find the directory "{}" but it was not there.'.
               format(deployment_name))
         print('Every deployment must have a matching "inventories" directory')
         return False

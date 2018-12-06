@@ -19,8 +19,9 @@ export TF_VAR_aws_secret_key=SetMe
 
 # The SSH key-pair name known by the cloud provider.
 # Instances will be created using this key-pair and you will
-# need it to connect to them.
-export TF_VAR_keypair_name=SetMe
+# need it to connect to them. You need to change this if you have
+# used a different key-pair.
+export TF_VAR_keypair_name=okdo-keypair
 
 # THe AWS AMIs for the Bastion and OpenShift cluster nodes
 export TF_VAR_aws_ami_os=SetMe
@@ -31,5 +32,5 @@ export TF_VAR_aws_ami_bastion=SetMe
 # -----------------------------------------------------------------------------
 
 # The password for the initial admin account
-# that wil be cerated on the OpenShift cluster.
+# that wil be created on the OpenShift cluster.
 export TF_VAR_okd_admin_password=SetMe

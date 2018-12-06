@@ -7,7 +7,7 @@
 # -------------------------
 
 data "template_file" "inventory" {
-  template = "${file("${var.openshift_dir}/inventories/${var.deployment}/inventory.tpl")}"
+  template = "${file("${var.openshift_dir}/inventories/${var.inventory_dir}/inventory.tpl")}"
 
   vars {
 
@@ -48,7 +48,7 @@ data "template_file" "inventory" {
 
 resource "local_file" "inventory" {
   content = "${data.template_file.inventory.rendered}"
-  filename = "${var.openshift_dir}/inventories/${var.deployment}/inventory"
+  filename = "${var.openshift_dir}/inventories/${var.inventory_dir}/inventory"
 }
 
 # ---------------------
@@ -75,7 +75,7 @@ resource "local_file" "post_os_inventory" {
 # -------------------------
 
 data "template_file" "bastion-inventory" {
-  template = "${file("${var.openshift_dir}/inventories/${var.deployment}/bastion.inventory.tpl")}"
+  template = "${file("${var.openshift_dir}/inventories/${var.inventory_dir}/bastion.inventory.tpl")}"
 
   vars {
     bastion = "${aws_instance.bastion.0.public_ip}"
@@ -84,7 +84,7 @@ data "template_file" "bastion-inventory" {
 
 resource "local_file" "bastion-inventory" {
   content = "${data.template_file.bastion-inventory.rendered}"
-  filename = "${var.openshift_dir}/inventories/${var.deployment}/bastion.inventory"
+  filename = "${var.openshift_dir}/inventories/${var.inventory_dir}/bastion.inventory"
 }
 
 # -------------------------------------
@@ -92,7 +92,7 @@ resource "local_file" "bastion-inventory" {
 # -------------------------------------
 
 data "template_file" "sh" {
-  template = "${file("${var.openshift_dir}/inventories/${var.deployment}/bastion.sh.tpl")}"
+  template = "${file("${var.openshift_dir}/inventories/${var.inventory_dir}/bastion.sh.tpl")}"
 
   vars {
     aws_access_key = "${var.aws_access_key}"
@@ -103,5 +103,5 @@ data "template_file" "sh" {
 
 resource "local_file" "bastion-sh" {
   content = "${data.template_file.sh.rendered}"
-  filename = "${var.openshift_dir}/inventories/${var.deployment}/bastion.sh"
+  filename = "${var.openshift_dir}/inventories/${var.inventory_dir}/bastion.sh"
 }

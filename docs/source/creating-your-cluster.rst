@@ -36,7 +36,7 @@ the default (i.e. `id_rsa`) then you will need to run `ssh-agent` in the
 container to allow some stages of orchestration to run without prompting::
 
     $ eval $(ssh-agent)
-    $ ssh-add ~/.ssh/aws-keypair
+    $ ssh-add okdo-keypair
 
 Now, to create the cluster (bastion, network and OpenShift nodes)
 set your environment variables and run the ``create.py`` utility using

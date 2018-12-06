@@ -29,12 +29,13 @@ ENV HOME /home/okdo
 
 # Containers should NOT run as root
 # (as good practice)
-RUN useradd --shell /bin/bash --user-group --uid 6000 --home-dir ${HOME} okdo
+ARG uid=1000
+RUN useradd --shell /bin/bash --user-group --uid ${uid} --home-dir ${HOME} okdo
 
 # Install required system tools
 COPY requirements.txt /tmp/
 RUN apt-get -y update && \
-    apt-get install -y jq unzip graphviz vim && \
+    apt-get install -y jq unzip graphviz vim less && \
     pip install -r /tmp/requirements.txt
 
 # Install Terraform

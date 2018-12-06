@@ -27,6 +27,8 @@ variables:
 
 builders:
 
+# AWS 'eu-central-1' (Frankfurt)
+
 - access_key: '{{user `aws_access_key`}}'
   ami_description: '{{user `description`}}'
   ami_name: '{{user `base_ami_name`}}'
@@ -35,5 +37,18 @@ builders:
   region: eu-central-1
   secret_key: '{{user `aws_secret_key`}}'
   source_ami: ami-dd3c0f36
+  ssh_username: '{{user `aws_user`}}'
+  type: amazon-ebs
+
+# AWS 'eu-west-1' (Paris)
+
+- access_key: '{{user `aws_access_key`}}'
+  ami_description: '{{user `description`}}'
+  ami_name: '{{user `base_ami_name`}}'
+  instance_type: '{{user `aws_i_type`}}'
+  name: '{{user `our_name`}} Paris'
+  region: eu-west-3
+  secret_key: '{{user `aws_secret_key`}}'
+  source_ami: ami-bfff49c2
   ssh_username: '{{user `aws_user`}}'
   type: amazon-ebs

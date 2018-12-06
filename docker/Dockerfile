@@ -14,7 +14,7 @@
 # would be: -
 #
 #   docker run -it \
-#     -v `pwd`/..:/home/okdo/okd-orchestrator \
+#     -v `pwd`/..:/home/okdo/okd-orchestrator:Z \
 #     -v ~/.ssh:/home/okdo/.ssh \
 #     --rm informaticsmatters/okd-orchestrator:stable /bin/bash
 #
@@ -30,7 +30,6 @@ ENV HOME /home/okdo
 # Containers should NOT run as root
 # (as good practice)
 RUN useradd --shell /bin/bash --user-group --uid 6000 --home-dir ${HOME} okdo
-
 
 # Install required system tools
 COPY requirements.txt /tmp/
@@ -53,6 +52,7 @@ RUN curl https://releases.hashicorp.com/packer/${pacxker_version}/packer_${pacxk
     chmod 0755 /usr/local/bin/packer
 
 RUN chown -R okdo.okdo ${HOME}
+RUN chmod -R a+wrx ${HOME}
 USER okdo
 WORKDIR ${HOME}
 

@@ -49,6 +49,6 @@ builders:
   name: '{{user `our_name`}} Paris'
   region: eu-west-3
   secret_key: '{{user `aws_secret_key`}}'
-  source_ami: ami-bfff49c2
+  source_ami: ami-262e9f5b
   ssh_username: '{{user `aws_user`}}'
   type: amazon-ebs

@@ -1,0 +1,47 @@
+{% extends 'inventory.root' %}
+
+{# --- osev3_vars ---------------------------------------------------------- #}
+
+{% block osev3_vars %}
+
+openshift_master_cluster_public_hostname=${public_hostname}
+{% if cluster.infra.count %}
+openshift_master_default_subdomain=${router_basename}
+{% else %}
+openshift_master_default_subdomain=${router_basename}
+{% endif %}
+
+{% endblock %}
+
+{# --- masters ------------------------------------------------------------- #}
+
+{%- block masters -%}
+{%- for item in range(1, cluster.master.count + 1) -%}
+${master{{ item }}}
+{%- endfor -%}
+{%- endblock -%}
+
+{# --- etcd ---------------------------------------------------------------- #}
+
+{%- block etcd -%}
+${master1}
+{%- endblock -%}
+
+{# --- nfs ----------------------------------------------------------------- #}
+
+{# --- nodes --------------------------------------------------------------- #}
+
+{%- block nodes -%}
+${master1} openshift_hostname=${master1_hostname} openshift_node_group_name='node-config-master'
+{%- if cluster.infra.count %}
+${infra1} openshift_hostname=${infra1_hostname} openshift_node_group_name='node-config-infra'
+{%- endif %}
+{%- for item in range(1, cluster.node.count + 1) %}
+${node{{ '%03d'|format(item) }}} openshift_hostname=${node{{ '%03d'|format(item) }}_hostname} openshift_node_group_name='node-config-compute'
+{%- endfor %}
+{%- endblock -%}
+
+{# --- glusterfs ----------------------------------------------------------- #}
+
+{%- block glusterfs -%}
+{%- endblock -%}

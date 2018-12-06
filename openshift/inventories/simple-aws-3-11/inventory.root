@@ -1,0 +1,90 @@
+{#-
+    The ROOT jinja2 OpenShift inventory file.
+    Here we define all common variables and provide 'blocks'
+    that can be written-to from templates that inherit from this.
+
+    There are blocks that allow injection into these sections...
+
+    Section Name        Block Name
+    ------------        ----------
+    [OSEv3:vars]        osev3_vars
+    [masters]           masters
+    [etcd]              etcd
+    [nfs]               nfs
+    [nodes]             nodes
+    [glusterfs]         glusterfs
+-#}
+
+[OSEv3:children]
+masters
+nodes
+etcd
+nfs
+glusterfs
+
+[OSEv3:vars]
+ansible_ssh_user=centos
+ansible_become=yes
+
+openshift_deployment_type=origin
+openshift_release=v3.11
+openshift_image_tag=v3.11.0
+openshift_pkg_version=-3.11.0
+
+openshift_additional_repos=[{'id': 'centos-okd-ci', 'name': 'centos-okd-ci', 'baseurl' :'https://rpms.svc.ci.openshift.org/openshift-origin-v3.11', 'gpgcheck' :'0', 'enabled' :'1'}]
+
+openshift_skip_deprecation_check=yes
+
+openshift_disable_check=disk_availability,docker_storage,memory_availability
+openshift_clock_enabled=true
+
+# Enable htpasswd authentication
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+
+openshift_master_api_port=443
+openshift_master_console_port=443
+
+# AWS
+{%- raw %}
+openshift_cloudprovider_kind=aws
+openshift_cloudprovider_aws_access_key="{{ lookup('env','TF_VAR_aws_access_key') }}"
+openshift_cloudprovider_aws_secret_key="{{ lookup('env','TF_VAR_aws_secret_key') }}"
+openshift_clusterid=im
+{%- endraw %}
+
+openshift_docker_additional_registries = registry.access.redhat.com
+openshift_docker_insecure_registries = registry.access.redhat.com
+
+openshift_metrics_install_metrics=false
+openshift_metrics_cassandra_storage_type=dynamic
+
+openshift_logging_install_logging=false
+openshift_logging_storage_kind=dynamic
+openshift_loggingops_storage_kind=dynamic
+openshift_logging_storage_volume_size=10Gi
+
+# Disable Prometheus Cluster Monitoring
+openshift_cluster_monitoring_operator_install=false
+
+ansible_service_broker_image_prefix=registry.access.redhat.com/openshift3/ose-
+ansible_service_broker_registry_url=registry.access.redhat.com
+
+# Node groups
+openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true']}, {'name': 'node-config-compute', 'labels': ['node-role.kubernetes.io/compute=true']}, {'name': 'node-config-compute-storage', 'labels': []}]
+
+{% block osev3_vars %}{% endblock %}
+
+[masters]
+{% block masters %}{% endblock %}
+
+[etcd]
+{% block etcd %}{% endblock %}
+
+[nfs]
+{% block nfs %}{% endblock %}
+
+[nodes]
+{% block nodes %}{% endblock %}
+
+[glusterfs]
+{% block glusterfs %}{% endblock %}

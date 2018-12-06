@@ -1,0 +1,58 @@
+---
+
+# A 'yacker' file to build a Node image for OpenShift 3.9 deployments.
+# It is based on a CentOS 7 image (CentOS Linux 7 x86_64 HVM EBS)
+# and adds all we need for the Bastion including material for the
+# OKD Orchestrator.
+#
+# The AWS access and secret keys are expected to be available
+# in two environment variables: -
+#
+#   TF_VAR_aws_access_key
+#   TF_VAR_aws_secret_key
+
+provisioners:
+
+- type: shell
+  inline:
+
+  - sudo yum -y update
+  - sudo yum -y install wget git net-tools yum-utils bind-utils
+  - sudo yum -y install iptables-services ntp bridge-utils bash-completion
+  - sudo yum -y install kexec-tools sos psacct pyOpenSSL etcd flannel
+
+  - sudo yum -y install atomic
+
+  - sudo yum -y install docker-1.13.1
+  - sudo rpm -V docker-1.13.1
+
+  - sudo systemctl enable docker
+  - sudo systemctl start docker
+  - sudo yum -y install NetworkManager
+  - sudo systemctl enable NetworkManager
+  - sudo systemctl start NetworkManager
+
+variables:
+
+  aws_access_key: '{{env `TF_VAR_aws_access_key`}}'
+  aws_i_type: t2.micro
+  aws_secret_key: '{{env `TF_VAR_aws_secret_key`}}'
+  aws_user: centos
+  base_ami_name: os311-machine-image-01
+  base_description: CentOS Linux 7 x86_64 HVM EBS for OpenShift 3.11
+  our_name: OpenShift 3.11 Base Image
+
+builders:
+
+# AWS 'eu-central-1' (Frankfurt)
+
+- access_key: '{{user `aws_access_key`}}'
+  ami_description: '{{user `description`}}'
+  ami_name: '{{user `base_ami_name`}}'
+  instance_type: '{{user `aws_i_type`}}'
+  name: '{{user `our_name`}} Frankfurt'
+  region: eu-central-1
+  secret_key: '{{user `aws_secret_key`}}'
+  source_ami: ami-dd3c0f36
+  ssh_username: '{{user `aws_user`}}'
+  type: amazon-ebs

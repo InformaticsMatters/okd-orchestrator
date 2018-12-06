@@ -34,7 +34,7 @@ RUN useradd --shell /bin/bash --user-group --uid 6000 --home-dir ${HOME} okdo
 # Install required system tools
 COPY requirements.txt /tmp/
 RUN apt-get -y update && \
-    apt-get install -y jq unzip graphviz && \
+    apt-get install -y jq unzip graphviz vim && \
     pip install -r /tmp/requirements.txt
 
 # Install Terraform

@@ -4,8 +4,7 @@ name: Simple AWS Deployment (OpenShift 3.9) [Frankfurt]
 
 openshift:
 
-  # The version tag for OpenShift Origin/OKD ansible playbooks
-  # used to deploy it and the playbooks to run to complete the task.
+  # The version tag for OpenShift Origin/OKD ansible playbooks.
   ansible_tag: openshift-ansible-3.9.54-1
   play:
   - prerequisites.yml

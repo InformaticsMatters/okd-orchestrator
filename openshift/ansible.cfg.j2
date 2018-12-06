@@ -1,6 +1,6 @@
 [defaults]
 host_key_checking = False
-inventory = inventories/{{ deployment }}/inventory
+inventory = inventories/{{ openshift.inventory_dir }}/inventory
 forks = 8
 gathering = smart
 fact_caching = jsonfile

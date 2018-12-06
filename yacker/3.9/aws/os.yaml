@@ -1,3 +1,16 @@
+---
+
+# A 'yacker' file to build a Node image for OpenShift 3.9 deployments.
+# It is based on a CentOS 7 image (CentOS Linux 7 x86_64 HVM EBS)
+# and adds all we need for the Bastion including material for the
+# OKD Orchestrator.
+#
+# The AWS access and secret keys are expected to be available
+# in two environment variables: -
+#
+#   TF_VAR_aws_access_key
+#   TF_VAR_aws_secret_key
+
 provisioners:
 
 - type: shell

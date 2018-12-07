@@ -13,16 +13,25 @@ data "template_file" "inventory" {
 
     {% if cluster.public_hostname %}
     public_hostname = "{{ cluster.public_hostname }}"
+    {% elif cluster.master.fixed_ip_id %}
+    public_hostname = "${aws_eip_association.master.public_ip}"
     {% else %}
     public_hostname = "${aws_eip.master.public_ip}"
     {% endif %}
+
     {% if cluster.router_basename %}
     router_basename = "{{ cluster.router_basename }}"
+    {% elif cluster.infra.fixed_ip_id %}
+    router_basename = "${aws_eip_association.infra.public_ip}"
     {% else %}
     router_basename = "${aws_eip.infra.public_ip}"
     {% endif %}
 
+    {% if cluster.master.fixed_ip_id %}
+    master1 = "${aws_eip_association.master.public_ip}"
+    {% else %}
     master1 = "${aws_eip.master.public_ip}"
+    {% endif %}
     master1_hostname = "${aws_instance.master.0.private_dns}"
 
     {% for item in range(1, cluster.master.count) %}
@@ -30,7 +39,11 @@ data "template_file" "inventory" {
     master{{ item + 1 }}_hostname = "${aws_instance.master.{{ item }}.private_dns}"
     {% endfor %}
 
+    {% if cluster.infra.fixed_ip_id %}
+    infra1 = "${aws_eip_association.infra.public_ip}"
+    {% else %}
     infra1 = "${aws_eip.infra.public_ip}"
+    {% endif %}
     infra1_hostname = "${aws_instance.infra.0.private_dns}"
 
     {% for item in range(1, cluster.infra.count) %}
@@ -51,9 +64,9 @@ resource "local_file" "inventory" {
   filename = "${var.openshift_dir}/inventories/${var.inventory_dir}/inventory"
 }
 
-# ---------------------
-# The Ansible Inventory (post-os Ansible plays)
-# ---------------------
+# --------------------------------
+# Post-OpenShift Ansible Inventory
+# --------------------------------
 
 data "template_file" "post_os_inventory" {
   template = "${file("${var.ansible_dir}/post-os/inventory.tpl")}"
@@ -75,16 +88,21 @@ resource "local_file" "post_os_inventory" {
 # -------------------------
 
 data "template_file" "bastion-inventory" {
-  template = "${file("${var.openshift_dir}/inventories/${var.inventory_dir}/bastion.inventory.tpl")}"
+  template = "${file("${var.ansible_dir}/bastion/inventory.tpl")}"
 
   vars {
     bastion = "${aws_instance.bastion.0.public_ip}"
+    {% if cluster.master.fixed_ip_id %}
+    master1 = "${aws_eip_association.master.public_ip}"
+    {% else %}
+    master1 = "${aws_eip.master.public_ip}"
+    {% endif %}
   }
 }
 
 resource "local_file" "bastion-inventory" {
   content = "${data.template_file.bastion-inventory.rendered}"
-  filename = "${var.openshift_dir}/inventories/${var.inventory_dir}/bastion.inventory"
+  filename = "${var.ansible_dir}/bastion/inventory"
 }
 
 # -------------------------------------
@@ -92,7 +110,7 @@ resource "local_file" "bastion-inventory" {
 # -------------------------------------
 
 data "template_file" "sh" {
-  template = "${file("${var.openshift_dir}/inventories/${var.inventory_dir}/bastion.sh.tpl")}"
+  template = "${file("${var.ansible_dir}/bastion/bastion.sh.tpl")}"
 
   vars {
     aws_access_key = "${var.aws_access_key}"
@@ -103,5 +121,5 @@ data "template_file" "sh" {
 
 resource "local_file" "bastion-sh" {
   content = "${data.template_file.sh.rendered}"
-  filename = "${var.openshift_dir}/inventories/${var.inventory_dir}/bastion.sh"
+  filename = "${var.ansible_dir}/bastion/bastion.sh"
 }

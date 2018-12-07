@@ -46,10 +46,13 @@ cluster:
   zone: eu-central-1a
   # The external IP address or domain-name of the Master node.
   # If not set the master public DNS will be used.
-  public_hostname:
+  # Whatever is used must provide a resolvable route to the master.
+  # So, if you have a domain, ensure it's routed to the pre-allocated
+  # public IP of the master (see cluster.master.fixed_ip_id).
+  public_hostname: s-master.matildapeak.io
   # The external IP address or domain-name of the Infrastructure node.
-  # If not set the master public DNS will be used.
-  router_basename:
+  # (see cluster.public_hostname)
+  router_basename: s-infra.matildapeak.io
 
   # Details of the Master nodes.
   #
@@ -57,6 +60,18 @@ cluster:
   master:
     count: 1
     type: t2.xlarge
+    # If you have pre-allocated public IPs for the Master set the value here.
+    # This is _not_ normally the IP address itself, it is the cloud-provider's
+    # IP identity. In AWS this would be the Elastic IP Allocation ID of
+    # the form "eipalloc-0000000000000000".
+    #
+    # If you have not provided a pre-allocated (fixed) IP
+    # leave this property empty.
+    fixed_ip_id: eipalloc-010cfe12a8b8c7fa2
+    # Set to automatically generate a Let's Encrypt/certbot certificate
+    # for the master node when the cluster has been created but prior to
+    # OpenShift installation.
+    generate_cert: yes
 
   # Details of the Infrastructure nodes.
   #
@@ -64,8 +79,11 @@ cluster:
   infra:
     count: 1
     type: t2.xlarge
+    # The (optional) pre-allocated public IP for the Infrastructure.
+    # (See cluster.master.fixed_ip)
+    fixed_ip_id: eipalloc-037f7a1943abe1174
 
   # Details of the cluster compute nodes.
   node:
     count: 1
-    type: t2.xlarge
+    type: t2.medium

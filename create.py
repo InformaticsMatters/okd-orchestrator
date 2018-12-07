@@ -100,7 +100,7 @@ def _main(cli_args, deployment_name):
         if not cli_args.skip_terraform:
 
             cmd = 'terraform init'
-            cwd = 'terraform/{}/cluster'.format(t_dir)
+            cwd = 'terraform/{}'.format(t_dir)
             rv, _ = io.run(cmd, cwd, cli_args.quiet)
             if not rv:
                 return False
@@ -108,7 +108,7 @@ def _main(cli_args, deployment_name):
             cmd = 'terraform apply' \
                   ' -auto-approve' \
                   ' -state=.terraform.{}'.format(deployment_name)
-            cwd = 'terraform/{}/cluster'.format(t_dir)
+            cwd = 'terraform/{}'.format(t_dir)
             rv, _ = io.run(cmd, cwd, cli_args.quiet)
             if not rv:
                 return False
@@ -116,20 +116,22 @@ def _main(cli_args, deployment_name):
         # -------
         # Ansible
         # -------
-        # Run the bastion site file (on the bastion)
-        # optionally continuing to install OpenShift.
-        install_openshift = 'yes' if cli_args.openshift else 'no'
+        # Run the bastion site file.
+
+        extra_env = ''
+        if deployment['cluster']['master']['generate_cert']:
+            extra_env += ' -e master_cert_email={}'. \
+                format(os.environ['TF_VAR_master_certbot_email'])
+            extra_env += ' -e public_hostname={}'. \
+                format(deployment['cluster']['public_hostname'])
         keypair_name = os.environ['TF_VAR_keypair_name']
-        cmd = 'ansible-playbook' \
-              ' ../ansible/bastion/site.yaml' \
-              ' -i inventories/{}/bastion.inventory' \
+        cmd = 'ansible-playbook site.yaml' \
+              ' {}' \
               ' -e keypair_name={}' \
-              ' -e install_openshift={}' \
-              ' -e deployment={}'.format(inventory_dir,
+              ' -e deployment={}'.format(extra_env,
                                          keypair_name,
-                                         install_openshift,
                                          inventory_dir)
-        cwd = 'openshift'
+        cwd = 'ansible/bastion'
         rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
             return False
@@ -137,7 +139,7 @@ def _main(cli_args, deployment_name):
         # Now expose the Bastion's IP
         cmd = 'terraform output' \
               ' -state=.terraform.{}'.format(deployment_name)
-        cwd = 'terraform/{}/cluster'.format(t_dir)
+        cwd = 'terraform/{}'.format(t_dir)
         rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
             return False
@@ -153,8 +155,7 @@ def _main(cli_args, deployment_name):
     # -----
     # Clone (OpenShift Ansible)
     # -----
-    # Clones OpenShift Ansible
-    # and checks out the revision defined by the deployment tag.
+    # ...and checkout the revision defined by the deployment tag.
 
     # If the expected clone directory does not exist
     # then clone OpenShift Ansible.
@@ -180,17 +181,18 @@ def _main(cli_args, deployment_name):
     # Ansible (Pre-OpenShift)
     # -------
 
-    if ('play' in deployment['ansible'] and
-            'pre_os_create' in deployment['ansible']['play']):
-
-        pre_os_create = deployment['ansible']['play']['pre_os_create']
-        if not cli_args.skip_pre_openshift and pre_os_create:
-
-            cmd = 'ansible-playbook {}.yaml'.format(pre_os_create)
-            cwd = 'ansible/pre-os'
-            rv, _ = io.run(cmd, cwd, cli_args.quiet)
-            if not rv:
-                return False
+    extra_env = ''
+    if deployment['cluster']['master']['generate_cert']:
+        extra_env += ' -e public_hostname={}'. \
+            format(deployment['cluster']['public_hostname'])
+    cmd = 'ansible-playbook site.yaml' \
+          ' {}' \
+          ' -i ../../openshift/inventories/{}/inventory'.\
+        format(extra_env, inventory_dir)
+    cwd = 'ansible/pre-os'
+    rv, _ = io.run(cmd, cwd, cli_args.quiet)
+    if not rv:
+        return False
 
     # -------
     # Ansible (OpenShift)
@@ -246,8 +248,8 @@ if __name__ == '__main__':
                         help='Create the cluster, do not install OpenShift',
                         action='store_true')
 
-    PARSER.add_argument('-o', '--openshift',
-                        help='Create the OpenShift installation'
+    PARSER.add_argument('-o', '--okd',
+                        help='Create the OpenShift/OKD installation'
                              ' (on an existing cluster)',
                         action='store_true')
 
@@ -286,8 +288,8 @@ if __name__ == '__main__':
     ARGS = PARSER.parse_args()
 
     # User must have specified 'cluster' or 'open-shift'
-    if not ARGS.cluster and not ARGS.openshift:
-        print('Must specify --cluster or --openshift')
+    if not ARGS.cluster and not ARGS.okd:
+        print('Must specify --cluster or --okd')
         sys.exit(1)
 
     deployments = glob.glob('deployments/*.yaml')

@@ -1,8 +1,10 @@
 ansible == 2.6.7
 awscli == 1.16.69
+boto == 2.49.0
 jinja2 == 2.10
 matildapeak-yacker == 2018.5
 passlib == 1.7.1
+pyOpenSSL == 18.0.0
 pyyaml == 3.13
 flake8 == 3.6.0
 sphinx == 1.8.1

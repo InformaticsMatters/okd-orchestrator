@@ -1,0 +1,37 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+  - name: Pause
+    pause:
+      seconds: 8
+
+  - name: Get available volumes
+    ec2_vol_facts:
+      aws_access_key: "{{ lookup('env','TF_VAR_aws_access_key') }}"
+      aws_secret_key: "{{ lookup('env','TF_VAR_aws_secret_key') }}"
+      region: "{{ aws_region }}"
+      filters:
+        status: available
+    register: vol_info
+
+  - debug:
+      msg: "{{ vol_info }}"
+      verbosity: 1
+
+  - name: Delete Kubernetes dynamic volumes
+    ec2_vol:
+      aws_access_key: "{{ lookup('env','TF_VAR_aws_access_key') }}"
+      aws_secret_key: "{{ lookup('env','TF_VAR_aws_secret_key') }}"
+      region: "{{ aws_region }}"
+      id: "{{ item.id }}"
+      state: absent
+    when:
+    - item.tags.Name is defined
+    - item.tags.Name is match("kubernetes-dynamic-pvc-.*")
+    with_items:
+    - "{{ vol_info.volumes }}"

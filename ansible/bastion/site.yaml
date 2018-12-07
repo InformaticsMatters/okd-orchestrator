@@ -1,9 +1,11 @@
 ---
 
-# This playbook interacts with the bastion node.
+# This playbook interacts with the bastion and master node.
 
 # It installs the user's OpenShift-specific tools and files
 # assuming a base Bastion image is being used on the cloud-provider.
+
+# -----------------------------------------------------------------------------
 
 - hosts: bastion
   gather_facts: no
@@ -36,10 +38,13 @@
     - .ansible/tmp
     - okd-orchestrator
 
-  - name: Install the libselinux-python package
+  - name: Install system packages
     yum:
-      name: libselinux-python
+      name: "{{ item }}"
       state: present
+    loop:
+    - libselinux-python
+    become: yes
 
   # Add files...
 
@@ -55,7 +60,7 @@
   # is relative to this (ansible/bastion) directory.
   - name: Install bastion.sh
     copy:
-      src: "../../openshift/inventories/{{ deployment }}/bastion.sh"
+      src: "bastion.sh"
       dest: "/etc/profile.d/okd.sh"
       mode: 0644
     become: yes
@@ -87,14 +92,63 @@
       - create.py
       - render.py
 
-  # -----------------
-  # Install OpenShift
-  # -----------------
+# -----------------------------------------------------------------------------
 
-  # Continue to install OpenShift (using the cloned 'create' utility)
-  # if install_openshift is set.
-  - name: Create (Install OpenShift)
-    shell: ./create.py --openshift --auto-acknowledge
-    args:
-      chdir: okd-orchestrator
-    when: install_openshift|lower == 'yes'
+- hosts: master1
+  gather_facts: no
+
+  tasks:
+
+  # --------
+  # Preamble
+  # --------
+
+  # Wait for the the host...
+  - name: Wait for SSH
+    wait_for:
+      host: "{{ ansible_ssh_host }}"
+      port: 22
+      search_regex: OpenSSH
+      delay: 5
+    vars:
+      ansible_connection: local
+
+  - name: Gathering facts
+    setup:
+
+  # ---------------------------
+  # Generate an SSL certificate
+  # ---------------------------
+  # We do this if the master_cert_email is defined
+  # (which is true if the cluster.master.generate_cert property is set).
+  # The master's 'public_hostname' is located in the deployment configuration
+  # and the certbot registration email is expected to be set in the
+  # user's 'setenv.sh'
+
+  - name: Install certbot
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - epel-release
+      - certbot
+    become: yes
+    when:
+      - master_cert_email is defined
+
+  - name: Look for exisiting certificate directory
+    stat:
+      path: /etc/letsencrypt/live/{{ public_hostname }}
+    register: cert_result
+    become: yes
+    when:
+      - master_cert_email is defined
+
+  - name: Generate master SSL certificate
+    shell: >
+      certbot certonly --standalone -d {{ public_hostname }}
+      --agree-tos -n -m {{ master_cert_email }}
+    become: yes
+    when:
+      - master_cert_email is defined
+      - cert_result.stat.exists == false

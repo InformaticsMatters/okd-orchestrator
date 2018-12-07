@@ -87,7 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="compiling-machine-images-for-aws.html">Compiling Machine Images for AWS</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Creating a Cluster</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#creating-the-cluster">Creating the Cluster</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-openshift">Installing OpenShift</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-openshift-okd">Installing OpenShift/OKD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cluster-state-files">Cluster State Files</a></li>
 </ul>
 </li>
@@ -165,11 +165,6 @@ All of this can be accomplished from within the orchestrator’s Docker
 container.</p>
 <div class="section" id="creating-the-cluster">
 <h2>Creating the Cluster<a class="headerlink" href="#creating-the-cluster" title="Permalink to this headline">¶</a></h2>
-<p>If you’re not already in the orchestration container you can start and enter
-it with the convenient start script in the root of the project:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./okdo-start.sh
-</pre></div>
-</div>
 <p>If you haven’t done so already you need to set the password that will be
 assigned to the OpenShift <strong>admin</strong> account the orchestrator creates. Choose
 a suitable value and set it in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> script, replacing
@@ -177,16 +172,13 @@ the value for:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>TF_VAR_okd_admin_password
 </pre></div>
 </div>
-<p>If the SSH key-pair you are using (named in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code>) is not
-the default (i.e. <cite>id_rsa</cite>) then you will need to run <cite>ssh-agent</cite> in the
-container to allow some stages of orchestration to run without prompting:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ eval $(ssh-agent)
-$ ssh-add okdo-keypair
+<p>Now you can start and enter the OKD orchestration container
+with the convenient start script in the root of the project:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./okdo-start.sh
 </pre></div>
 </div>
-<p>Now, to create the cluster (bastion, network and OpenShift nodes)
-set your environment variables and run the <code class="docutils literal notranslate"><span class="pre">create.py</span></code> utility using
-the <code class="docutils literal notranslate"><span class="pre">--cluster</span></code> option:</p>
+<p>To create the cluster (bastion, network and OpenShift/OKD nodes)
+run the <code class="docutils literal notranslate"><span class="pre">create.py</span></code> utility using the <code class="docutils literal notranslate"><span class="pre">--cluster</span></code> option:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ source provider-env/setenv.sh
 $ ./create.py --cluster
 +---------------------------------------------------+
@@ -207,41 +199,36 @@ Enter &quot;okay&quot; to CREATE the Cluster:
 <p>Respond to the warning prompt to confirm the action and the creation process
 will begin.</p>
 <p>Creating the Cluster will take a few minutes.</p>
-<p>When complete the public IP address of the bastion (and the master and
-infrastructure nodes) will be presented to you. You should see a
-<code class="docutils literal notranslate"><span class="pre">terraform</span> <span class="pre">output</span></code> banner with the relevant addresses printed below.
+<p>When complete the public IP address of the bastion will be presented to you.
+You should see a <code class="docutils literal notranslate"><span class="pre">terraform</span> <span class="pre">output</span></code> banner with the relevant address exposed.
 The address of the bastion is needed for the next step:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+----------------------+
 | terraform output ... |
 +----------------------+
 bastion_ip = 18.185.149.91
-openshift_infra_ip = 35.157.131.211
-openshift_master_ip = 18.184.254.113
 </pre></div>
 </div>
 </div>
-<div class="section" id="installing-openshift">
-<h2>Installing OpenShift<a class="headerlink" href="#installing-openshift" title="Permalink to this headline">¶</a></h2>
-<p>The cluster creation step places a copy of key parts of your orchestrator
-project in the Bastion’s home directory. Installation of OpenShift takes place
-from there.</p>
+<div class="section" id="installing-openshift-okd">
+<h2>Installing OpenShift/OKD<a class="headerlink" href="#installing-openshift-okd" title="Permalink to this headline">¶</a></h2>
+<p>The prior cluster creation step places a copy of key parts of your orchestrator
+project in the Bastion’s home directory. Installation of OpenShift/OKD takes
+place from there.</p>
 <p>You can <code class="docutils literal notranslate"><span class="pre">ssh</span></code> to the Bastion from within the orchestration container you’re
 currently in using the public IP address of the bastion presented to you in
-the previous step.</p>
-<p><code class="docutils literal notranslate"><span class="pre">ssh</span></code> to the Bastion using the built-in <code class="docutils literal notranslate"><span class="pre">centos</span></code> account. for the above
-you’d run:</p>
+the previous step:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ssh centos@18.185.149.91
 </pre></div>
 </div>
 <p>From the Bastion you simply move to the cloned orchestrator directory and run
-<code class="docutils literal notranslate"><span class="pre">create.py</span></code> again, this time using the <code class="docutils literal notranslate"><span class="pre">--openshift</span></code> command-line option,
-to install the OpenShift element of the cluster:</p>
+<code class="docutils literal notranslate"><span class="pre">create.py</span></code> again, this time using the <code class="docutils literal notranslate"><span class="pre">--okd</span></code> command-line option,
+to install the OpenShift/OKD element of the cluster:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cd okd-orchestrator
-$ ./create.py --openshift
+$ ./create.py --okd
 +---------------------------------------------------+
 | Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |
 +---------------------------------------------------+
-Enter &quot;go&quot; to INSTALL OpenShift:
+Enter &quot;go&quot; to INSTALL OKD:
 </pre></div>
 </div>
 <p>Acknowledge the warning prompt to begin the installation.</p>

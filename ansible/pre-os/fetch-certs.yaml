@@ -1,0 +1,21 @@
+---
+
+# This playbook should run an the Bastion node.
+# It executes pre-OKD installation actions such as: -
+#
+# - Fetching certificates from the master
+
+- hosts: masters[0]
+
+  tasks:
+
+  - name: Fetch certificates (from master)
+    fetch:
+      src: /etc/letsencrypt/live/{{ public_hostname }}/{{ item }}
+      dest: "{{ openshift_master_named_certificates[0].certfile.split('/fullchain')[0] }}/"
+      flat: true
+    loop:
+    - fullchain.pem
+    - privkey.pem
+    become: true
+    when: public_hostname is defined

@@ -5,9 +5,11 @@ okdo-keypair
 doc/build
 
 # Translated (jinja2) material...
+ansible/bastion/inventory
+ansible/bastion/bastion.sh
 ansible/post-os/inventory
+ansible/post-destroy/aws/host_vars/localhost/vars.yaml
 ansible/pre-os/inventory
-ansible/pre-os/inventory.tpl
 openshift/ansible.cfg
 openshift/inventories/**/inventory
 openshift/inventories/**/inventory.tpl

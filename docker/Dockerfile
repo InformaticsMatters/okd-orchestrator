@@ -15,7 +15,6 @@
 #
 #   docker run -it \
 #     -v `pwd`/..:/home/okdo/okd-orchestrator:Z \
-#     -v ~/.ssh:/home/okdo/.ssh \
 #     --rm informaticsmatters/okd-orchestrator:stable /bin/bash
 #
 # Refer to the project's documention for a detailed discussiomn of
@@ -52,10 +51,11 @@ RUN curl https://releases.hashicorp.com/packer/${pacxker_version}/packer_${pacxk
     unzip /tmp/packer.zip -d /usr/local/bin && \
     chmod 0755 /usr/local/bin/packer
 
+COPY bashrc ${HOME}/.bashrc
 RUN chown -R okdo.okdo ${HOME}
 RUN chmod -R a+wrx ${HOME}
 USER okdo
-WORKDIR ${HOME}
+WORKDIR ${HOME}/okd-orchestrator
 
 ENV LANG C
 ENV LC_ALL C

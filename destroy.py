@@ -49,17 +49,20 @@ def _main(cli_args, deployment_name):
     # -----
     io.banner(deployment['name'], full_heading=True, quiet=False)
 
-    print()
-    print('CAUTION You are about to destroy the cluster.')
-    print('------- Are you sure you want to do this?')
-    print()
+    if not cli_args.now:
 
-    confirmation_word = io.get_confirmation_word()
-    confirmation = input('Enter "{}" to DESTROY this deployment: '.
-                         format(confirmation_word))
-    if confirmation != confirmation_word:
-        print('Phew! That was close!')
-        return True
+        # User said "now" so don't ask for confirmation
+        print()
+        print('CAUTION You are about to destroy the cluster.')
+        print('------- Are you sure you want to do this?')
+        print()
+
+        confirmation_word = io.get_confirmation_word()
+        confirmation = input('Enter "{}" to DESTROY this deployment: '.
+                             format(confirmation_word))
+        if confirmation != confirmation_word:
+            print('Phew! That was close!')
+            return True
 
     # ---------
     # Terraform
@@ -68,7 +71,7 @@ def _main(cli_args, deployment_name):
 
     t_dir = deployment['terraform']['dir']
     cmd = 'terraform init'
-    cwd = 'terraform/{}/cluster'.format(t_dir)
+    cwd = 'terraform/{}'.format(t_dir)
     rv = io.run(cmd, cwd, cli_args.quiet)
     if not rv:
         return False
@@ -76,8 +79,22 @@ def _main(cli_args, deployment_name):
     t_dir = deployment['terraform']['dir']
     cmd = 'terraform destroy -force -state=.terraform.{}'.\
         format(deployment_name)
-    cwd = 'terraform/{}/cluster'.format(t_dir)
+    cwd = 'terraform/{}'.format(t_dir)
     rv = io.run(cmd, cwd, cli_args.quiet)
+
+    # ----------------------
+    # Ansible (Post-Destroy)
+    # ----------------------
+    # If there's an 'ansible/post-destroy/<t_dir>' directory
+    # we run the site.yaml file in it. There is no inventory,
+    # the ansible script runs locally.
+    if os.path.exists('ansible/post-destroy/{}'.format(t_dir)):
+
+        cmd = 'ansible-playbook site.yaml'
+        cwd = 'ansible/post-destroy/{}'.format(t_dir)
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
+        if not rv:
+            return False
 
     return rv
 
@@ -95,6 +112,9 @@ if __name__ == '__main__':
 
     PARSER.add_argument('-d', '--display-deployments',
                         help='Display known deployments',
+                        action='store_true')
+
+    PARSER.add_argument('-n', '--now', help="Destroy without confirmation",
                         action='store_true')
 
     PARSER.add_argument('deployment', metavar='DEPLOYMENT',

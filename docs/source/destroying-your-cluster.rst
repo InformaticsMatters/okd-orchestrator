@@ -26,7 +26,6 @@ you wish to delete. For the example AWS cluster this would require the
 following commands::
 
     $ cd okd-orchestrator
-    $ source provider-env/setenv.sh
     $ ./destroy.py simple-aws-frankfurt-3-9
     +---------------------------------------------------+
     | Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |

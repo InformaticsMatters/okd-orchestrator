@@ -12,11 +12,6 @@ container.
 Creating the Cluster
 ====================
 
-If you're not already in the orchestration container you can start and enter
-it with the convenient start script in the root of the project::
-
-    $ ./okdo-start.sh
-
 If you haven't done so already you need to set the password that will be
 assigned to the OpenShift **admin** account the orchestrator creates. Choose
 a suitable value and set it in your ``setenv.sh`` script, replacing
@@ -24,16 +19,13 @@ the value for::
 
     TF_VAR_okd_admin_password
 
-If the SSH key-pair you are using (named in your ``setenv.sh``) is not
-the default (i.e. `id_rsa`) then you will need to run `ssh-agent` in the
-container to allow some stages of orchestration to run without prompting::
+Now you can start and enter the OKD orchestration container
+with the convenient start script in the root of the project::
 
-    $ eval $(ssh-agent)
-    $ ssh-add okdo-keypair
+    $ ./okdo-start.sh
 
-Now, to create the cluster (bastion, network and OpenShift nodes)
-set your environment variables and run the ``create.py`` utility using
-the ``--cluster`` option::
+To create the cluster (bastion, network and OpenShift/OKD nodes)
+run the ``create.py`` utility using the ``--cluster`` option::
 
     $ source provider-env/setenv.sh
     $ ./create.py --cluster
@@ -56,44 +48,39 @@ will begin.
 
 Creating the Cluster will take a few minutes.
 
-When complete the public IP address of the bastion (and the master and
-infrastructure nodes) will be presented to you. You should see a
-``terraform output`` banner with the relevant addresses printed below.
+When complete the public IP address of the bastion will be presented to you.
+You should see a ``terraform output`` banner with the relevant address exposed.
 The address of the bastion is needed for the next step::
 
     +----------------------+
     | terraform output ... |
     +----------------------+
     bastion_ip = 18.185.149.91
-    openshift_infra_ip = 35.157.131.211
-    openshift_master_ip = 18.184.254.113
 
-Installing OpenShift
-====================
 
-The cluster creation step places a copy of key parts of your orchestrator
-project in the Bastion's home directory. Installation of OpenShift takes place
-from there.
+Installing OpenShift/OKD
+========================
+
+The prior cluster creation step places a copy of key parts of your orchestrator
+project in the Bastion's home directory. Installation of OpenShift/OKD takes
+place from there.
 
 You can ``ssh`` to the Bastion from within the orchestration container you're
 currently in using the public IP address of the bastion presented to you in
-the previous step.
-
-``ssh`` to the Bastion using the built-in ``centos`` account. for the above
-you'd run::
+the previous step::
 
     $ ssh centos@18.185.149.91
 
 From the Bastion you simply move to the cloned orchestrator directory and run
-``create.py`` again, this time using the ``--openshift`` command-line option,
-to install the OpenShift element of the cluster::
+``create.py`` again, this time using the ``--okd`` command-line option,
+to install the OpenShift/OKD element of the cluster::
 
     $ cd okd-orchestrator
-    $ ./create.py --openshift
+    $ ./create.py --okd
     +---------------------------------------------------+
     | Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |
     +---------------------------------------------------+
-    Enter "go" to INSTALL OpenShift:
+    Enter "go" to INSTALL OKD:
 
 Acknowledge the warning prompt to begin the installation.
 

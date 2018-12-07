@@ -98,10 +98,10 @@ def find_template_files(deployment_config):
                 break
         # Not our terraform directory?
         if (root.startswith('./terraform/') and
-                not root.startswith('./terraform/{}/'.format(terraform_dir))):
+                not root.startswith('./terraform/{}'.format(terraform_dir))):
             exclude = True
         # If the directory's not been excluded then
-        # add it to our jonja2 search list....
+        # add it to our jinja2 search list....
         if not exclude:
             for filename in file_names:
                 if filename.endswith(_TEMPLATE_EXTENSION):

@@ -8,8 +8,7 @@
 # - Granting the `anyuid` security context constraint to a number of users,
 #   groups and service accounts
 
-- hosts:
-  - cli-node
+- hosts: cli-node
 
   tasks:
 

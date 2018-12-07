@@ -23,23 +23,20 @@ images.
 When you're ready run the following to start and enter the container
 from the root of the project::
 
-    $ ./orc-start.sh
+    $ ./okdo-start.sh
 
 It is important to realise that the ``orc-start.sh`` script maps your
 orchestrator working directory to the container directory
-``$HOME/okd-orchestrator`` and your ``~/.ssh``
-directory to the container directory ``$HOME/.ssh``.
+``$HOME/okd-orchestrator``.
 
 If this is the first time you're running the orchestrator the container image
 will need to be downloaded from Docker. This might take a moment or two before
 you eventually enter the container.
 
-From the orchestrator container, move to the orchestration directory,
-set your environment variables and validate the template files::
+From the orchestrator container, move to the orchestration directory
+and validate the OpensShift./OKD 3.9 template files::
 
-    $ cd okd-orchestrator
-    $ source provider-env/setenv.sh
-    $ cd yacker/3.9/aws
+    $ cd okd-orchestrator/yacker/3.9/aws
     $ yacker validate bastion.yaml
     $ yacker validate os.yaml
 

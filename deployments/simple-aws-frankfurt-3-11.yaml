@@ -57,13 +57,25 @@ cluster:
   master:
     count: 1
     type: t2.xlarge
+    # If you have pre-allocated public IPs for the Master set the value here.
+    # This is _not_ normally the IP address itself, it is the cloud-provider's
+    # IP identity. In AWS this would be the Elastic IP Allocation ID of
+    # the form "eipalloc-0000000000000000"
+    fixed_ip_id: eipalloc-010cfe12a8b8c7fa2
+    # Set to automatically generate a Let's Encrypt/certbot certificate
+    # for the master node when the cluster has been created but prior to
+    # OpenShift installation.
+    generate_cert: yes
 
   # Details of the Infrastructure nodes.
   #
-  # At the moment only one master instance is supported.
+  # At the moment only one infrastructure instance is supported.
   infra:
     count: 1
     type: t2.xlarge
+    # The (optional) pre-allocated public IP for the Infrastructure.
+    # (See cluster.master.fixed_ip)
+    fixed_ip_id: eipalloc-037f7a1943abe1174
 
   # Details of the cluster compute nodes.
   node:

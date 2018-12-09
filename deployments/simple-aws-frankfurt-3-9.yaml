@@ -71,7 +71,7 @@ cluster:
     # Set to automatically generate a Let's Encrypt/certbot certificate
     # for the master node when the cluster has been created but prior to
     # OpenShift installation.
-    generate_cert: yes
+    generate_cert: no
 
   # Details of the Infrastructure nodes.
   #

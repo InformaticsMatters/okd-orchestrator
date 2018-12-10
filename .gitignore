@@ -1,9 +1,6 @@
 # Expected ssh private key-pair files
 okdo-keypair
 
-# Sphinx material
-doc/build
-
 # Translated (jinja2) material...
 ansible/bastion/inventory
 ansible/bastion/bastion.sh
@@ -14,18 +11,9 @@ openshift/ansible.cfg
 openshift/inventories/**/inventory
 openshift/inventories/**/inventory.tpl
 openshift/inventories/**/bastion.sh
-terraform/openstack/cluster/infra.tf
-terraform/openstack/cluster/master.tf
-terraform/openstack/cluster/s3.tf
-terraform/openstack/cluster/template.tf
-terraform/openstack/cluster/variables.tf
-terraform/aws/cluster/s3.tf
-terraform/aws/cluster/template.tf
-terraform/aws/cluster/variables.tf
-terraform/aws/bastion/s3.tf
-terraform/aws/bastion/variables.tf
-terraform/scaleway/cluster/template.tf
-terraform/scaleway/cluster/variables.tf
+terraform/aws/s3.tf
+terraform/aws/template.tf
+terraform/aws/variables.tf
 
 # Packer material
 packer/**/*.json

@@ -49,8 +49,8 @@ RUN curl https://releases.hashicorp.com/packer/${packer_version}/packer_${packer
 # (as good practice)
 #
 ENV HOME /home/okdo
-RUN groupadd --gid ${gid} okdo && \
-    useradd --shell /bin/bash --gid okdo --uid ${uid} --home-dir ${HOME} okdo
+RUN groupadd --gid ${gid} --force okdo && \
+    useradd --shell /bin/bash --gid ${gid} --uid ${uid} --home-dir ${HOME} okdo
 
 WORKDIR ${HOME}/okd-orchestrator
 COPY bashrc ${HOME}/.bashrc

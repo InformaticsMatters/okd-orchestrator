@@ -17,19 +17,15 @@
 #     -v `pwd`/..:/home/okdo/okd-orchestrator:Z \
 #     --rm informaticsmatters/okd-orchestrator:stable /bin/bash
 #
-# Refer to the project's documention for a detailed discussiomn of
+# Refer to the project's documention for a detailed discussion of
 # the orchestrator.
 
 FROM python:3.6.7
 
-# Base directory for the application
-# Also used for user directory
-ENV HOME /home/okdo
-
-# Containers should NOT run as root
-# (as good practice)
-ARG uid=1000
-RUN useradd --shell /bin/bash --user-group --uid ${uid} --home-dir ${HOME} okdo
+ARG terraform_version=0.11.10
+ARG packer_version=1.3.2
+ARG uid=40000
+ARG gid=40000
 
 # Install required system tools
 COPY requirements.txt /tmp/
@@ -38,24 +34,28 @@ RUN apt-get -y update && \
     pip install -r /tmp/requirements.txt
 
 # Install Terraform
-ARG terraform_version=0.11.10
 RUN curl https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_amd64.zip \
         --output /tmp/terraform.zip && \
     unzip /tmp/terraform.zip -d /usr/local/bin && \
     chmod 0755 /usr/local/bin/terraform
 
 # Install Packer
-ARG pacxker_version=1.3.2
-RUN curl https://releases.hashicorp.com/packer/${pacxker_version}/packer_${pacxker_version}_linux_amd64.zip \
+RUN curl https://releases.hashicorp.com/packer/${packer_version}/packer_${packer_version}_linux_amd64.zip \
         --output /tmp/packer.zip && \
     unzip /tmp/packer.zip -d /usr/local/bin && \
     chmod 0755 /usr/local/bin/packer
 
-COPY bashrc ${HOME}/.bashrc
-RUN chown -R okdo.okdo ${HOME}
-RUN chmod -R a+wrx ${HOME}
-USER okdo
+# Containers should NOT run as root
+# (as good practice)
+#
+ENV HOME /home/okdo
+RUN groupadd --gid ${gid} okdo && \
+    useradd --shell /bin/bash --gid okdo --uid ${uid} --home-dir ${HOME} okdo
+
 WORKDIR ${HOME}/okd-orchestrator
+COPY bashrc ${HOME}/.bashrc
+RUN chown -R ${uid}.${gid} ${HOME}
+USER ${uid}
 
 ENV LANG C
 ENV LC_ALL C

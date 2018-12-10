@@ -34,5 +34,5 @@ export TF_VAR_master_certbot_email=SetMe
 # -----------------------------------------------------------------------------
 
 # The password for the initial admin account
-# that wil be created on the OpenShift cluster.
+# that will be created on the OpenShift cluster.
 export TF_VAR_okd_admin_password=SetMe

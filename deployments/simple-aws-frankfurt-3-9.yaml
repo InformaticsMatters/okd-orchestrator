@@ -1,6 +1,6 @@
 ---
 
-name: Simple AWS Deployment (OpenShift 3.9) [Frankfurt]
+name: Simple AWS Deployment (OKD 3.9) [Frankfurt]
 
 openshift:
 
@@ -42,7 +42,7 @@ cluster:
   id: simple-frankfurt-39
   # Name prefix and suffix values for the names of each cluster instance.
   # Use this to quickly distinguish between instances.
-  name_prefix: orn
+  name_prefix: vre
   name_suffix:
   # The region and zone used for cluster instances.
   # At the moment all instances are created in the same zone.
@@ -53,22 +53,24 @@ cluster:
   # Whatever is used must provide a resolvable route to the master.
   # So, if you have a domain, ensure it's routed to the pre-allocated
   # public IP of the master (see cluster.master.fixed_ip_id).
-  public_hostname:
+  public_hostname: vre.informaticsmatters.com
   # The external IP address or domain-name of the Infrastructure node.
   # (see cluster.public_hostname)
-  router_basename:
+  router_basename: vre.informaticsmatters.com
 
   # Machine image name for the cluster instances.
   # This should match the start of the Packer-generated images.
   # The latest image whose name starts with this will be used.
   image_prefix: os39-machine-image
 
-  # What additional services should be enabled?
-  # Add services to this list like metrics.
-  # e.g.:
+  # What additional OpenShift/OKD services should be enabled?
+  # Add services to this list like metrics with something like:
   #
   #   enable:
   #   - metrics
+  #
+  # We currently support the automatic inclusion of:
+  # - metrics
   enable:
 
   # Details of the Master nodes.
@@ -84,11 +86,11 @@ cluster:
     #
     # If you have not provided a pre-allocated (fixed) IP
     # leave this property empty.
-    fixed_ip_id:
+    fixed_ip_id: eipalloc-010cfe12a8b8c7fa2
     # Set to automatically generate a Let's Encrypt/certbot certificate
     # for the master node when the cluster has been created but prior to
     # OpenShift installation.
-    generate_cert: no
+    generate_cert: yes
 
   # Details of the Infrastructure nodes.
   #
@@ -98,7 +100,7 @@ cluster:
     type: t2.xlarge
     # The (optional) pre-allocated public IP for the Infrastructure.
     # (See cluster.master.fixed_ip)
-    fixed_ip_id:
+    fixed_ip_id: eipalloc-037f7a1943abe1174
 
   # Details of the cluster compute nodes.
   node:

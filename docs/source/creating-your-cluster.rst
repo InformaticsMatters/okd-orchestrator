@@ -27,7 +27,6 @@ with the convenient start script in the root of the project::
 To create the cluster (bastion, network and OpenShift/OKD nodes)
 run the ``create.py`` utility using the ``--cluster`` option::
 
-    $ source provider-env/setenv.sh
     $ ./create.py --cluster
     +---------------------------------------------------+
     | Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |
@@ -46,7 +45,8 @@ you'll need to name the one you want to create, i.e.::
 Respond to the warning prompt to confirm the action and the creation process
 will begin.
 
-Creating the Cluster will take a few minutes.
+The simple AWS example cluster should be ready after approximately
+**4 minutes**.
 
 When complete the public IP address of the bastion will be presented to you.
 You should see a ``terraform output`` banner with the relevant address exposed.
@@ -98,32 +98,28 @@ need to name the configuration to use for the OpenShift installation.
     metrics, gluster etc. are also being installed). You should allow around
     30 minutes for a typical small configuration.
 
-    The basic AWS example will be finished after approximately **14 minutes**.
+    The simple AWS example, which does not deploy logging, metrics or
+    GlusterFS, should be ready after approximately **14 minutes**.
 
 Once ``create.py`` is complete, your OKD Cluster should be installed with a
 console available on the IP address or domain name that's routed to the Master
 node, i.e. the address used for the deployment's ``cluster.public_hostname`` or
 via the IP address presented to you when the cluster was created.
 
+You should be able to login to the OpenShift/OKD console as ``admin``
+using the password you supplied in your ``setenv.sh`` script.
+
+    If you are using a Bastion it is no longer needed once your cluster has
+    been deployed and so you can **stop** it, if your cloud provider provides
+    this functionality and it likely to help will reduce your cluster costs.
+    But **do not** *delete* the Bastion or any other cluster object.
+    You **must** destroy the Cluster using the orchestrator.
+    So feel free to **stop** the instance, but **do not** delete it.
+
 You're connected to the bastion, when the cluster's complete you can exit
 and return  to the orchestration container::
 
     $ exit
-
-Using the terraform output from the cluster creation stage you
-should see the OpenShift Master IP address. In the above example you'll
-find the master's console at::
-
-    https://18.184.254.113
-
-You should be able to login as ``admin`` using the password you used
-in your ``setenv.sh`` script.
-
-    The Bastion is no longer needed once your cluster has been deployed and
-    so you can **stop** it, if your cloud provider provides this functionality.
-    This will reduce your costs. **Do not** delete the Bastion or any other
-    cluster object. You **must** destroy the Cluster using the orchestrator.
-    So feel free to **stop** the instance, but **do not** delete it.
 
 When you're finished with the cluster you can follow the
 :doc:`destroying-your-cluster` guide to delete it.

@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Generating SSL Certificates &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Creating a Cluster" href="creating-your-cluster.html" />
+    <link rel="prev" title="Compiling Machine Images for AWS" href="compiling-machine-images-for-aws.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> The OKD Orchestrator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images-for-aws.html">Compiling Machine Images for AWS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Generating SSL Certificates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-automatically-allocated-public-ips">Using automatically allocated public IPs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">The OKD Orchestrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Generating SSL Certificates</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/generating-site-certificates.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="generating-ssl-certificates">
+<h1>Generating SSL Certificates<a class="headerlink" href="#generating-ssl-certificates" title="Permalink to this headline">¶</a></h1>
+<p>You can use the orchestrator’s ability to use <a class="reference external" href="https://letsencrypt.org">Let’s Encrypt</a> and the
+<a class="reference external" href="https://certbot.eff.org">certbot</a> utility to automatically create SSL certificates for your site.</p>
+<p>It would be normal when deploying a certificate to have satisfied the following
+before orchestrating your cluster:</p>
+<ul class="simple">
+<li>Pre-allocate public IPs for the Master and Infrastructure (Router) nodes</li>
+<li>A domain (like <em>mydomain.com</em>) routed to the Master’s public IP for
+access to the OpenShift/OKD’s web console</li>
+</ul>
+<p>The above information need to be placed in your deployment configuration prior
+to orchestration.</p>
+<ol class="arabic simple">
+<li>Place the identity of the Master Node’s fixed IP into the value for
+<code class="docutils literal notranslate"><span class="pre">cluster.master.fixed_ip_id</span></code>. This is normally the provider’s identity
+of the allocated IP <em>not</em> the IP itself. In the case of AWS this
+would be the the Elastic IP identity (the value starting <code class="docutils literal notranslate"><span class="pre">eipalloc-</span></code>)</li>
+<li>Similarly place the identity of the Infrastructure/Router Node’s fixed
+IP into the value for <code class="docutils literal notranslate"><span class="pre">cluster.infra.fixed_ip_id</span></code></li>
+<li>Place the domain name routed to the master (for the OpenShift console)
+into the value for <code class="docutils literal notranslate"><span class="pre">cluster.public_hostname</span></code></li>
+<li>Place the domain name that is routed to the Infrastructure/Router
+into the value for <code class="docutils literal notranslate"><span class="pre">cluster.router_basename</span></code></li>
+<li>To instruct the orchestrator to automatically generate
+certificates set the <code class="docutils literal notranslate"><span class="pre">cluster.master.generate_cert</span></code> value to <code class="docutils literal notranslate"><span class="pre">Yes</span></code></li>
+<li>Finally, you need to set the <code class="docutils literal notranslate"><span class="pre">TF_VAR_master_certbot_email</span></code> variable in
+your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> file to the email address registered with Let’s Encrypt.</li>
+</ol>
+<p>You should now be ready to follow the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a> guide.</p>
+<div class="section" id="using-automatically-allocated-public-ips">
+<h2>Using automatically allocated public IPs<a class="headerlink" href="#using-automatically-allocated-public-ips" title="Permalink to this headline">¶</a></h2>
+<p>If you are not generating a certificate then you can optionally let the
+orchestrator allocate public IPs for your Master and Infrastructure instances.</p>
+<p>In this case you simply need to remove any value for the Master and
+Infrastructure <code class="docutils literal notranslate"><span class="pre">fixed_ip_id</span></code> properties of your deployment configuration.</p>
+<p>When you do not provide values for the Master and Infrastructure
+<code class="docutils literal notranslate"><span class="pre">fixed_ip_id</span></code> values the orchestrator will, where the provider
+allows it, create fixed IPs on your behalf. In the case of AWS this will
+be two <strong>Elastic IP</strong> allocations in the region the orchestrator is
+deploying to.</p>
+<p>Automatically generated public IPs will be removed when the cluster is
+destroyed.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="creating-your-cluster.html" class="btn btn-neutral float-right" title="Creating a Cluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="compiling-machine-images-for-aws.html" class="btn btn-neutral" title="Compiling Machine Images for AWS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Informatics Matters
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

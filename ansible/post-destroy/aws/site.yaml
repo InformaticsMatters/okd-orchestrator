@@ -8,7 +8,7 @@
 
   - name: Pause
     pause:
-      seconds: 8
+      seconds: 4
 
   - name: Get available volumes
     ec2_vol_facts:

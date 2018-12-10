@@ -27,16 +27,17 @@ from the root of the project::
 
 It is important to realise that the ``orc-start.sh`` script maps your
 orchestrator working directory to the container directory
-``$HOME/okd-orchestrator``.
+``$HOME/okd-orchestrator``, which is also the working directory when you
+enter the container.
 
 If this is the first time you're running the orchestrator the container image
 will need to be downloaded from Docker. This might take a moment or two before
 you eventually enter the container.
 
-From the orchestrator container, move to the orchestration directory
-and validate the OpensShift./OKD 3.9 template files::
+From the orchestrator container, move to the Yacker directory
+and validate the OpensShift/OKD 3.9 template files::
 
-    $ cd okd-orchestrator/yacker/3.9/aws
+    $ cd yacker/3.9/aws
     $ yacker validate bastion.yaml
     $ yacker validate os.yaml
 
@@ -45,19 +46,9 @@ Then, if successful, build each image::
     $ yacker build bastion.yaml
     $ yacker build os.yaml
 
-The builds may take a minute or two. At the end you should be presented with
-an Amazon Machine Image ID (or AMI). Here's the example output for an
-image that results in an AMI with the ID ``ami-01234567012345670``::
-
-    ==> Builds finished. The artifacts of successful builds are:
-    --> OpenShift 3.9 Base Image Frankfurt: AMIs were created:
-    eu-central-1: ami-01234567012345670
-
-Take the two AMIs you are presented with and place them in your provider
-environment. For AWS these *AMIs* replace the existing values for::
-
-   TF_VAR_aws_ami_os
-   TF_VAR_aws_ami_bastion
+The builds may take a minute or two. As long as you have not changed
+the image ``ami_name`` variable the machine images (AMIs) Yacker creates
+will be picked up automatically by the cluster orchestration.
 
 You can stay in the container image and follow the :doc:`creating-your-cluster`
 guide to create your cluster, but first return  to the project root from
@@ -65,8 +56,8 @@ the yacker directory::
 
     $ cd ../../..
 
-Finding AWS Machine Images
---------------------------
+Finding new base AWS Machine Images
+-----------------------------------
 
 The base image AMI that your Yacker template files use depends on the AWS
 region you wish to deploy your cluster to. The orchestrator images

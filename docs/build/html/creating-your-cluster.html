@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Destroying a Cluster" href="destroying-your-cluster.html" />
-    <link rel="prev" title="Compiling Machine Images for AWS" href="compiling-machine-images-for-aws.html" /> 
+    <link rel="prev" title="Generating SSL Certificates" href="generating-site-certificates.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -85,6 +85,7 @@
 <li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compiling-machine-images-for-aws.html">Compiling Machine Images for AWS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generating-site-certificates.html">Generating SSL Certificates</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Creating a Cluster</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#creating-the-cluster">Creating the Cluster</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-openshift-okd">Installing OpenShift/OKD</a></li>
@@ -179,8 +180,7 @@ with the convenient start script in the root of the project:</p>
 </div>
 <p>To create the cluster (bastion, network and OpenShift/OKD nodes)
 run the <code class="docutils literal notranslate"><span class="pre">create.py</span></code> utility using the <code class="docutils literal notranslate"><span class="pre">--cluster</span></code> option:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ source provider-env/setenv.sh
-$ ./create.py --cluster
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./create.py --cluster
 +---------------------------------------------------+
 | Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |
 +---------------------------------------------------+
@@ -198,7 +198,8 @@ Enter &quot;okay&quot; to CREATE the Cluster:
 </div>
 <p>Respond to the warning prompt to confirm the action and the creation process
 will begin.</p>
-<p>Creating the Cluster will take a few minutes.</p>
+<p>The simple AWS example cluster should be ready after approximately
+<strong>4 minutes</strong>.</p>
 <p>When complete the public IP address of the bastion will be presented to you.
 You should see a <code class="docutils literal notranslate"><span class="pre">terraform</span> <span class="pre">output</span></code> banner with the relevant address exposed.
 The address of the bastion is needed for the next step:</p>
@@ -242,31 +243,27 @@ on the Bastion as part of the cluster creation step.</p>
 the configuration (i.e., the size of the cluster and whether logging,
 metrics, gluster etc. are also being installed). You should allow around
 30 minutes for a typical small configuration.</p>
-<p>The basic AWS example will be finished after approximately <strong>14 minutes</strong>.</p>
+<p>The simple AWS example, which does not deploy logging, metrics or
+GlusterFS, should be ready after approximately <strong>14 minutes</strong>.</p>
 </div></blockquote>
 <p>Once <code class="docutils literal notranslate"><span class="pre">create.py</span></code> is complete, your OKD Cluster should be installed with a
 console available on the IP address or domain name that’s routed to the Master
 node, i.e. the address used for the deployment’s <code class="docutils literal notranslate"><span class="pre">cluster.public_hostname</span></code> or
 via the IP address presented to you when the cluster was created.</p>
+<p>You should be able to login to the OpenShift/OKD console as <code class="docutils literal notranslate"><span class="pre">admin</span></code>
+using the password you supplied in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> script.</p>
+<blockquote>
+<div>If you are using a Bastion it is no longer needed once your cluster has
+been deployed and so you can <strong>stop</strong> it, if your cloud provider provides
+this functionality and it likely to help will reduce your cluster costs.
+But <strong>do not</strong> <em>delete</em> the Bastion or any other cluster object.
+You <strong>must</strong> destroy the Cluster using the orchestrator.
+So feel free to <strong>stop</strong> the instance, but <strong>do not</strong> delete it.</div></blockquote>
 <p>You’re connected to the bastion, when the cluster’s complete you can exit
 and return  to the orchestration container:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ exit
 </pre></div>
 </div>
-<p>Using the terraform output from the cluster creation stage you
-should see the OpenShift Master IP address. In the above example you’ll
-find the master’s console at:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>https://18.184.254.113
-</pre></div>
-</div>
-<p>You should be able to login as <code class="docutils literal notranslate"><span class="pre">admin</span></code> using the password you used
-in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> script.</p>
-<blockquote>
-<div>The Bastion is no longer needed once your cluster has been deployed and
-so you can <strong>stop</strong> it, if your cloud provider provides this functionality.
-This will reduce your costs. <strong>Do not</strong> delete the Bastion or any other
-cluster object. You <strong>must</strong> destroy the Cluster using the orchestrator.
-So feel free to <strong>stop</strong> the instance, but <strong>do not</strong> delete it.</div></blockquote>
 <p>When you’re finished with the cluster you can follow the
 <a class="reference internal" href="destroying-your-cluster.html"><span class="doc">Destroying a Cluster</span></a> guide to delete it.</p>
 </div>
@@ -296,7 +293,7 @@ a number of dynamic files not under revision control.</p>
         <a href="destroying-your-cluster.html" class="btn btn-neutral float-right" title="Destroying a Cluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="compiling-machine-images-for-aws.html" class="btn btn-neutral" title="Compiling Machine Images for AWS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="generating-site-certificates.html" class="btn btn-neutral" title="Generating SSL Certificates" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -330,7 +327,6 @@ a number of dynamic files not under revision control.</p>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
   

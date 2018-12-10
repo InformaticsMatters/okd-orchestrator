@@ -23,6 +23,7 @@ A Cluster Orchestrator for OpenShift Origin (OKD). A project sponsored by
     getting-started-aws
     compiling-machine-images
     compiling-machine-images-for-aws
+    generating-site-certificates
     creating-your-cluster
     destroying-your-cluster
     faq

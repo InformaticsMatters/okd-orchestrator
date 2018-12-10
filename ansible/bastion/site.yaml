@@ -54,7 +54,12 @@
       dest: "{{ ansible_env.HOME }}/.ssh/id_rsa"
       mode: 0600
 
-  # Default environment variables
+  # Create ~/.ssh/config
+  - name: Create SSH config
+    copy:
+      src: "files/ssh-config"
+      dest: "{{ ansible_env.HOME }}/.ssh/config"
+      mode: 0400
 
   # The path to the deployment-specific directory
   # is relative to this (ansible/bastion) directory.

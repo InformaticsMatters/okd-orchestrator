@@ -91,6 +91,13 @@ cluster:
     # for the master node when the cluster has been created but prior to
     # OpenShift installation.
     generate_cert: yes
+    # If the master is to also act as the infrastructure node
+    # then set this field to 'yes' while also setting the 'infra.count' to 0.
+    is_infra: no
+    # If the master is to also act as the Bastion node
+    # then set this field to 'yes'. There is no need to adjust
+    # the bastion configuration.
+    is_bastion: no
 
   # Details of the Infrastructure nodes.
   #

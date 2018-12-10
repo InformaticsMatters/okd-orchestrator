@@ -44,6 +44,11 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 openshift_master_api_port=443
 openshift_master_console_port=443
 
+{%- if cluster.master.generate_cert %}
+openshift_master_named_certificates=[{"certfile": "/home/centos/fullchain.pem", "keyfile": "/home/centos/privkey.pem"}]
+openshift_master_overwrite_named_certificates=true
+{%- endif %}
+
 # AWS
 {%- raw %}
 openshift_cloudprovider_kind=aws
@@ -55,7 +60,13 @@ openshift_clusterid=im
 openshift_docker_additional_registries = registry.access.redhat.com
 openshift_docker_insecure_registries = registry.access.redhat.com
 
+{% if cluster.enable and 'metrics' in cluster.enable %}
+openshift_metrics_install_metrics=true
+openshift_metrics_hawkular_hostname=metrics.${public_hostname}
+openshift_hosted_metrics_deployer_version=v3.11
+{%- else %}
 openshift_metrics_install_metrics=false
+{%- endif %}
 openshift_metrics_cassandra_storage_type=dynamic
 
 openshift_logging_install_logging=false

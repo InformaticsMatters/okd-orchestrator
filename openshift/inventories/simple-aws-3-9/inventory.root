@@ -57,7 +57,13 @@ openshift_clusterid=im
 openshift_docker_additional_registries = registry.access.redhat.com
 openshift_docker_insecure_registries = registry.access.redhat.com
 
+{% if cluster.enable and 'metrics' in cluster.enable %}
+openshift_metrics_install_metrics=true
+openshift_metrics_hawkular_hostname=metrics.${public_hostname}
+openshift_hosted_metrics_deployer_version=v3.9
+{%- else %}
 openshift_metrics_install_metrics=false
+{%- endif %}
 openshift_metrics_cassandra_storage_type=dynamic
 
 openshift_logging_install_logging=false

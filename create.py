@@ -118,31 +118,35 @@ def _main(cli_args, deployment_name):
         # -------
         # Run the bastion site file.
 
-        extra_env = ''
-        if deployment['cluster']['master']['generate_cert']:
-            extra_env += ' -e master_cert_email={}'. \
-                format(os.environ['TF_VAR_master_certbot_email'])
-            extra_env += ' -e public_hostname={}'. \
-                format(deployment['cluster']['public_hostname'])
-        keypair_name = os.environ['TF_VAR_keypair_name']
-        cmd = 'ansible-playbook site.yaml' \
-              ' {}' \
-              ' -e keypair_name={}' \
-              ' -e deployment={}'.format(extra_env,
-                                         keypair_name,
-                                         inventory_dir)
-        cwd = 'ansible/bastion'
-        rv, _ = io.run(cmd, cwd, cli_args.quiet)
-        if not rv:
-            return False
+        if not cli_args.skip_pre_openshift:
 
-        # Now expose the Bastion's IP
-        cmd = 'terraform output' \
-              ' -state=.terraform.{}'.format(deployment_name)
-        cwd = 'terraform/{}'.format(t_dir)
-        rv, _ = io.run(cmd, cwd, cli_args.quiet)
-        if not rv:
-            return False
+            extra_env = ''
+            if deployment['cluster']['master']['generate_cert']:
+                extra_env += ' -e master_cert_email={}'. \
+                    format(os.environ['TF_VAR_master_certbot_email'])
+                extra_env += ' -e public_hostname={}'. \
+                    format(deployment['cluster']['public_hostname'])
+            keypair_name = os.environ['TF_VAR_keypair_name']
+            cmd = 'ansible-playbook site.yaml' \
+                  ' {}' \
+                  ' -e keypair_name={}' \
+                  ' -e deployment={}'.format(extra_env,
+                                             keypair_name,
+                                             inventory_dir)
+            cwd = 'ansible/bastion'
+            rv, _ = io.run(cmd, cwd, cli_args.quiet)
+            if not rv:
+                return False
+
+        if not cli_args.skip_terraform:
+
+            # Now expose the Bastion's IP
+            cmd = 'terraform output' \
+                  ' -state=.terraform.{}'.format(deployment_name)
+            cwd = 'terraform/{}'.format(t_dir)
+            rv, _ = io.run(cmd, cwd, cli_args.quiet)
+            if not rv:
+                return False
 
         # Leave.
         return True
@@ -181,18 +185,20 @@ def _main(cli_args, deployment_name):
     # Ansible (Pre-OpenShift)
     # -------
 
-    extra_env = ''
-    if deployment['cluster']['master']['generate_cert']:
-        extra_env += ' -e public_hostname={}'. \
-            format(deployment['cluster']['public_hostname'])
-    cmd = 'ansible-playbook site.yaml' \
-          ' {}' \
-          ' -i ../../openshift/inventories/{}/inventory'.\
-        format(extra_env, inventory_dir)
-    cwd = 'ansible/pre-os'
-    rv, _ = io.run(cmd, cwd, cli_args.quiet)
-    if not rv:
-        return False
+    if not cli_args.skip_pre_openshift:
+
+        extra_env = ''
+        if deployment['cluster']['master']['generate_cert']:
+            extra_env += ' -e public_hostname={}'. \
+                format(deployment['cluster']['public_hostname'])
+        cmd = 'ansible-playbook site.yaml' \
+              ' {}' \
+              ' -i ../../openshift/inventories/{}/inventory'.\
+            format(extra_env, inventory_dir)
+        cwd = 'ansible/pre-os'
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
+        if not rv:
+            return False
 
     # -------
     # Ansible (OpenShift)

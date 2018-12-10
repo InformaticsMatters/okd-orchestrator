@@ -63,6 +63,14 @@ cluster:
   # The latest image whose name starts with this will be used.
   image_prefix: os39-machine-image
 
+  # What additional services should be enabled?
+  # Add services to this list like metrics.
+  # e.g.:
+  #
+  #   enable:
+  #   - metrics
+  enable:
+
   # Details of the Master nodes.
   #
   # At the moment only one master instance is supported.

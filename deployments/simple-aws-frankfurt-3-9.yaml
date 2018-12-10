@@ -29,6 +29,10 @@ ansible:
 
 bastion:
 
+  # Machine image name for the Bastion instance.
+  # This should match the start of the Packer-generated image.
+  # The latest image whose name starts with this will be used.
+  image_prefix: bastion-image
   type: t2.small
 
 cluster:
@@ -49,10 +53,15 @@ cluster:
   # Whatever is used must provide a resolvable route to the master.
   # So, if you have a domain, ensure it's routed to the pre-allocated
   # public IP of the master (see cluster.master.fixed_ip_id).
-  public_hostname: s-master.matildapeak.io
+  public_hostname:
   # The external IP address or domain-name of the Infrastructure node.
   # (see cluster.public_hostname)
-  router_basename: s-infra.matildapeak.io
+  router_basename:
+
+  # Machine image name for the cluster instances.
+  # This should match the start of the Packer-generated images.
+  # The latest image whose name starts with this will be used.
+  image_prefix: os39-machine-image
 
   # Details of the Master nodes.
   #

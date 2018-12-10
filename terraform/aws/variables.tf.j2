@@ -7,8 +7,6 @@
 #
 # - TF_VAR_aws_access_key                 Your AWS access token
 # - TF_VAR_aws_secret_key                 Your AWS secret key
-# - TF_VAR_aws_ami_os                     The AMI for OpenShift base images
-# - TF_VAR_aws_ami_bastion                The AMI for the bastion base image
 #
 # - TF_VAR_keypair_name                   The cluster keypair name
 #
@@ -16,8 +14,6 @@
 
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
-variable "aws_ami_os" {}
-variable "aws_ami_bastion" {}
 variable "keypair_name" {}
 variable "okd_admin_password" {}
 
@@ -64,6 +60,10 @@ variable "ansible_dir" {
 
 variable "openshift_dir" {
   default = "../../openshift"
+}
+
+variable "cluster_image_name_prefix" {
+  default = "{{ cluster.image_prefix }}"
 }
 
 # -----------------------------------------------------------------------------
@@ -117,4 +117,8 @@ variable "node_image_type" {
 
 variable "bastion_image_type" {
   default = "{{ bastion.type }}"
+}
+
+variable "bastion_image_name_prefix" {
+  default = "{{ bastion.image_prefix }}"
 }

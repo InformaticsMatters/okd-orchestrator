@@ -23,10 +23,6 @@ export TF_VAR_aws_secret_key=SetMe
 # used a different key-pair.
 export TF_VAR_keypair_name=okdo-keypair
 
-# THe AWS AMIs for the Bastion and OpenShift cluster nodes
-export TF_VAR_aws_ami_os=SetMe
-export TF_VAR_aws_ami_bastion=SetMe
-
 # Your Let's Encrypt/Certbot email address.
 # `You need to set this is you are expecting the deployment
 # to generate SSL certificates for your master instance.

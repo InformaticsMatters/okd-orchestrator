@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 resource "aws_instance" "node" {
-  ami = "${var.aws_ami_os}"
+  ami = "${data.aws_ami.cluster.id}"
   instance_type = "${var.node_image_type}"
   count = "${var.node_count}"
   key_name = "${var.keypair_name}"

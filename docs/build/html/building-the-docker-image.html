@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Getting Started &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  <title>Building the Docker Image &mdash; The OKD Orchestrator 1.0.0 documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Building the Docker Image" href="building-the-docker-image.html" />
-    <link rel="prev" title="Architecture" href="architecture.html" /> 
+    <link rel="next" title="Getting Started with AWS" href="getting-started-aws.html" />
+    <link rel="prev" title="Getting Started" href="getting-started.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -81,10 +81,10 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#git">Git</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#docker">Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="building-the-docker-image.html">Building the Docker Image</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="getting-started.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#git">Git</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="getting-started.html#docker">Docker</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Building the Docker Image</a></li>
 </ul>
 </li>
 </ul>
@@ -141,13 +141,15 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Getting Started</li>
+          <li><a href="getting-started.html">Getting Started</a> &raquo;</li>
+        
+      <li>Building the Docker Image</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/getting-started.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/building-the-docker-image.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -160,53 +162,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<p>The orchestrator is designed to simplify the construction of an OpenShift
-cluster on various cloud providers. At the moment we have working solutions
-for Amazon <em>EC2</em>, <em>OpenStack</em> and <em>Scaleway</em> and a working example for
-<em>EC2</em> that we use as a tutorial.</p>
-<p>The tools required by the orchestrator are packaged into a convenient
-Docker image that you can run on your laptop or desktop. The essential
-tools you <em>will</em> need are: -</p>
-<ul class="simple">
-<li><strong>Git</strong> (and a fork of the OKD Orchestrator repository)</li>
-<li><strong>Docker</strong></li>
-</ul>
-<div class="section" id="git">
-<h2>Git<a class="headerlink" href="#git" title="Permalink to this headline">¶</a></h2>
-<p>In order to use the orchestrator, an open source software project, you will
-need the <a class="reference external" href="https://git-scm.com">Git</a> version control system installed. Using Git you should start
-with a clone of a <strong>fork</strong> of the orchestrator project. A fork is preferred
-because you may need to make changes to the configuration files or
-create your own configurations.</p>
-<ol class="arabic simple">
-<li>Install Git</li>
-<li>Visit the <a class="reference external" href="https://github.com/InformaticsMatters/okd-orchestrator">orchestrator repository</a>. Fork it and clone it to your
-development host.</li>
-</ol>
-<p>You will be working from the clone of this project so start by navigating to
-the root of your working copy.</p>
+  <div class="section" id="building-the-docker-image">
+<h1>Building the Docker Image<a class="headerlink" href="#building-the-docker-image" title="Permalink to this headline">¶</a></h1>
+<p>The image used for the container to create your cluster is available
+on <a class="reference external" href="https://hub.docker.com/r/informaticsmatters/okd-orchestrator/">Docker Hub</a> and should work with MacOS.</p>
+<p>The container image runs as the built-in user <code class="docutils literal notranslate"><span class="pre">okdo</span></code> using <strong>User</strong> and
+<strong>Group</strong> IDs of <code class="docutils literal notranslate"><span class="pre">40000</span></code>.</p>
+<p>As the OKD Orchestrator working directory of your clone or fork of this
+project is expected to be mounted within the container as a <strong>volume</strong>
+you may have permission issues with some flavours of unix.</p>
+<p>To get around this you can build your own container image using the
+<code class="docutils literal notranslate"><span class="pre">build4me.sh</span></code> script inside the <code class="docutils literal notranslate"><span class="pre">docker</span></code> directory. This script builds
+the container image using the <code class="docutils literal notranslate"><span class="pre">okdo</span></code> user but with <strong>User</strong> and <strong>Group</strong>
+ids that match yours:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">docker</span>
+<span class="o">./</span><span class="n">build4me</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
 </div>
-<div class="section" id="docker">
-<h2>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h2>
-<p>We use <a class="reference external" href="https://www.docker.com">Docker</a> because it is a tool designed to make it easier to create,
-deploy, and run applications by using containers. Containers allow a developer
-to package up an application with all of the parts it needs, such as libraries
-and other dependencies, and ship it all out as one package.</p>
-<ol class="arabic simple">
-<li>Install Docker. You can refer to Docker’s installation guide,
-which includes guides for various platforms.</li>
-</ol>
-<p>We have been using Docker <strong>18.09.0</strong> but any recent version should be
-suitable.</p>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">See:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="building-the-docker-image.html">Building the Docker Image</a></li>
-</ul>
-</div>
-</div>
+<p>Once built you can then use the project’s <code class="docutils literal notranslate"><span class="pre">okdo-start.sh</span></code> script from the
+project root to build your personalised copy of the image.</p>
 </div>
 
 
@@ -217,10 +191,10 @@ suitable.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="building-the-docker-image.html" class="btn btn-neutral float-right" title="Building the Docker Image" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="getting-started-aws.html" class="btn btn-neutral float-right" title="Getting Started with AWS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="architecture.html" class="btn btn-neutral" title="Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="getting-started.html" class="btn btn-neutral" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

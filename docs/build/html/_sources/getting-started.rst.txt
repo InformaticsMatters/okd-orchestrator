@@ -47,5 +47,11 @@ and other dependencies, and ship it all out as one package.
 We have been using Docker **18.09.0** but any recent version should be
 suitable.
 
+..  toctree::
+    :maxdepth: 1
+    :caption: See:
+
+    building-the-docker-image
+
 .. _docker: https://www.docker.com
 .. _installation guide: https://docs.docker.com/install/

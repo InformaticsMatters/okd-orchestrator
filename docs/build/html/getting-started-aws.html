@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Compiling Machine Images" href="compiling-machine-images.html" />
-    <link rel="prev" title="Getting Started" href="getting-started.html" /> 
+    <link rel="prev" title="Building the Docker Image" href="building-the-docker-image.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -95,7 +95,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compiling-machine-images-for-aws.html">Compiling Machine Images for AWS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="configuring-site-certificates.html">Configuring Site Certificates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generating-site-certificates.html">Generating SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
@@ -172,10 +172,10 @@ work on a clone of your own <strong>fork</strong> of the OKD Orchestrator.
 You will then be able to commit the changes you make and start to craft
 your own deployment configurations without being disturbed by changes in this,
 the upstream project.</p>
-<p>Here we’re going to deploy an example OKD 3.9 release on a small cluster at
-AWS. The deployment configuration is called <code class="docutils literal notranslate"><span class="pre">simple-aws-frankfurt-3-9</span></code>.</p>
+<p>Here we’re going to deploy an example OKD 3.11 release on a small cluster at
+AWS. The deployment configuration is called <code class="docutils literal notranslate"><span class="pre">compact-aws-frankfurt-3-11</span></code>.</p>
 <p>The orchestrator will be creating the bastion node, the cluster network,
-the cluster and installing OpenShift, all from within a Docker container
+the cluster and installing OpenShift/OKD, all from within a Docker container
 hosting the orchestrator’s run-time tools.</p>
 <p>At the end we’ll tear-down the cluster using the orchestrator.</p>
 <blockquote>
@@ -266,7 +266,7 @@ all of which is covered in the <a class="reference internal" href="creating-your
         <a href="compiling-machine-images.html" class="btn btn-neutral float-right" title="Compiling Machine Images" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="getting-started.html" class="btn btn-neutral" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="building-the-docker-image.html" class="btn btn-neutral" title="Building the Docker Image" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

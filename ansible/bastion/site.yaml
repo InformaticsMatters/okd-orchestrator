@@ -48,6 +48,11 @@
 
   # Add files...
 
+  - name: Copy requirements
+    copy:
+      src: files/requirements.txt
+      dest: /tmp/
+
   - name: Install SSH private key
     copy:
       src: "../../{{ keypair_name }}"
@@ -70,6 +75,11 @@
       mode: 0644
     become: yes
 
+  - name: Install Python Modules
+    pip:
+      requirements: /tmp/requirements.txt
+    become: yes
+
   # ---------------------
   # Copy the Orchestrator
   # ---------------------
@@ -83,11 +93,34 @@
       dest: "{{ ansible_env.HOME }}/okd-orchestrator/{{ item }}"
     loop:
       - ansible
-      - deployments
-      - openshift
+      - okd
       - utils
 
-  # Now executable parts of the Orchestrator
+  # Create the deployment directory
+  - name: Create deployments directory
+    file:
+      path: "{{ deployments_directory }}"
+      state: directory
+      owner: centos
+      group: centos
+      mode: 0755
+    become: yes
+    when: deployments_directory is defined
+
+  # Copy the deployment (default or user)
+  - name: Copy deployment file (from OKD Orchestrator)
+    copy:
+      src: "../../deployments/{{ deployment_name }}.yaml"
+      dest: "{{ ansible_env.HOME }}/okd-orchestrator/deployments/"
+    when: deployments_directory is not defined
+
+  - name: Copy deployment file (from user)
+    copy:
+      src: "{{ deployments_directory }}/{{ deployment_name }}.yaml"
+      dest: "{{ deployments_directory }}/"
+    when: deployments_directory is defined
+
+  # Now the executable parts of the Orchestrator
   - name: Copy orchestrator modules
     copy:
       src: "../../{{ item }}"
@@ -95,7 +128,6 @@
       mode: 0755
     loop:
       - create.py
-      - render.py
 
 # -----------------------------------------------------------------------------
 

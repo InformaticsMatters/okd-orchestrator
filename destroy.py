@@ -7,7 +7,7 @@ from __future__ import print_function
 
 import argparse
 from builtins import input
-import glob
+import codecs
 import os
 import sys
 
@@ -15,32 +15,37 @@ import yaml
 
 from utils import io
 
+# The deployments directory.
+OKD_DEPLOYMENTS_DIRECTORY = io.get_deployments_directory()
 
-def _main(cli_args, deployment_name):
+
+def _main(cli_args, chosen_deployment_name):
     """Destruction entry point.
 
     :param cli_args: The command-line arguments
     :type cli_args: ``list``
-    :param deployment_name: The deployment file (excluding the extension)
-    :type deployment_name: ``str``
+    :param chosen_deployment_name: The deployment file
+                                   (excluding the extension)
+    :type chosen_deployment_name: ``str``
     :return: True on success
     :rtype: ``bool``
     """
 
-    deployment_file = 'deployments/{}.yaml'.format(deployment_name)
-    if not os.path.exists(deployment_file):
-        io.error(('No config file ({}) for an "{}" deployment'.
-                  format(deployment_file, deployment_name)))
+    file = os.path.join(OKD_DEPLOYMENTS_DIRECTORY,
+                        chosen_deployment_name + '.yaml')
+    if not os.path.isfile(file):
+        io.error(('Config file does not exist ({})'.
+                  format(chosen_deployment_name)))
         return False
-    with open(deployment_file, 'r') as stream:
+    with codecs.open(file, 'r', 'utf8') as stream:
         deployment = yaml.load(stream)
 
-    # There must be an openshift/inventories directory
-    inventory_dir = deployment['openshift']['inventory_dir']
-    if not os.path.isdir('openshift/inventories/{}'.format(inventory_dir)):
-        io.error('Missing "openshift/inventories" directory')
+    # There must be an okd/inventories directory
+    inventory_dir = deployment['okd']['inventory_dir']
+    if not os.path.isdir('okd/inventories/{}'.format(inventory_dir)):
+        io.error('Missing "okd/inventories" directory')
         print('Expected to find the directory "{}" but it was not there.'.
-              format(deployment_name))
+              format(chosen_deployment_name))
         print('Every deployment must have a matching "inventories" directory')
         return False
 
@@ -78,7 +83,7 @@ def _main(cli_args, deployment_name):
 
     t_dir = deployment['terraform']['dir']
     cmd = 'terraform destroy -force -state=.terraform.{}'.\
-        format(deployment_name)
+        format(chosen_deployment_name)
     cwd = 'terraform/{}'.format(t_dir)
     rv = io.run(cmd, cwd, cli_args.quiet)
 
@@ -104,7 +109,7 @@ if __name__ == '__main__':
     # Parse the command-line then run the main method.
     PARSER = argparse.\
         ArgumentParser(description='The Informatics Matters Orchestrator.'
-                                   ' Destroys the cloud-based execution'
+                                   ' Destroys the OKD cloud-based execution'
                                    ' platform.')
 
     PARSER.add_argument('-q', '--quiet', help="Decrease output verbosity",
@@ -123,44 +128,10 @@ if __name__ == '__main__':
 
     ARGS = PARSER.parse_args()
 
-    deployments = glob.glob('deployments/*.yaml')
-    # If there are no deployments, we can do nothing!
-    if not deployments:
-        print('The deployments directory is empty.')
-        sys.exit(1)
-
-    # Deal with special cases...
-    # 1. 'display deployments'
-    if ARGS.display_deployments:
-        for deployment in deployments:
-            # Display the deployment without the path
-            # and removing the '.yaml' suffix.
-            print(os.path.basename(deployment)[:-5])
-        sys.exit(0)
-
-    # We must have a deployment defined if we get here.
-    # Even if there is just one, it's safe to force the
-    # user to specify the deployment.
-    if not ARGS.deployment:
-        print('ERROR: You need to supply the name of a deployment.'
-              ' The following are available:')
-        for deployment in deployments:
-            # Display the deployment without the path
-            # and removing the '.yaml' suffix.
-            print(os.path.basename(deployment)[:-5])
-        sys.exit(1)
-    else:
-        deployment_file = ARGS.deployment
-
-    # Load the deployment's configuration file...
-    config_file = 'deployments/{}.yaml'.format(deployment_file)
-    if not os.path.exists(config_file):
-        io.error('No config file ({}) for an "{}" deployment'.
-                 format(config_file, deployment_file))
-        sys.exit(1)
-
     # Go...
-    success = _main(ARGS, deployment_file)
+    deployment_name = io.get_deployment_config_name(ARGS.deployment,
+                                                    ARGS.display_deployments)
+    success = _main(ARGS, deployment_name)
 
     # Done
     # ...or failed and exhausted retry attempts!

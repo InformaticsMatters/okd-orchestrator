@@ -14,33 +14,72 @@
 provisioners:
 
 - type: file
-  source: ../files/bastion-requirements.txt
+  source: yacker/files/bastion.sh
+  destination: /tmp/bastion.sh
+
+- type: file
+  source: yacker/files/okd-requirements.txt
   destination: /tmp/requirements.txt
 
 - type: shell
   inline:
+
+  # On top of basic ODK requirements the 'control node'
+  # needs the following for Metrics installation:
+  #
+  #  httpd-tools
+  #  java-1.8.0-openjdk-headless
+
+  - sudo yum -y update
   - sudo yum -y install wget git unzip net-tools yum-utils bind-utils
-      iptables-services ntp bridge-utils bash-completion
-      kexec-tools sos psacct pyOpenSSL etcd flannel
+      httpd-tools iptables-services ntp bridge-utils bash-completion
+      kexec-tools sos psacct pyOpenSSL etcd flannel java-1.8.0-openjdk-headless
       docker-1.13.1
+
   - sudo rpm -V docker-1.13.1
+
   - sudo systemctl enable docker
   - sudo systemctl start docker
   - sudo yum -y install NetworkManager
   - sudo systemctl enable NetworkManager
   - sudo systemctl start NetworkManager
+
   - sudo easy_install pip
   - sudo pip install -r /tmp/requirements.txt
+
+  # OKD (default) PATH variables
+  # adding ~/bin and ~/bin/oc to the user PATH...
+
+  - sudo cp /tmp/bastion.sh /etc/profile.d
+
+  # Fetch the OC CLI (to /home/centos/bin/oc)
+
+  - sudo mkdir -p /home/centos/bin/oc
+  - sudo wget --output-document=/tmp/oc.tar.gz
+      https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
+  - sudo tar -xf /tmp/oc.tar.gz -C /home/centos/bin/oc --strip-components=1
+  - sudo chown -R centos.centos /home/centos
+
+  # Monit 5.25.2 from source
+
+  - sudo yum install -y gcc zlib-devel pam-devel openssl-devel
+  - sudo wget http://mmonit.com/monit/dist/monit-5.25.2.tar.gz
+  - sudo tar -zxvf monit-5.25.2.tar.gz
+  - cd monit-5.25.2
+  - sudo ./configure
+  - sudo make
+  - sudo make install
+  - sudo rm -rf monit-5.25.2
 
 variables:
 
   aws_access_key: '{{env `TF_VAR_aws_access_key`}}'
-  aws_i_type: t2.micro
   aws_secret_key: '{{env `TF_VAR_aws_secret_key`}}'
+  aws_i_type: t2.micro
   aws_user: centos
-  base_ami_name: bastion-image-311-01
+  base_ami_name: okd-bastion-image-311-03
   base_description: CentOS Linux 7 x86_64 HVM EBS for Bastion
-  our_name: OpenShift Bastion Image
+  our_name: OpenShift OKD Bastion Image
 
 builders:
 

@@ -3,9 +3,11 @@ Getting Started
 ###############
 
 The orchestrator is designed to simplify the construction of an OpenShift
-cluster on various cloud providers. At the moment we have working solutions
-for Amazon *EC2*, *OpenStack* and *Scaleway* and a working example for
-*EC2* that we use as a tutorial.
+cluster on various cloud providers using **deployments** - high-level
+configuration files written in `YAML`_.
+
+At the moment we have working solutions for Amazon *EC2*, *OpenStack* and
+*Scaleway* and a working example for *EC2* that we use as a tutorial.
 
 The tools required by the orchestrator are packaged into a convenient
 Docker image that you can run on your laptop or desktop. The essential
@@ -32,6 +34,7 @@ the root of your working copy.
 
 .. _Git: https://git-scm.com
 .. _Orchestrator Repository: https://github.com/InformaticsMatters/okd-orchestrator
+.. _YAML: https://yaml.org
 
 Docker
 ------
@@ -52,6 +55,8 @@ suitable.
     :caption: See:
 
     building-the-docker-image
+    running-without-docker
+    using-your-own-deployments
 
 .. _docker: https://www.docker.com
 .. _installation guide: https://docs.docker.com/install/

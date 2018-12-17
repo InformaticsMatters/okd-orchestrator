@@ -2,35 +2,37 @@
 okdo-keypair
 
 # Translated (jinja2) material...
-ansible/bastion/inventory
-ansible/bastion/bastion.sh
-ansible/post-os/inventory
-ansible/post-destroy/aws/host_vars/localhost/vars.yaml
-ansible/pre-os/inventory
-openshift/ansible.cfg
-openshift/inventories/**/inventory
-openshift/inventories/**/inventory.tpl
-openshift/inventories/**/bastion.sh
-terraform/aws/s3.tf
-terraform/aws/template.tf
-terraform/aws/variables.tf
+okd/inventories/**/inventory.yaml
+okd/inventories/**/inventory.yaml.tpl
 
-# Packer material
-packer/**/*.json
+# Packer/Yacker material
+yacker/**/*.json
 .packer.d/
 
 # Provider Variables
 provider-env/setenv.sh
 
 # Terraform material...
+terraform/aws/s3.tf
+terraform/aws/bastion.tf
+terraform/aws/data.tf
+terraform/aws/node.tf
+terraform/aws/output.tf
+terraform/aws/template.tf
+terraform/aws/variables.tf
+terraform/**/*.svg
 *.tfstate
 *.tfstate.backup
 *.tfstate.lock.info
 **/.terraform/
 **/.terraform.*
-terraform/**/*.svg
 
 # Ansible material...
+ansible/bastion/inventory.yaml
+ansible/bastion/bastion.sh
+ansible/post-okd/inventory.yaml
+ansible/post-destroy/aws/host_vars/localhost/vars.yaml
+ansible/pre-okd/inventory
 **/facts/
 **/*.retry
 **/ansible.log

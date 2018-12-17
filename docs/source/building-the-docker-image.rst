@@ -3,7 +3,7 @@ Building the Docker Image
 #########################
 
 The image used for the container to create your cluster is available
-on `Docker Hub`_ and should work with MacOS.
+on `Docker Hub`_ and should work with MacOS and Unix.
 
 The container image runs as the built-in user ``okdo`` using **User** and
 **Group** IDs of ``40000``.
@@ -21,6 +21,6 @@ ids that match yours::
     ./build4me.sh
 
 Once built you can then use the project's ``okdo-start.sh`` script from the
-project root to build your personalised copy of the image.
+project root to use your personalised copy of the image.
 
 .. _Docker Hub: https://hub.docker.com/r/informaticsmatters/okd-orchestrator/

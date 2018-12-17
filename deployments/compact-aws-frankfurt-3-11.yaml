@@ -1,0 +1,173 @@
+---
+
+version: 1
+
+name: Compact AWS Deployment (OKD 3.11) [Frankfurt]
+description: >
+  A combined Master/Infra deployment with a one-node cluster.
+  This also includes certbot certificate creation
+  metrics and prometheus
+
+okd:
+
+  # The version tag for OpenShift Origin/OKD ansible playbooks.
+  ansible_tag: openshift-ansible-3.11.58-1
+  play:
+  - prerequisites
+  - deploy_cluster
+
+  # The directory of the inventory for this deployment.
+  # This directory is expected to exist in `openshift/inventories'.
+  # The inventory directory contains template files for the Bastion
+  # and OpenShift cluster. These can be shared between deployments.
+  inventory_dir: simple-aws-3-11
+
+terraform:
+
+  # The Terraform templates
+  # used to build the Bastion and its Cluster.
+  dir: aws
+
+ansible:
+
+  # The Ansible version required to deploy the cluster.
+  version: 2.7.5
+
+bastion:
+
+  # Machine image name for the Bastion instance.
+  # This should match the start of the Packer-generated image.
+  # The latest image whose name starts with this will be used.
+  image_prefix: okd-bastion-image-311-
+  type: t2.small
+
+cluster:
+
+  # A unique name for your cluster.
+  # All your clusters must have a different ID.
+  id: simple-frankfurt-311
+  # Name prefix and suffix values for the names of each cluster instance.
+  # Use this to quickly distinguish between instances.
+  name_prefix: vre
+  name_suffix:
+  # The provider 'region' used for cluster instances.
+  # The value is provider-specific.
+  region: eu-central-1
+  # The external IP address or domain-name of the Master node.
+  # If not set the master public DNS will be used.
+  # Whatever is used must provide a resolvable route to the master.
+  # So, if you have a domain, ensure it's routed to the pre-allocated
+  # public IP of the master (see cluster.master.fixed_ip_id).
+  public_hostname: vre.informaticsmatters.com
+  # The external IP address or domain-name of the Infrastructure node.
+  # (see cluster.public_hostname)
+  router_basename: vre.informaticsmatters.com
+  # The Master API/Console Port
+  api_port: 8443
+
+  # Machine image name for the cluster instances.
+  # This should match the start of the Packer-generated images.
+  # The latest image whose name starts with this will be used.
+  image_prefix: okd-machine-image-311-
+
+  # What additional OpenShift/OKD services should be enabled?
+  # Add services to this list like metrics with something like:
+  #
+  #   enable:
+  #   - metrics
+  #
+  # We currently support the automatic inclusion of:
+  # - logging
+  # - metrics
+  # - prometheus
+  enable:
+  - metrics
+  - prometheus
+
+  # You can define extra node groups that your nodes can be assigned to.
+  # These complement the expected/built-in groups
+  # (e.g. master, infra, compute).
+  #
+  # For each group you define a 'node_group_<name>' will be created.
+  #
+  # Node groups consist of:
+  # - A 'name' (following standard variable conventions)
+  # - A 'label' string that's essentially a keyword=value pair.
+  #   The label is used for node selection.
+  # - An 'is_compute_node' which, if it evaluates to true,
+  #   means the node is also treated by OKD as a generally available
+  #   compute node where Pods can be scheduled. If you need an exclusive node
+  #   (only for jobs that name the label explicitly) then set this to false.
+  #   By default this is 'no' so groups are not normally general compute nodes.
+  node_groups:
+  - name: general
+    label: general-node=true
+    is_compute_node: yes
+
+  # Details of the Master nodes.
+  #
+  # At the moment only 1 master instance is supported.
+  master:
+    count: 1
+    type: t2.xlarge
+    # If you have pre-allocated public IPs for the Master set the value here.
+    # This is _not_ normally the IP address itself, it is the cloud-provider's
+    # IP identity. In AWS this would be the Elastic IP Allocation ID of
+    # the form "eipalloc-0000000000000000".
+    #
+    # If you have not provided a pre-allocated (fixed) IP
+    # leave this property empty.
+    fixed_ip_id: eipalloc-010cfe12a8b8c7fa2
+    # Set to automatically generate a Let's Encrypt/certbot certificate
+    # for the master node when the cluster has been created but prior to
+    # OpenShift installation.
+    generate_cert: yes
+    # If the master is to also act as the infrastructure node
+    # then set this field to 'yes' while also setting the 'infra.count' to 0.
+    is_infra: yes
+    # If the master is to also act as the Bastion node
+    # then set this field to 'yes'.
+    # There is no need to adjust the bastion configuration.
+    is_bastion: no
+
+  # Details of the Infrastructure nodes.
+  #
+  # At the moment only 0 or 1 infra instance is supported.
+  infra:
+    count: 0
+    type:
+    # The (optional) pre-allocated public IP for the Infrastructure.
+    # (See cluster.master.fixed_ip)
+    fixed_ip_id:
+
+  # Details of the cluster compute nodes.
+  # This is a list that allows you to define different node 'categories'.
+  # Each entry in the list supports the the following properties:
+  #
+  # - A 'name' used simply to tag the resource, for providers that support it.
+  # - A numerical 'count' to define the number of nodes of this category to
+  #   create in the cluster.
+  # - A provider-specific 'type' used to define the compute instance type
+  #   for each node in the category. In AWS this might be 't2.medium'.
+  # - A 'node_group', used to identify the OKD node group the nodes of this
+  #   category belong to. OKD provides built-in groups like 'compute'
+  #   for general compute nodes but you can define your own groups
+  #   (see the node_groups section above) and place you r node into one of
+  #   those groups. By convention groups are called 'node-config-<name>'
+  #   (like 'node-config-compute'). Here you simply need the name
+  #   (i.e 'compute')
+  nodes:
+  - name: general
+    count: 1
+    type: t2.medium
+    node_group: general
+
+  # Install extra stuff based on playbooks in the post-okd directory.
+  # These playbooks will be run on the 'cli-node', a node
+  # with a suitable corresponding (typically the Master)
+  # after the OKD software has been installed.
+  #
+  # For each 'play' a corresponding
+  # 'ansible/post-okd/playbooks/<play>/deploy.yaml' must exist.
+  post_okd_play:
+  - acme-controller

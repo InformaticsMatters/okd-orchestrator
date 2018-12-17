@@ -1,0 +1,9 @@
+---
+
+# The OKD Project Namespace
+acme_project: acme-controller
+
+# The GitHub Origin of the ACME OpenShift object/template definitions.
+# If the origin is "https://raw.githubusercontent.com/tnozicka/openshift-acme/master/[...]"
+# then the value of the variable is "tnozicka/openshift-acme"
+acme_github_origin: informaticsmatters/openshift-acme

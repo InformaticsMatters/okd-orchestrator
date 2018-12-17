@@ -3,14 +3,14 @@
 # -----------------------------------------------------------------------------
 
 terraform {
-  required_version = "0.11.10"
+  required_version = "0.11.11"
 }
 
 provider "aws" {
   access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
   region = "${var.aws_region}"
-  version = "1.39.0"
+  version = "1.52.0"
 }
 
 provider "local" {

@@ -19,6 +19,12 @@ the value for::
 
     TF_VAR_okd_admin_password
 
+The default value in the template is valid but it isn't particularly secure!
+
+>   You can also create a less-privileged ``developer`` user by
+    providing a value for ``TF_VAR_okd_developer_password``.
+    This is optional, you can leave it blank to avoid creating a *developer*.
+
 Now you can start and enter the OKD orchestration container
 with the convenient start script in the root of the project::
 
@@ -28,19 +34,21 @@ To create the cluster (bastion, network and OpenShift/OKD nodes)
 run the ``create.py`` utility using the ``--cluster`` option::
 
     $ ./create.py --cluster
-    +---------------------------------------------------+
-    | Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |
-    +---------------------------------------------------+
-    Enter "okay" to CREATE the Cluster:
+
+    +-----------------------------------------------+
+    | Compact AWS Deployment (OKD 3.11) [Frankfurt] |
+    +-----------------------------------------------+
+    Enter "yes" to CREATE the Cluster:
 
 If there's more than one deployment configuration in the project
 you'll need to name the one you want to create, i.e.::
 
-    ./create.py --cluster simple-aws-frankfurt-3.9
-    +---------------------------------------------------+
-    | Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |
-    +---------------------------------------------------+
-    Enter "okay" to CREATE the Cluster:
+    $ ./create.py --cluster compact-aws-frankfurt-3.11
+
+    +-----------------------------------------------+
+    | Compact AWS Deployment (OKD 3.11) [Frankfurt] |
+    +-----------------------------------------------+
+    Enter "yes" to CREATE the Cluster:
 
 Respond to the warning prompt to confirm the action and the creation process
 will begin.
@@ -72,20 +80,21 @@ the previous step::
     $ ssh centos@18.185.149.91
 
 From the Bastion you simply move to the cloned orchestrator directory and run
-``create.py`` again, this time using the ``--okd`` command-line option,
-to install the OpenShift/OKD element of the cluster::
+``create.py``.,  You don't need to provide any options (although you
+can use ``--okd``) as there's only one deployment configuration copied to it -
+the one you used to create the cluster.
+
+To install OpenShift/OKD::
 
     $ cd okd-orchestrator
-    $ ./create.py --okd
-    +---------------------------------------------------+
-    | Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |
-    +---------------------------------------------------+
-    Enter "go" to INSTALL OKD:
+    $ ./create.py
+
+    +-----------------------------------------------+
+    | Compact AWS Deployment (OKD 3.11) [Frankfurt] |
+    +-----------------------------------------------+
+    Enter "yes" to INSTALL OpenShift/OKD:
 
 Acknowledge the warning prompt to begin the installation.
-
-If there's more than one deployment configuration in your project you will
-need to name the configuration to use for the OpenShift installation.
 
 .. epigraph::
 

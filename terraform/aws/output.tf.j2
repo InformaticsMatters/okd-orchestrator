@@ -1,0 +1,17 @@
+# -------------------
+# Interactive Outputs
+# -------------------
+
+output "bastion_ip" {
+    # The Bastion instance
+    # (either a separate machine or the master)
+    {% if cluster.master.is_bastion %}
+    {% if cluster.master.fixed_ip_id %}
+    value = "${aws_eip_association.master.0.public_ip}"
+    {% else %}
+    value = "${aws_eip.master.public_ip}"
+    {% endif %}
+    {% else %}
+    value = "${aws_instance.bastion.0.public_ip}"
+    {% endif %}
+}

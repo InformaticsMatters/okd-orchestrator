@@ -19,22 +19,20 @@ start and enter the orchestrator::
 
     $ ./okdo-start.sh
 
-You're in the container as the built-in ``okdo`` user. To destroy the
-cluster you just need to set your environment variables and run
-``destroy.py``, naming the deployment configuration that defines the cluster
-you wish to delete. For the example AWS cluster this would require the
-following commands::
+To destroy the cluster you just need to run ``destroy.py``, naming the
+deployment configuration that defines the cluster you wish to delete.
+For the example AWS cluster this would require the following command::
 
-    $ cd okd-orchestrator
-    $ ./destroy.py simple-aws-frankfurt-3-9
-    +---------------------------------------------------+
-    | Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |
-    +---------------------------------------------------+
+    $ ./destroy.py compact-aws-frankfurt-3-11
+
+    +-----------------------------------------------+
+    | Compact AWS Deployment (OKD 3.11) [Frankfurt] |
+    +-----------------------------------------------+
 
     CAUTION You are about to destroy the cluster.
     ------- Are you sure you want to do this?
 
-    Enter "ok" to DESTROY this deployment:
+    Enter "yes" to DESTROY this deployment:
 
 Acknowledge the warning to destroy the cluster.
 

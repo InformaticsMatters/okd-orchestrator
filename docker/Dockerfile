@@ -22,8 +22,8 @@
 
 FROM python:3.6.7
 
-ARG terraform_version=0.11.10
-ARG packer_version=1.3.2
+ARG terraform_version=0.11.11
+ARG packer_version=1.3.3
 ARG uid=40000
 ARG gid=40000
 

@@ -1,6 +1,9 @@
-ansible == 2.6.7
-awscli == 1.16.69
+# You'll need Python3
+
+ansible == 2.7.5
+awscli == 1.16.76
 boto == 2.49.0
+boto3 == 1.9.66
 jinja2 == 2.10
 matildapeak-yacker == 2018.5
 passlib == 1.7.1

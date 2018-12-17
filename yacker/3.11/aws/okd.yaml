@@ -1,0 +1,93 @@
+---
+
+# A 'yacker' file to build a Node image for OpenShift/OKD 3.11 deployments.
+# It is based on a CentOS 7 image (CentOS Linux 7 x86_64 HVM EBS)
+# and adds all we need for the Bastion including material for the
+# OKD Orchestrator.
+#
+# The AWS access and secret keys are expected to be available
+# in two environment variables: -
+#
+#   TF_VAR_aws_access_key
+#   TF_VAR_aws_secret_key
+
+provisioners:
+
+- type: file
+  source: yacker/files/bastion.sh
+  destination: /tmp/bastion.sh
+
+- type: file
+  source: yacker/files/okd-requirements.txt
+  destination: /tmp/requirements.txt
+
+- type: shell
+  inline:
+
+  # On top of basic ODK requirements the 'control node'
+  # needs the following for Metrics installation:
+  #
+  #  httpd-tools
+  #  java-1.8.0-openjdk-headless
+  #
+  # And we add it here in case we want to run a cluster
+  # node as the Bastion node.
+
+  - sudo yum -y update
+  - sudo yum -y install wget git unzip net-tools yum-utils bind-utils
+      httpd-tools iptables-services ntp bridge-utils bash-completion
+      kexec-tools sos psacct pyOpenSSL etcd flannel java-1.8.0-openjdk-headless
+      docker-1.13.1
+      atomic
+
+  - sudo rpm -V docker-1.13.1
+
+  - sudo systemctl enable docker
+  - sudo systemctl start docker
+  - sudo yum -y install NetworkManager
+  - sudo systemctl enable NetworkManager
+  - sudo systemctl start NetworkManager
+
+  - sudo easy_install pip
+  - sudo pip install -r /tmp/requirements.txt
+
+  # OKD (default) PATH variables
+  # adding ~/bin and ~/bin/oc to the user PATH...
+
+  - sudo cp /tmp/bastion.sh /etc/profile.d
+
+  # Monit 5.25.2 from source
+
+  - sudo yum install -y gcc zlib-devel pam-devel openssl-devel
+  - sudo wget http://mmonit.com/monit/dist/monit-5.25.2.tar.gz
+  - sudo tar -zxvf monit-5.25.2.tar.gz
+  - cd monit-5.25.2
+  - sudo ./configure
+  - sudo make
+  - sudo make install
+  - sudo rm -rf monit-5.25.2
+
+variables:
+
+  aws_access_key: '{{env `TF_VAR_aws_access_key`}}'
+  aws_secret_key: '{{env `TF_VAR_aws_secret_key`}}'
+  aws_i_type: t2.micro
+  aws_user: centos
+  base_ami_name: okd-machine-image-311-02
+  base_description: CentOS Linux 7 x86_64 HVM EBS for OKD 3.11
+  our_name: OpenShift OKD 3.11 Base Image
+
+builders:
+
+# AWS 'eu-central-1' (Frankfurt)
+
+- access_key: '{{user `aws_access_key`}}'
+  ami_description: '{{user `description`}}'
+  ami_name: '{{user `base_ami_name`}}'
+  instance_type: '{{user `aws_i_type`}}'
+  name: '{{user `our_name`}} Frankfurt'
+  region: eu-central-1
+  secret_key: '{{user `aws_secret_key`}}'
+  source_ami: ami-dd3c0f36
+  ssh_username: '{{user `aws_user`}}'
+  type: amazon-ebs

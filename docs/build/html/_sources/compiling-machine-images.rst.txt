@@ -28,8 +28,8 @@ a HashiCorp tool dedicated to the the automated construction of machine images.
 
 The image templates are located in the ``yacker`` project directory
 where you'll find templates organised according to OKD release and
-cloud provider. For example, the OpenShift 3.9 AWS EC2 templates for the
-Bastion and OpenShift cluster nodes can be found in the ``yacker/3.9/aws``
+cloud provider. For example, the OpenShift 3.11 AWS EC2 templates for the
+Bastion and OpenShift cluster nodes can be found in the ``yacker/3.11/aws``
 directory.
 
 .. _yacker: https://pypi.org/project/matildapeak-yacker/

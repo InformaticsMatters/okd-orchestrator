@@ -15,7 +15,7 @@ provider environment script (e.g. ``setenv.sh``).
     ``builders`` section for each region in the template file. The template files
     in our example build images for the **Frankfurt** region.
 
-To compile the OKD 3.9 machine images, set your environment variables and
+To compile the OKD 3.11 machine images, set your environment variables and
 launch the orchestrator container. You will not need to define all the
 environment variables at this stage, only those required for compiling machine
 images.
@@ -34,27 +34,27 @@ If this is the first time you're running the orchestrator the container image
 will need to be downloaded from Docker. This might take a moment or two before
 you eventually enter the container.
 
-From the orchestrator container, move to the Yacker directory
-and validate the OpensShift/OKD 3.9 template files::
+From the orchestrator container you can validate the OpensShift/OKD 3.11
+template files::
 
-    $ cd yacker/3.9/aws
-    $ yacker validate bastion.yaml
-    $ yacker validate os.yaml
+    $ yacker validate yacker/3.11/aws/bastion.yaml
+    $ yacker validate yacker/3.11/aws/okd.yaml
 
 Then, if successful, build each image::
 
-    $ yacker build bastion.yaml
-    $ yacker build os.yaml
+    $ yacker build yacker/3.11/aws/bastion.yaml
+    $ yacker build yacker/3.11/aws/okd.yaml
 
 The builds may take a minute or two. As long as you have not changed
 the image ``ami_name`` variable the machine images (AMIs) Yacker creates
 will be picked up automatically by the cluster orchestration.
 
-You can stay in the container image and follow the :doc:`creating-your-cluster`
-guide to create your cluster, but first return  to the project root from
-the yacker directory::
+>   You do not need to create the bastion image if your deployment's **Master**
+    instance is also acting as the Bastion machine. The Bastion machine image
+    is only required if you're creating a dedicated Bastion in the cluster.
 
-    $ cd ../../..
+You can stay in the container image and follow the :doc:`creating-your-cluster`
+guide to create your cluster.
 
 Finding new base AWS Machine Images
 -----------------------------------

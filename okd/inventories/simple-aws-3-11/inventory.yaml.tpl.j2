@@ -1,0 +1,73 @@
+{% extends 'inventory.root' %}
+
+{# --- masters ------------------------------------------------------------- #}
+
+{% block masters %}
+        masters:
+          hosts:
+{% for item in range(1, cluster.master.count + 1) %}
+            ${master{{ item }}}:
+{% endfor %}
+{% endblock %}
+
+{# --- etcd ---------------------------------------------------------------- #}
+
+{% block etcd %}
+        etcd:
+          hosts:
+            ${master1}:
+{% endblock %}
+
+{# --- nfs ----------------------------------------------------------------- #}
+
+{# --- nodes --------------------------------------------------------------- #}
+
+{% block nodes %}
+        nodes:
+          hosts:
+{%- if cluster.master.is_infra %}
+            ${master1}:
+              openshift_hostname: ${master1_hostname}
+              openshift_node_group_name: 'node-config-master-infra'
+{%- else %}
+            ${master1}:
+              openshift_hostname: ${master1_hostname}
+              openshift_node_group_name: 'node-config-master'
+{%- endif %}
+
+{%- if cluster.infra.count %}
+            ${infra1}:
+              openshift_hostname: ${infra1_hostname}
+              openshift_node_group_name: 'node-config-infra'
+{%- endif %}
+
+{%- set node_id = namespace(a=1) -%}
+{%- for node in cluster.nodes %}
+{%- for item in range(node.count) %}
+            ${node{{ '%03d'|format(node_id.a) }}}:
+              openshift_hostname: ${node{{ '%03d'|format(node_id.a) }}_hostname}
+              openshift_node_group_name: 'node-config-{{ node.node_group }}'
+{%- set node_id.a = node_id.a + 1 -%}
+{%- endfor %}
+{%- endfor %}
+{% endblock %}
+
+{# --- glusterfs ----------------------------------------------------------- #}
+
+{% block glusterfs %}
+{% endblock %}
+
+{# --- node_groups --------------------------------------------------------- #}
+
+{% block node_groups %}
+{%- for node_group in cluster.node_groups -%}
+{% if node_group.is_compute_node %}
+            { 'name': 'node-config-{{ node_group.name }}',
+              'labels': ['node-role.kubernetes.io/compute=true',
+                         '{{  node_group.label }}'] },
+{% else %}
+            { 'name': 'node-config-{{ node_group.name }}',
+              'labels': ['{{  node_group.label }}'] },
+{% endif %}
+{%- endfor -%}
+{% endblock %}

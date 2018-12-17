@@ -10,11 +10,11 @@ You will then be able to commit the changes you make and start to craft
 your own deployment configurations without being disturbed by changes in this,
 the upstream project.
 
-Here we're going to deploy an example OKD 3.9 release on a small cluster at
-AWS. The deployment configuration is called ``simple-aws-frankfurt-3-9``.
+Here we're going to deploy an example OKD 3.11 release on a small cluster at
+AWS. The deployment configuration is called ``compact-aws-frankfurt-3-11``.
 
 The orchestrator will be creating the bastion node, the cluster network,
-the cluster and installing OpenShift, all from within a Docker container
+the cluster and installing OpenShift/OKD, all from within a Docker container
 hosting the orchestrator's run-time tools.
 
 At the end we'll tear-down the cluster using the orchestrator.

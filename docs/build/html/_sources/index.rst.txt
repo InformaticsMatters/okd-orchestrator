@@ -2,8 +2,8 @@
 The OKD Orchestrator
 ####################
 
-A Cluster Orchestrator for OpenShift Origin (OKD). A project sponsored by
-`OpenRiskNet`_.
+A Cluster Orchestrator for OpenShift Origin (OKD) v3.11 and beyond.
+A project sponsored by `OpenRiskNet`_.
 
 .. epigraph::
 
@@ -26,6 +26,7 @@ A Cluster Orchestrator for OpenShift Origin (OKD). A project sponsored by
     generating-site-certificates
     creating-your-cluster
     destroying-your-cluster
+    environment-variables
     faq
 
 The **OKD Orchestrator** is a tool to simplify the cloud-deployment of

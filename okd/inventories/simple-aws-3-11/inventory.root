@@ -1,0 +1,165 @@
+---
+
+{#
+    The ROOT jinja2 OpenShift/OKD inventory file (YAML).
+    Here we define all common variables and provide 'blocks'
+    that can be written-to from templates that inherit from here.
+#}
+
+# This is an auto-generated OpenShift/OKD Inventory File.
+# Edit this file with extreme caution because
+# it belongs to and is written by the OKD Orchestrator.
+
+all:
+  children:
+    OSEv3:
+
+      #############
+      # Variables #
+      #############
+      vars:
+
+        ansible_ssh_user: centos
+        ansible_become: yes
+
+        # General
+        # -------
+
+        openshift_deployment_type: origin
+        openshift_release: v3.11
+        openshift_image_tag: v3.11.0
+        openshift_pkg_version: -3.11.0
+
+        # A fix for 3.11 to avoid problems with missing Centos repos
+        # (not fixed by the prerequisites playbook)...
+        openshift_additional_repos: [
+            { 'id': 'centos-okd-ci',
+              'name': 'centos-okd-ci',
+              'baseurl': 'https://rpms.svc.ci.openshift.org/openshift-origin-v3.11',
+              'gpgcheck': '0',
+              'enabled': '1' }
+        ]
+
+        openshift_skip_deprecation_check: yes
+        openshift_disable_check: disk_availability,docker_storage,memory_availability
+        openshift_clock_enabled: true
+
+        # Enable htpasswd authentication.
+        # There is no htpasswd file here, users are created
+        # by the 'ansible/post-okd/site.yaml' playbook
+        # once the cluster has been installed.
+        openshift_master_identity_providers: [
+            { 'name': 'htpasswd_auth',
+              'login': 'true',
+              'challenge': 'true',
+              'kind': 'HTPasswdPasswordIdentityProvider' }
+        ]
+
+        openshift_docker_additional_registries: registry.access.redhat.com
+        openshift_docker_insecure_registries: registry.access.redhat.com
+        openshift_master_cluster_public_hostname: ${public_hostname}
+        openshift_master_default_subdomain: ${router_basename}
+        # Be aware that the router's ROUTER_SERVICE_HTTPS_PORT variable
+        # is likely to be set to 443 by default. So if the router can reside
+        # on the same host as the API service you'll need to avoid 443
+        # (i.e. if you combine the master and infrastructure nodes)
+        openshift_master_api_port: {{ cluster.api_port }}
+        openshift_master_console_port: {{ cluster.api_port }}
+
+{% if cluster.master.generate_cert %}
+        openshift_master_named_certificates: [
+            { 'certfile': '/home/centos/fullchain.pem',
+              'keyfile': '/home/centos/privkey.pem' }
+        ]
+        openshift_master_overwrite_named_certificates: true
+{%- endif %}
+
+{%- raw %}
+        # AWS
+        # ---
+
+        openshift_cloudprovider_kind: aws
+        openshift_cloudprovider_aws_access_key: "{{ lookup('env','TF_VAR_aws_access_key') }}"
+        openshift_cloudprovider_aws_secret_key: "{{ lookup('env','TF_VAR_aws_secret_key') }}"
+{%- endraw %}
+        openshift_clusterid: {{ cluster.id }}
+
+        # Metrics
+        # -------
+{% if cluster.enable and 'metrics' in cluster.enable %}
+        openshift_metrics_install_metrics: true
+{%- else %}
+        openshift_metrics_install_metrics: false
+{%- endif %}
+        openshift_metrics_hawkular_hostname: metrics.${public_hostname}
+        openshift_hosted_metrics_deployer_version: v3.11
+        openshift_metrics_cassandra_storage_type: dynamic
+        openshift_metrics_cassandra_pvc_size: 5Gi
+        openshift_metrics_cassandra_limits_memory: 2Gi
+        openshift_metrics_duration: 4
+        openshift_metrics_resolution: 15s
+
+        # Logging
+        # -------
+{% if cluster.enable and 'logging' in cluster.enable %}
+        openshift_logging_install_logging: true
+{%- else %}
+        openshift_logging_install_logging: false
+{%- endif %}
+        openshift_logging_storage_kind: dynamic
+        openshift_logging_es_nodeselector: {'node-role.kubernetes.io/infra': 'true'}
+        openshift_logging_storage_volume_size: 10Gi
+        openshift_loggingops_storage_kind: dynamic
+
+        # Prometheus
+        # ----------
+{% if cluster.enable and 'prometheus' in cluster.enable %}
+        openshift_cluster_monitoring_operator_install: true
+        openshift_cluster_monitoring_operator_prometheus_storage_enabled: true
+        openshift_cluster_monitoring_operator_alertmanager_storage_enabled: true
+{%- else %}
+        openshift_cluster_monitoring_operator_install: false
+{%- endif %}
+
+        # Service Broker
+        # --------------
+
+        ansible_service_broker_image_prefix: registry.access.redhat.com/openshift3/ose-
+        ansible_service_broker_registry_url: registry.access.redhat.com
+
+        # Node Groups
+        # -----------
+
+        openshift_node_groups: [
+{%- block node_groups %}
+{%- endblock %}
+            { 'name': 'node-config-compute',
+              'labels': ['node-role.kubernetes.io/compute=true'] },
+            { 'name': 'node-config-master',
+              'labels': ['node-role.kubernetes.io/master=true'] },
+            { 'name': 'node-config-master-infra',
+              'labels': ['node-role.kubernetes.io/master=true',
+                         'node-role.kubernetes.io/infra=true'] },
+            { 'name': 'node-config-infra',
+              'labels': ['node-role.kubernetes.io/infra=true'] }
+        ]
+
+      #########
+      # Hosts #
+      #########
+      children:
+
+{%- block masters -%}
+{%- endblock -%}
+
+{%- block etcd -%}
+{%- endblock -%}
+
+{%- block nfs -%}
+{%- endblock -%}
+
+{%- block nodes -%}
+{%- endblock -%}
+
+{%- block glusterfs -%}
+{%- endblock -%}

@@ -1,0 +1,83 @@
+---
+
+# This playbook should run an a CLI node
+# (typically the cluster bastion or master).
+# It executes post-OKD installation actions such as: -
+#
+# - Setting the admin user (an expected user) to allow cluster administration
+# - Granting the `anyuid` security context constraint to a number of users,
+#   groups and service accounts
+# - Creating an optional developer user
+
+- hosts: cli-node
+
+  tasks:
+
+  - name: Login as system:admin
+    shell: oc login -u system:admin
+    changed_when: False
+
+  # Check and create the 'admin' user
+
+  - name: Check Admin user
+    shell: oc get users
+    register: user_result
+    changed_when: False
+
+  - name: Create Admin user
+    shell: >
+      htpasswd -bc /etc/origin/master/htpasswd
+      admin {{ okd_admin_password }}
+    become: yes
+    when: not user_result.stdout | regex_search('^admin\s', multiline=True)
+
+  - name: Get ClusterRole bindings
+    shell: oc get clusterrolebindings -o json
+    register: crb_result
+    changed_when: False
+
+  - name: Add Admin cluster-admin rights
+    shell: oc adm policy add-cluster-role-to-user cluster-admin {{ item }}
+    when: not crb_result.stdout | from_json | json_query(query) | flatten | count
+    vars:
+      query: "items[*].subjects[?name=='{{ item }}']"
+    loop:
+    - admin
+
+  # Optionally create the 'developer' user
+
+  - name: Create developer user
+    shell: >
+      htpasswd -b /etc/origin/master/htpasswd
+      developer {{ okd_developer_password }}
+    become: yes
+    when:
+    - okd_developer_password is defined
+    - not user_result.stdout | regex_search('^developer\s', multiline=True)
+
+  # Test OKD account login.
+  #
+  # This is required as the user isn't actually known to OKD
+  # until after they've logged in once. e.g. If you don't login
+  # the response to 'oc get users' is not accurate. So we
+  # login here to force the users into OKD.
+  #
+  # We skip the TLS verification because (at this stage) we don't
+  # know whether the user has supplied legitimate certificates.
+  # And we don't care, we're logging into an OKD server we created.
+
+  - name: Check admin login
+    shell: >
+      oc login {{ okd_api_hostname }}
+      --insecure-skip-tls-verify=true
+      -u admin -p {{ okd_admin_password }}
+    changed_when: False
+
+  - name: Check developer login
+    shell: >
+      oc login {{ okd_api_hostname }}
+      --insecure-skip-tls-verify=true
+      -u developer -p {{ okd_developer_password }}
+    changed_when: False
+    when:
+    - okd_developer_password is defined

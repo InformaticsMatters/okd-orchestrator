@@ -1,0 +1,55 @@
+---
+
+# Login (as admin), check and create the ACME Controller project...
+
+- name: Login (admin)
+  shell: oc login {{ okd_api_hostname }} -u {{ okd_admin }} -p {{ okd_admin_password }}
+  changed_when: False
+
+- name: Check the Controller Project
+  shell: oc get projects
+  register: projects_result
+  changed_when: False
+
+- name: Create the Controller Project
+  shell: oc new-project {{ acme_project }} --display-name='The ACME Controller'
+  when: >
+    not projects_result.stdout
+    | regex_search('^%s\s' % acme_project, multiline=True)
+
+- name: Move to Controller Project
+  shell: oc project {{ acme_project }}
+  changed_when: False
+
+# Check and create the deployment
+
+- name: Get Cluster Roles
+  shell: oc get clusterroles -o json
+  register: cr_result
+  changed_when: False
+
+- name: Crete Controller
+  shell: oc create -f {{ origin }}/{{ path }}/{{ item }}.yaml
+  loop:
+  - clusterrole
+  - serviceaccount
+  - imagestream
+  - deployment
+  when: not cr_result.stdout | from_json | json_query(query) | flatten | count
+  vars:
+    role: openshift-acme
+    query: "items[?metadata.name=='{{ role }}']"
+    origin: https://raw.githubusercontent.com/{{ acme_github_origin }}
+    path: master/deploy/letsencrypt-live/cluster-wide
+
+- name: Get ClusterRole bindings
+  shell: oc get clusterrolebindings -o json
+  register: crb_result
+  changed_when: False
+
+- name: Add ClusterRole to Controller
+  shell: oc adm policy add-cluster-role-to-user {{ role }} -z {{ role }}
+  when: not crb_result.stdout | from_json | json_query(query) | flatten | count
+  vars:
+    role: openshift-acme
+    query: "items[*].subjects[?name=='{{ role }}']"

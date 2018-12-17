@@ -20,15 +20,18 @@ built-in variable is give the name ``deployment``.
 from __future__ import print_function
 
 import argparse
+import codecs
 import os
 import sys
 import yaml
 import jinja2
 
+from utils import io
+
 _TEMPLATE_EXTENSION = '.j2'
 _PROJECT_ROOT = '.'
-_DEPLOYMENT_DIR = 'deployments'
-_EXCLUDE = ['openshift-ansible']
+_DEPLOYMENT_DIR = io.get_deployments_directory()
+_EXCLUDE = []
 
 
 def error(message):
@@ -66,7 +69,7 @@ def load_deployment_configuration(deployment):
         error('Deployment is not known ({})'.format(deployment_file))
 
     deployment_configuration = {}
-    with open(deployment_file, 'r') as stream:
+    with codecs.open(deployment_file, 'r', 'utf8') as stream:
         try:
             deployment_configuration = yaml.load(stream)
         except yaml.YAMLError as exc:
@@ -123,7 +126,7 @@ def translate_template_files(file_set, config):
         print('+ {}'.format(template_file))
         output_filename = template_file[:-(len(_TEMPLATE_EXTENSION))]
         translation = translate(template_file, config)
-        with open(output_filename, 'w') as output_file:
+        with codecs.open(output_filename, 'w', 'utf8') as output_file:
             output_file.write(translation)
         num_translated += 1
 

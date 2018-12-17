@@ -93,6 +93,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
 
@@ -173,6 +174,12 @@ the value for:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>TF_VAR_okd_admin_password
 </pre></div>
 </div>
+<p>The default value in the template is valid but it isn’t particularly secure!</p>
+<dl class="docutils">
+<dt>&gt;   You can also create a less-privileged <code class="docutils literal notranslate"><span class="pre">developer</span></code> user by</dt>
+<dd>providing a value for <code class="docutils literal notranslate"><span class="pre">TF_VAR_okd_developer_password</span></code>.
+This is optional, you can leave it blank to avoid creating a <em>developer</em>.</dd>
+</dl>
 <p>Now you can start and enter the OKD orchestration container
 with the convenient start script in the root of the project:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./okdo-start.sh
@@ -181,19 +188,21 @@ with the convenient start script in the root of the project:</p>
 <p>To create the cluster (bastion, network and OpenShift/OKD nodes)
 run the <code class="docutils literal notranslate"><span class="pre">create.py</span></code> utility using the <code class="docutils literal notranslate"><span class="pre">--cluster</span></code> option:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./create.py --cluster
-+---------------------------------------------------+
-| Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |
-+---------------------------------------------------+
-Enter &quot;okay&quot; to CREATE the Cluster:
+
++-----------------------------------------------+
+| Compact AWS Deployment (OKD 3.11) [Frankfurt] |
++-----------------------------------------------+
+Enter &quot;yes&quot; to CREATE the Cluster:
 </pre></div>
 </div>
 <p>If there’s more than one deployment configuration in the project
 you’ll need to name the one you want to create, i.e.:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>./create.py --cluster simple-aws-frankfurt-3.9
-+---------------------------------------------------+
-| Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |
-+---------------------------------------------------+
-Enter &quot;okay&quot; to CREATE the Cluster:
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./create.py --cluster compact-aws-frankfurt-3.11
+
++-----------------------------------------------+
+| Compact AWS Deployment (OKD 3.11) [Frankfurt] |
++-----------------------------------------------+
+Enter &quot;yes&quot; to CREATE the Cluster:
 </pre></div>
 </div>
 <p>Respond to the warning prompt to confirm the action and the creation process
@@ -222,19 +231,20 @@ the previous step:</p>
 </pre></div>
 </div>
 <p>From the Bastion you simply move to the cloned orchestrator directory and run
-<code class="docutils literal notranslate"><span class="pre">create.py</span></code> again, this time using the <code class="docutils literal notranslate"><span class="pre">--okd</span></code> command-line option,
-to install the OpenShift/OKD element of the cluster:</p>
+<code class="docutils literal notranslate"><span class="pre">create.py</span></code>.,  You don’t need to provide any options (although you
+can use <code class="docutils literal notranslate"><span class="pre">--okd</span></code>) as there’s only one deployment configuration copied to it -
+the one you used to create the cluster.</p>
+<p>To install OpenShift/OKD:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cd okd-orchestrator
-$ ./create.py --okd
-+---------------------------------------------------+
-| Simple AWS Deployment (OpenShift 3.9) [Frankfurt] |
-+---------------------------------------------------+
-Enter &quot;go&quot; to INSTALL OKD:
+$ ./create.py
+
++-----------------------------------------------+
+| Compact AWS Deployment (OKD 3.11) [Frankfurt] |
++-----------------------------------------------+
+Enter &quot;yes&quot; to INSTALL OpenShift/OKD:
 </pre></div>
 </div>
 <p>Acknowledge the warning prompt to begin the installation.</p>
-<p>If there’s more than one deployment configuration in your project you will
-need to name the configuration to use for the OpenShift installation.</p>
 <blockquote class="epigraph">
 <div><p>You do not need to set any environment variables on the bastion or
 use <code class="docutils literal notranslate"><span class="pre">ssh-agent</span></code> as it and your variables are automatically configured

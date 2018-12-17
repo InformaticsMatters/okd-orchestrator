@@ -104,7 +104,7 @@ Jinja2 Rendering Process
 Ansible Playbooks
 -----------------
 
-In ``ansible/`` and ``openshift-ansible//``.
+In ``ansible/``.
 
 The Create Utility
 ------------------

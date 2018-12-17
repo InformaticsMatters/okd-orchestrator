@@ -1,0 +1,22 @@
+# -----------------------------------------------------------------------------
+# Provider Data
+# -----------------------------------------------------------------------------
+
+# Bastion and Cluster AMIs
+# Extracted from AWS using the aws_ami data
+
+{% if not cluster.master.is_bastion %}
+data "aws_ami" "bastion" {
+  most_recent = true
+  owners = ["self"]
+
+  name_regex = "^${var.bastion_image_name_prefix}.*"
+}
+{% endif %}
+
+data "aws_ami" "cluster" {
+  most_recent = true
+  owners = ["self"]
+
+  name_regex = "^${var.cluster_image_name_prefix}.*"
+}

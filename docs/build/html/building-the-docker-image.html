@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started with AWS" href="getting-started-aws.html" />
+    <link rel="next" title="Running Without Docker" href="running-without-docker.html" />
     <link rel="prev" title="Getting Started" href="getting-started.html" /> 
 
   
@@ -85,6 +85,8 @@
 <li class="toctree-l2"><a class="reference internal" href="getting-started.html#git">Git</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="getting-started.html#docker">Docker</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Building the Docker Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="running-without-docker.html">Running Without Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="using-your-own-deployments.html">Using Your Own Deployments</a></li>
 </ul>
 </li>
 </ul>
@@ -165,7 +167,7 @@
   <div class="section" id="building-the-docker-image">
 <h1>Building the Docker Image<a class="headerlink" href="#building-the-docker-image" title="Permalink to this headline">¶</a></h1>
 <p>The image used for the container to create your cluster is available
-on <a class="reference external" href="https://hub.docker.com/r/informaticsmatters/okd-orchestrator/">Docker Hub</a> and should work with MacOS.</p>
+on <a class="reference external" href="https://hub.docker.com/r/informaticsmatters/okd-orchestrator/">Docker Hub</a> and should work with MacOS and Unix.</p>
 <p>The container image runs as the built-in user <code class="docutils literal notranslate"><span class="pre">okdo</span></code> using <strong>User</strong> and
 <strong>Group</strong> IDs of <code class="docutils literal notranslate"><span class="pre">40000</span></code>.</p>
 <p>As the OKD Orchestrator working directory of your clone or fork of this
@@ -180,7 +182,7 @@ ids that match yours:</p>
 </pre></div>
 </div>
 <p>Once built you can then use the project’s <code class="docutils literal notranslate"><span class="pre">okdo-start.sh</span></code> script from the
-project root to build your personalised copy of the image.</p>
+project root to use your personalised copy of the image.</p>
 </div>
 
 
@@ -191,7 +193,7 @@ project root to build your personalised copy of the image.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="getting-started-aws.html" class="btn btn-neutral float-right" title="Getting Started with AWS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="running-without-docker.html" class="btn btn-neutral float-right" title="Running Without Docker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="getting-started.html" class="btn btn-neutral" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

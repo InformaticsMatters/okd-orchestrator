@@ -20,6 +20,14 @@ OKD_ADMIN_PASSWORD_ENV = 'TF_VAR_okd_admin_password'
 OKD_DEVELOPER_PASSWORD_ENV = 'TF_VAR_okd_developer_password'
 OKD_DEPLOYMENTS_DIRECTORY = io.get_deployments_directory()
 
+# The list of supported deployment configuration file versions.
+# The config file contains a version number, we only handle
+# those that are in this list.
+#
+# As soon as backwards support is lost (an unsupported)
+# the version must be removed form the list ans replaced by a new one.
+SUPPORTED_DEPLOYMENT_VERSIONS = [1]
+
 
 def _main(cli_args, chosen_deployment_name):
     """Deployment entry point.
@@ -35,16 +43,31 @@ def _main(cli_args, chosen_deployment_name):
     file = os.path.join(OKD_DEPLOYMENTS_DIRECTORY,
                         chosen_deployment_name + '.yaml')
     if not os.path.isfile(file):
-        io.error(('Config file does not exist ({})'.
-                  format(chosen_deployment_name)))
+        print('Config file does not exist ({})'.
+              format(chosen_deployment_name))
         return False
     with codecs.open(file, 'r', 'utf8') as stream:
         deployment = yaml.load(stream)
 
+    # First check:
+    # is the version present
+    # and do we support it?
+    if 'version' not in deployment:
+        print('The deployment configuration has no version.')
+        return False
+    if deployment['version'] not in SUPPORTED_DEPLOYMENT_VERSIONS:
+        supported_versions = str(SUPPORTED_DEPLOYMENT_VERSIONS[0])
+        for version in SUPPORTED_DEPLOYMENT_VERSIONS[1:]:
+            supported_versions += ', {}'.format(version)
+        print('The deployment configuration file version ({})'
+              ' is not supported.'.format(deployment['version']))
+        print('Supported versions are: {}'.format(supported_versions))
+        return False
+
     # There must be an okd/inventories directory
     inventory_dir = deployment['okd']['inventory_dir']
     if not os.path.isdir('okd/inventories/{}'.format(inventory_dir)):
-        io.error('Missing "okd/inventories" directory')
+        print('Missing "okd/inventories" directory')
         print('Expected to find the inventory directory "{}"'
               ' but it was not there.'.format(inventory_dir))
         print('Every deployment must have an "inventories" directory')
@@ -359,20 +382,20 @@ if __name__ == '__main__':
         # we're creating a cluster or an oKD deployment
         # (on an existing cluster)
         if os.path.isfile('destroy.py'):
-            print('Must specify --cluster or --okd')
+            io.error('Must specify --cluster or --okd')
             sys.exit(1)
         # Otherwise we assume --okd
         ARGS.okd = True
     if ARGS.just_plan and not ARGS.cluster:
-        print('Must specify --cluster if using --skip-plan')
+        io.error('Must specify --cluster if using --skip-plan')
         sys.exit(1)
     if ARGS.just_plan and ARGS.skip_terraform:
-        print('Must --just-plan and --skip-terraform makes no sense')
+        io.error('Must --just-plan and --skip-terraform makes no sense')
         sys.exit(1)
 
     # The OKD admin password must be set.
     if not os.environ.get(OKD_ADMIN_PASSWORD_ENV):
-        print('You must define the "{}" environment variable'.
+        io.error('You must define the "{}" environment variable'.
               format(OKD_ADMIN_PASSWORD_ENV))
         sys.exit(1)
 
@@ -384,6 +407,6 @@ if __name__ == '__main__':
     # Done
     # ...or failed and exhausted retry attempts!
     if not success:
-        io.error('Failed to start cluster')
+        io.error('Failed to create')
         # Return non-zero exit value to the shell...
         sys.exit(1)

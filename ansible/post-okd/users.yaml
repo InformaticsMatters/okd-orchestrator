@@ -29,7 +29,6 @@
       htpasswd -bc /etc/origin/master/htpasswd
       admin {{ okd_admin_password }}
     become: yes
-    when: not user_result.stdout | regex_search('^admin\s', multiline=True)
 
   - name: Get ClusterRole bindings
     shell: oc get clusterrolebindings -o json
@@ -53,9 +52,8 @@
     become: yes
     when:
     - okd_developer_password is defined
-    - not user_result.stdout | regex_search('^developer\s', multiline=True)
 
-  # Test OKD account login.
+  # Test OKD account login (first-time around).
   #
   # This is required as the user isn't actually known to OKD
   # until after they've logged in once. e.g. If you don't login

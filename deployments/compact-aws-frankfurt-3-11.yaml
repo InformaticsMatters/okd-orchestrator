@@ -42,13 +42,22 @@ okd:
 terraform:
 
   # The Terraform template directory
-  # used to build the Bastion and the OKD Cluster.
+  # that was used to build the Bastion and the OKD Cluster.
   dir: aws
 
   # You can declare whether the Terraform state files are
   # stored in a globally available shared service. At the moment we support
   # Amazon S3. Leaving this field blank means that terraform state
   # is stored locally (within the project's Terraform directory).
+  #
+  # An S3 shared-state configuration would look somehting like:
+  #
+  #   shared_state:
+  #     s3:
+  #       bucket: <s3-bucket-name>
+  #       key: <s3-key>
+  #       region: <s3-region>
+  #       table: <dynamo-table-name>
   shared_state:
 
 # Configuration of the ansible software required to install OKD.

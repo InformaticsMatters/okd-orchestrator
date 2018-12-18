@@ -178,10 +178,17 @@ cluster:
   # - A 'node_group', used to identify the OKD node group the nodes of this
   #   category belong to. OKD provides built-in groups like 'compute'
   #   for general compute nodes but you can define your own groups
-  #   (see the node_groups section above) and place you r node into one of
+  #   (see the node_groups section above) and place your node into one of
   #   those groups. By convention groups are called 'node-config-<name>'
   #   (like 'node-config-compute'). Here you simply need the name
-  #   (i.e 'compute')
+  #   (i.e 'compute'). If you want to place your node into a build-in
+  #   group, you can use that group (i.e. 'compute').
+  #
+  # Where the provider allows, nodes are placed in different 'zones'.
+  # AWS typically provides 3 'zones' per region. So, if you create
+  # 6 nodes in a group then two will be placed in 'zone a', two in 'zone b'
+  # and two in 'zone c'. Each new node in a group is placed in a different
+  # zone with the first node in each group being placed in the first zone.
   nodes:
   - name: general
     count: 1

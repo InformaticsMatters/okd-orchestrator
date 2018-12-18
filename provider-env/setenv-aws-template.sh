@@ -55,5 +55,5 @@ export TF_VAR_okd_developer_password=
 # You must use the fully qualified path if using the container to launch
 # the cluster and have the environment variable defined
 # before entering the container, i.e. you should have done something like
-# 'source provider-env/setenv.sh` before `./okdo-start.sh.
+# 'source provider-env/setenv.sh' before './okdo-start.sh'.
 #export TF_VAR_deployments_directory=/Users/me/okd-deployments

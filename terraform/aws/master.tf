@@ -7,6 +7,7 @@ resource "aws_instance" "master" {
   instance_type = "${var.master_image_type}"
   count = "${var.master_count}"
   key_name = "${var.keypair_name}"
+  availability_zone = "${element(data.aws_availability_zones.available.names, count.index)}"
   vpc_security_group_ids = ["${aws_security_group.openshift.id}",
                             "${aws_security_group.ssh.id}",
                             "${aws_security_group.outbound-general.id}"]

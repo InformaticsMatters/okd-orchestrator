@@ -12,6 +12,8 @@ need to ensure that your environment is similar to the container's. That is: -
     `virtual environment`_ or with `Conda`_.
 #.  The **requirements** from ``requirements.txt`` from the root of this
     project
+#.  If you want to build documentation and run the travis-like tests you
+    will also need the **requirements** from ``build-requirements.txt``
 #.  **Packer** (we currently use v1.3.3), and available on your ``PATH``
 #.  **Terraform** available on your ``PATH``. Check any ``provider.tf``
     file in the ``terraform`` director as it specifies the

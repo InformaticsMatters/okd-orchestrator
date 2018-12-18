@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Frequently Asked Questions" href="faq.html" />
+    <link rel="next" title="Environment Variables" href="environment-variables.html" />
     <link rel="prev" title="Creating a Cluster" href="creating-your-cluster.html" /> 
 
   
@@ -88,6 +88,7 @@
 <li class="toctree-l1"><a class="reference internal" href="generating-site-certificates.html">Generating SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
 
@@ -169,8 +170,9 @@ start and enter the orchestrator:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./okdo-start.sh
 </pre></div>
 </div>
-<p>To destroy the cluster you just need to run <code class="docutils literal notranslate"><span class="pre">destroy.py</span></code>, naming the
-deployment configuration that defines the cluster you wish to delete.
+<p>To destroy the cluster you just need to run <code class="docutils literal notranslate"><span class="pre">destroy.py</span></code>. If there’s more
+than one deployment configuration then you will need to name
+the deployment that defined the cluster you wish to delete.
 For the example AWS cluster this would require the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./destroy.py compact-aws-frankfurt-3-11
 
@@ -198,7 +200,7 @@ all of the objects that were originally created.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="faq.html" class="btn btn-neutral float-right" title="Frequently Asked Questions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="environment-variables.html" class="btn btn-neutral float-right" title="Environment Variables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="creating-your-cluster.html" class="btn btn-neutral" title="Creating a Cluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

@@ -26,7 +26,8 @@ to orchestration.
 #.  Place the domain name that is routed to the Infrastructure/Router
     into the value for ``cluster.router_basename``
 #.  To instruct the orchestrator to automatically generate
-    certificates set the ``cluster.master.generate_cert`` value to ``Yes``
+    certificates set the ``cluster.certificates.generate_api_cert`` value
+    to ``Yes``
 
 #.  Finally, you need to set the ``TF_VAR_master_certbot_email`` variable in
     your ``setenv.sh`` file to the email address registered with Let's Encrypt.

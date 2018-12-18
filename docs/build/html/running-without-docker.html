@@ -97,6 +97,7 @@
 <li class="toctree-l1"><a class="reference internal" href="generating-site-certificates.html">Generating SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
 
@@ -176,6 +177,8 @@ need to ensure that your environment is similar to the container’s. That is: -
 <a class="reference external" href="https://docs.python.org/3/tutorial/venv.html">virtual environment</a> or with <a class="reference external" href="https://conda.io/docs/">Conda</a>.</li>
 <li>The <strong>requirements</strong> from <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> from the root of this
 project</li>
+<li>If you want to build documentation and run the travis-like tests you
+will also need the <strong>requirements</strong> from <code class="docutils literal notranslate"><span class="pre">build-requirements.txt</span></code></li>
 <li><strong>Packer</strong> (we currently use v1.3.3), and available on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code></li>
 <li><strong>Terraform</strong> available on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. Check any <code class="docutils literal notranslate"><span class="pre">provider.tf</span></code>
 file in the <code class="docutils literal notranslate"><span class="pre">terraform</span></code> director as it specifies the

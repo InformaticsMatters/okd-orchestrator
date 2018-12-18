@@ -10,6 +10,3 @@ matildapeak-yacker == 2018.5
 passlib == 1.7.1
 pyOpenSSL == 18.0.0
 pyyaml == 3.13
-flake8 == 3.6.0
-sphinx == 1.8.2
-sphinx_rtd_theme == 0.4.2

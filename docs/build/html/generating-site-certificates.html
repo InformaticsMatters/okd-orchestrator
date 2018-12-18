@@ -91,6 +91,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
 
@@ -181,7 +182,8 @@ into the value for <code class="docutils literal notranslate"><span class="pre">
 <li>Place the domain name that is routed to the Infrastructure/Router
 into the value for <code class="docutils literal notranslate"><span class="pre">cluster.router_basename</span></code></li>
 <li>To instruct the orchestrator to automatically generate
-certificates set the <code class="docutils literal notranslate"><span class="pre">cluster.master.generate_cert</span></code> value to <code class="docutils literal notranslate"><span class="pre">Yes</span></code></li>
+certificates set the <code class="docutils literal notranslate"><span class="pre">cluster.certificates.generate_api_cert</span></code> value
+to <code class="docutils literal notranslate"><span class="pre">Yes</span></code></li>
 <li>Finally, you need to set the <code class="docutils literal notranslate"><span class="pre">TF_VAR_master_certbot_email</span></code> variable in
 your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> file to the email address registered with Let’s Encrypt.</li>
 </ol>

@@ -19,8 +19,9 @@ start and enter the orchestrator::
 
     $ ./okdo-start.sh
 
-To destroy the cluster you just need to run ``destroy.py``, naming the
-deployment configuration that defines the cluster you wish to delete.
+To destroy the cluster you just need to run ``destroy.py``. If there's more
+than one deployment configuration then you will need to name
+the deployment that defined the cluster you wish to delete.
 For the example AWS cluster this would require the following command::
 
     $ ./destroy.py compact-aws-frankfurt-3-11

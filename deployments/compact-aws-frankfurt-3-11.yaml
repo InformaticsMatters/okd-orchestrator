@@ -7,7 +7,8 @@ version: 1
 # This is used for reporting purposes only.
 name: Compact AWS Deployment (OKD 3.11) [Frankfurt]
 description: >
-  A combined Master/Infra deployment with a one-node cluster.
+  A combined Bastion/Master/Infra deployment
+  with a one-node compute instance.
   This also includes certbot certificate creation,
   metrics and prometheus
 
@@ -21,7 +22,7 @@ okd:
   # This must be a valid tag in the OpenShift git repository.
   ansible_tag: openshift-ansible-3.11.58-1
   # The names of the playbooks to play, in order,
-  # in order to deploy the OKD software.
+  # to deploy the OKD software.
   # This, for 3.11, is typically 'prerequisites'
   # followed by 'deploy_cluster'.
   play:
@@ -50,7 +51,7 @@ terraform:
   # Amazon S3. Leaving this field blank means that terraform state
   # is stored locally (within the project's Terraform directory).
   #
-  # An S3 shared-state configuration would look somehting like:
+  # An S3 shared-state configuration would look something like:
   #
   #   shared_state:
   #     s3:
@@ -69,14 +70,16 @@ ansible:
 
 # Configuration details of the Bastion instance.
 # This section is ignored if the cluster.master is
-# configured to also act as a Bastion (i.e. is_bastion is true)
+# configured to also act as a Bastion
+# (i.e. cluster.master.is_bastion resolves to true)
 bastion:
 
   # Machine image name for the Bastion instance.
   # This should match the start of the Packer-generated image.
   # The latest image whose name starts with this will be used.
-  image_prefix: okd-bastion-image-311-
-  type: t2.small
+  # As this is a 'compact' deployment there is no bastion.
+  image_prefix:
+  type:
 
 # Details of the OKD cluster configuration.
 # As well as the cluster region (provider-specific)
@@ -130,8 +133,8 @@ cluster:
   # - metrics
   # - prometheus
   enable:
-  - metrics
-  - prometheus
+#  - metrics
+#  - prometheus
 
   # You can define extra node groups that your nodes can be assigned to.
   # These complement the expected/built-in groups
@@ -161,8 +164,8 @@ cluster:
     type: t2.xlarge
     # If you have pre-allocated public IPs for the Master set the value here.
     # This is _not_ normally the IP address itself, it is the cloud-provider's
-    # IP identity. In AWS this would be the Elastic IP Allocation ID of
-    # the form "eipalloc-0000000000000000".
+    # IP identity. In AWS this would be the Elastic IP Allocation ID
+    # e.g. "eipalloc-0000000000000000".
     #
     # If you have not provided a pre-allocated (fixed) IP
     # leave this property empty.
@@ -173,7 +176,7 @@ cluster:
     # If the master is to also act as the Bastion node
     # then set this field to 'yes'.
     # There is no need to adjust the bastion configuration.
-    is_bastion: no
+    is_bastion: yes
 
   # Details of the Infrastructure nodes.
   #

@@ -8,7 +8,7 @@ version: 1
 name: Compact AWS Deployment (OKD 3.11) [Frankfurt]
 description: >
   A combined Master/Infra deployment with a one-node cluster.
-  This also includes certbot certificate creation
+  This also includes certbot certificate creation,
   metrics and prometheus
 
 # Details of the OpenShift/OKD deployment.
@@ -35,15 +35,21 @@ okd:
   # shared between similar deployments.
   inventory_dir: simple-aws-3-11
 
-# The terraform templates that are suitable for this configuration.
+# The Terraform templates that are suitable for this configuration.
 # The template choices for a given provider are kept to a minimum
 # but there may be separate templates for 'simple' and 'complex' (HA)
 # deployments.
 terraform:
 
-  # The Terraform templates
-  # used to build the Bastion and its Cluster.
+  # The Terraform template directory
+  # used to build the Bastion and the OKD Cluster.
   dir: aws
+
+  # You can declare whether the Terraform state files are
+  # stored in a globally available shared service. At the moment we support
+  # Amazon S3. Leaving this field blank means that terraform state
+  # is stored locally (within the project's Terraform directory).
+  shared_state:
 
 # Configuration of the ansible software required to install OKD.
 # The version is shared between client (control machine) and Bastion.
@@ -110,7 +116,7 @@ cluster:
   #   enable:
   #   - metrics
   #
-  # We currently support the automatic inclusion of:
+  # We currently support:
   # - logging
   # - metrics
   # - prometheus

@@ -2,9 +2,9 @@
 # Templating
 # -----------------------------------------------------------------------------
 
-# -------------------------
-# The AWS Ansible Inventory
-# -------------------------
+# -------------
+# OKD Inventory
+# -------------
 
 data "template_file" "okd_inventory" {
   template = "${file("${var.okd_dir}/inventories/${var.inventory_dir}/inventory.yaml.tpl")}"
@@ -29,6 +29,8 @@ data "template_file" "okd_inventory" {
     {% endif %}
     {% endif %}
 
+    # Masters...
+
     {% if cluster.master.fixed_ip_id %}
     master1 = "${aws_eip_association.master.0.public_ip}"
     {% else %}
@@ -40,6 +42,8 @@ data "template_file" "okd_inventory" {
     master{{ item + 1 }} = "${aws_instance.master.{{ item }}.private_ip}"
     master{{ item + 1 }}_hostname = "${aws_instance.master.{{ item }}.private_dns}"
     {% endfor %}
+
+    # Infrastructure nodes...
 
     {% if not cluster.master.is_infra %}
     {% if cluster.infra.fixed_ip_id %}
@@ -55,6 +59,8 @@ data "template_file" "okd_inventory" {
     infra{{ item + 1 }}_hostname = "${aws_instance.infra.{{ item }}.private_dns}"
     {% endfor %}
 
+    # Compute nodes...
+
     {% set node_id = namespace(a=1) %}
     {% for node in cluster.nodes %}
     {% for item in range(node.count) %}
@@ -64,6 +70,19 @@ data "template_file" "okd_inventory" {
     {% endfor %}
     {% endfor %}
 
+    # The CLI node (public-facing)...
+    # Ideally a bastion, but can be a master instance.
+
+    {% if not cluster.master.is_bastion %}
+    cli-node = "${aws_instance.bastion.public_ip}"
+    {% else %}
+    {% if cluster.master.fixed_ip_id %}
+    cli-node = "${aws_eip_association.master.0.public_ip}"
+    {% else %}
+    cli-node = "${aws_eip.master.public_ip}"
+    {% endif %}
+    {% endif %}
+
   }
 }
 
@@ -72,15 +91,15 @@ resource "local_file" "okd_inventory" {
   filename = "${var.okd_dir}/inventories/${var.inventory_dir}/inventory.yaml"
 }
 
-# --------------------------------
-# Post-OpenShift Ansible Inventory
-# --------------------------------
+# ------------------
+# Post-OKD Inventory
+# ------------------
 
 data "template_file" "post_okd_inventory" {
   template = "${file("${var.ansible_dir}/post-okd/inventory.yaml.tpl")}"
 
   vars {
-    cli-node-ip = "${aws_instance.master.0.private_dns}"
+    cli-node = "${aws_instance.master.0.private_dns}"
     admin-password = "${var.okd_admin_password}"
     ansible-user = "centos"
   }
@@ -91,9 +110,9 @@ resource "local_file" "post_okd_inventory" {
   filename = "${var.ansible_dir}/post-okd/inventory.yaml"
 }
 
-# -------------------------
-# The AWS Bastion Inventory
-# -------------------------
+# ---------------------
+# The Bastion Inventory
+# ---------------------
 
 data "template_file" "bastion-inventory" {
   template = "${file("${var.ansible_dir}/bastion/inventory.yaml.tpl")}"
@@ -125,9 +144,9 @@ resource "local_file" "bastion-inventory" {
   filename = "${var.ansible_dir}/bastion/inventory.yaml"
 }
 
-# -------------------------------------
-# The AWS Bastion Environment Variables
-# -------------------------------------
+# -----------------------------
+# Bastion Environment Variables
+# -----------------------------
 
 data "template_file" "sh" {
   template = "${file("${var.ansible_dir}/bastion/bastion.sh.tpl")}"

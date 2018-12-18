@@ -156,7 +156,7 @@ def _main(cli_args, chosen_deployment_name):
         if not cli_args.skip_pre_okd:
 
             extra_env = ''
-            if deployment['cluster']['master']['generate_cert']:
+            if deployment['cluster']['certificates']['generate_api_cert']:
                 extra_env += ' -e master_cert_email="{}"'. \
                     format(os.environ['TF_VAR_master_certbot_email'])
                 extra_env += ' -e public_hostname="{}"'. \
@@ -224,7 +224,7 @@ def _main(cli_args, chosen_deployment_name):
     if not cli_args.skip_pre_okd:
 
         extra_env = ''
-        if deployment['cluster']['master']['generate_cert']:
+        if deployment['cluster']['certificates']['generate_api_cert']:
             extra_env += ' -e public_hostname={}'. \
                 format(deployment['cluster']['public_hostname'])
         cmd = 'ansible-playbook site.yaml' \

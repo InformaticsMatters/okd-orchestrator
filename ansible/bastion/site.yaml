@@ -157,7 +157,7 @@
   # Generate an SSL certificate
   # ---------------------------
   # We do this if the master_cert_email is defined
-  # (which is true if the cluster.master.generate_cert property is set).
+  # (which is true if the cluster.certificates.generate_api_cert property is set).
   # The master's 'public_hostname' is located in the deployment configuration
   # and the certbot registration email is expected to be set in the
   # user's 'setenv.sh'

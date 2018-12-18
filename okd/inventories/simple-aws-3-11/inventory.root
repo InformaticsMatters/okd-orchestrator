@@ -1,9 +1,10 @@
 ---
 
-{#
+{#-
     The ROOT jinja2 OpenShift/OKD inventory file (YAML).
     Here we define all common variables and provide 'blocks'
-    that can be written-to from templates that inherit from here.
+    to declare the hosts. Blocks that can be written-to
+    from templates that inherit from here.
 #}
 
 # This is an auto-generated OpenShift/OKD Inventory File.
@@ -14,9 +15,10 @@ all:
   children:
     OSEv3:
 
-      #############
-      # Variables #
-      #############
+      ###################
+      # OSEv3 Variables #
+      ###################
+
       vars:
 
         ansible_ssh_user: centos
@@ -66,7 +68,10 @@ all:
         openshift_master_api_port: {{ cluster.api_port }}
         openshift_master_console_port: {{ cluster.api_port }}
 
-{% if cluster.master.generate_cert %}
+{% if cluster.certificates.generate_api_cert %}
+        # Certificate definitions.
+        # At the moment they are created by bastion and pre-okd playbooks
+        # using certbot if the user has set generate_api_cert
         openshift_master_named_certificates: [
             { 'certfile': '/home/centos/fullchain.pem',
               'keyfile': '/home/centos/privkey.pem' }
@@ -74,7 +79,7 @@ all:
         openshift_master_overwrite_named_certificates: true
 {%- endif %}
 
-{%- raw %}
+{% raw %}
         # AWS
         # ---
 
@@ -144,22 +149,40 @@ all:
               'labels': ['node-role.kubernetes.io/infra=true'] }
         ]
 
-      #########
-      # Hosts #
-      #########
+      ###############
+      # OSEv3 Hosts #
+      ###############
+      # A series of hosts auto-generated
+      # from terraform templates
+
       children:
 
-{%- block masters -%}
-{%- endblock -%}
+{%- block masters %}
+{%- endblock %}
 
-{%- block etcd -%}
-{%- endblock -%}
+{%- block etcd %}
+{%- endblock %}
 
-{%- block nfs -%}
-{%- endblock -%}
+{%- block lb %}
+{%- endblock %}
 
-{%- block nodes -%}
-{%- endblock -%}
+{%- block nfs %}
+{%- endblock %}
 
-{%- block glusterfs -%}
-{%- endblock -%}
+{%- block nodes %}
+{%- endblock %}
+
+{%- block glusterfs %}
+{%- endblock %}
+
+    ###############
+    # Other Hosts #
+    ###############
+    # General hosts,
+    # those that may not be running OKD cluster.
+    # For example, the 'cli-node' is a publically-accessible node
+    # the user can rely on having the OC command-line tool-set.
+
+    cli-node:
+      hosts:
+        ${cli-node}:

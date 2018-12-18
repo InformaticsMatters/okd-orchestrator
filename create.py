@@ -396,7 +396,7 @@ if __name__ == '__main__':
     # The OKD admin password must be set.
     if not os.environ.get(OKD_ADMIN_PASSWORD_ENV):
         io.error('You must define the "{}" environment variable'.
-              format(OKD_ADMIN_PASSWORD_ENV))
+                 format(OKD_ADMIN_PASSWORD_ENV))
         sys.exit(1)
 
     # Go...

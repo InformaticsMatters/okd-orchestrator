@@ -1,0 +1,79 @@
+---
+
+# --------------------------------------------------------------------------- #
+# An orchestrator deployment configuration file (version 1).                  #
+#                                                                             #
+# Refer to 'compact-aws-frankfurt-3.11'                                       #
+# for a detailed discussion of the                                            #
+# properties defined in this file.                                            #
+# --------------------------------------------------------------------------- #
+
+version: 1
+
+name: Compact AWS Deployment (OKD 3.11) [Frankfurt]
+description: >
+  A simple cluster with Bastion, Master and Infra deployment
+  with a one-node compute instance.
+  This also includes metrics and prometheus
+
+okd:
+  ansible_tag: openshift-ansible-3.11.58-1
+  play:
+  - prerequisites
+  - deploy_cluster
+  inventory_dir: simple-aws-3-11
+
+terraform:
+  dir: aws
+  shared_state:
+
+ansible:
+  version: 2.7.5
+
+bastion:
+  image_prefix: okd-bastion-image-311-
+  type: t2.small
+
+cluster:
+  id: simple-frankfurt-311
+  name_prefix: vre
+  name_suffix:
+  region: eu-central-1
+  public_hostname: vre.informaticsmatters.com
+  router_basename: vre.informaticsmatters.com
+  api_port: 8443
+
+  image_prefix: okd-machine-image-311-
+
+  certificates:
+    generate_api_cert: no
+
+  enable:
+  - metrics
+  - prometheus
+
+  node_groups:
+  - name: general
+    label: general-node=true
+    is_compute_node: yes
+
+  master:
+    count: 1
+    type: t2.xlarge
+    fixed_ip_id: eipalloc-010cfe12a8b8c7fa2
+    is_infra: no
+    is_bastion: no
+
+  infra:
+    count: 1
+    type: t2.xlarge
+    fixed_ip_id: eipalloc-037f7a1943abe1174
+
+  nodes:
+  - name: general
+    count: 1
+    type: t2.medium
+    node_group: general
+
+  post_okd_play:
+  - acme-controller

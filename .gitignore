@@ -13,13 +13,17 @@ yacker/**/*.json
 provider-env/setenv.sh
 
 # Terraform material...
-terraform/aws/s3.tf
 terraform/aws/bastion.tf
 terraform/aws/data.tf
+terraform/aws/infra.tf
+terraform/aws/master.tf
 terraform/aws/node.tf
 terraform/aws/output.tf
+terraform/aws/security-groups.tf
+terraform/aws/s3.tf
 terraform/aws/template.tf
 terraform/aws/variables.tf
+terraform/aws/vpc.tf
 terraform/**/*.svg
 *.tfstate
 *.tfstate.backup

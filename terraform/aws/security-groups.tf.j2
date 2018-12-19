@@ -44,7 +44,7 @@ resource "aws_security_group" "openshift" {
 
   tags {
     Name = "${var.name_tag}"
-    "kubernetes.io/cluster/${var.cluster_id}" = "owned"
+    "kubernetes.io/cluster/{{ cluster.id }}" = "owned"
   }
 }
 
@@ -74,7 +74,7 @@ resource "aws_security_group" "ssh" {
 
   tags {
     Name = "${var.name_tag}"
-    "kubernetes.io/cluster/${var.cluster_id}" = "owned"
+    "kubernetes.io/cluster/{{ cluster.id }}" = "owned"
   }
 }
 
@@ -98,6 +98,6 @@ resource "aws_security_group" "outbound-general" {
 
   tags {
     Name = "${var.name_tag}"
-    "kubernetes.io/cluster/${var.cluster_id}" = "owned"
+    "kubernetes.io/cluster/{{ cluster.id }}" = "owned"
   }
 }

@@ -28,6 +28,6 @@ module "vpc" {
 
   tags {
     Name = "${var.name_tag}"
-    "kubernetes.io/cluster/${var.cluster_id}" = "owned"
+    "kubernetes.io/cluster/{{ cluster.id }}" = "owned"
   }
 }

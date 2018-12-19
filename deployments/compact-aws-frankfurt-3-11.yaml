@@ -133,8 +133,8 @@ cluster:
   # - metrics
   # - prometheus
   enable:
-#  - metrics
-#  - prometheus
+  - metrics
+  - prometheus
 
   # You can define extra node groups that your nodes can be assigned to.
   # These complement the expected/built-in groups

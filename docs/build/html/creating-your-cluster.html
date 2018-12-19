@@ -246,16 +246,15 @@ Enter &quot;yes&quot; to INSTALL OpenShift/OKD:
 </div>
 <p>Acknowledge the warning prompt to begin the installation.</p>
 <blockquote class="epigraph">
-<div><p>You do not need to set any environment variables on the bastion or
+<div>You do not need to set any environment variables on the bastion or
 use <code class="docutils literal notranslate"><span class="pre">ssh-agent</span></code> as it and your variables are automatically configured
-on the Bastion as part of the cluster creation step.</p>
-<p>It may take a significant period fo time to install OpenShift, depending on
+on the Bastion as part of the cluster creation step.</div></blockquote>
+<p>It may take a significant period of time to install OpenShift, depending on
 the configuration (i.e., the size of the cluster and whether logging,
-metrics, gluster etc. are also being installed). You should allow around
+metrics, gluster etc. are also being installed). You should allow up to
 30 minutes for a typical small configuration.</p>
-<p>The simple AWS example, which does not deploy logging, metrics or
-GlusterFS, should be ready after approximately <strong>14 minutes</strong>.</p>
-</div></blockquote>
+<p>The compact AWS example, which deploys metrics and prometheus,
+should be ready after approximately <strong>16 minutes</strong>.</p>
 <p>Once <code class="docutils literal notranslate"><span class="pre">create.py</span></code> is complete, your OKD Cluster should be installed with a
 console available on the IP address or domain name that’s routed to the Master
 node, i.e. the address used for the deployment’s <code class="docutils literal notranslate"><span class="pre">cluster.public_hostname</span></code> or

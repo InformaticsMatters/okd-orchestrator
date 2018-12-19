@@ -71,12 +71,12 @@ A pre-built HTML rendition of the documentation can be found in the
 The source of this documentation can be found in the orchestrator's
 ``docs/source`` directory. It is written using `Sphinx`_ and, once you have
 installed the basic tools described in the :doc:`getting-started` section,
-you can be build it from that directory.
+you can be build it from ``docs``.
 
 To build the HTML version of this documentation move to the ``docs``
 directory and execute the following::
 
-    sphinx-build -b html source build/html
+    $ ./make-docs.sh
 
 The resultant index page will be called ``build/html/index.html`` and it and
 the rest of the generated files must be committed to revision control as

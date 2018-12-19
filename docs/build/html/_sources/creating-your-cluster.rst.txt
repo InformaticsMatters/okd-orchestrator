@@ -102,13 +102,13 @@ Acknowledge the warning prompt to begin the installation.
     use ``ssh-agent`` as it and your variables are automatically configured
     on the Bastion as part of the cluster creation step.
 
-    It may take a significant period fo time to install OpenShift, depending on
-    the configuration (i.e., the size of the cluster and whether logging,
-    metrics, gluster etc. are also being installed). You should allow around
-    30 minutes for a typical small configuration.
+It may take a significant period of time to install OpenShift, depending on
+the configuration (i.e., the size of the cluster and whether logging,
+metrics, gluster etc. are also being installed). You should allow up to
+30 minutes for a typical small configuration.
 
-    The simple AWS example, which does not deploy logging, metrics or
-    GlusterFS, should be ready after approximately **14 minutes**.
+The compact AWS example, which deploys metrics and prometheus,
+should be ready after approximately **16 minutes**.
 
 Once ``create.py`` is complete, your OKD Cluster should be installed with a
 console available on the IP address or domain name that's routed to the Master

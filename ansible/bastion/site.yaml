@@ -44,6 +44,7 @@
       state: present
     loop:
     - libselinux-python
+    - python-passlib
     become: yes
 
   # Add files...
@@ -75,9 +76,16 @@
       mode: 0644
     become: yes
 
+  - name: Uninstall any existing Ansible
+    pip:
+      name: ansible
+      state: absent
+    become: yes
+
   - name: Install Python Modules
     pip:
       requirements: /tmp/requirements.txt
+      state: forcereinstall
     become: yes
 
   # ---------------------

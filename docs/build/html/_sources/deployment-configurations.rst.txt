@@ -2,6 +2,16 @@
 Deployment Configurations (v1)
 ##############################
 
+.. highlight:: none
+
+The OKD Orchestrator is trying to strike a balance between requiring you to
+edit the complex Ansible inventory file expected by the OKD installation
+and a simpler approach, exposing sufficient variables that allow
+the ability to create rich, useful OKD clusters.
+
+The orchestrator compiles the inventory file for you based on a set of
+what it considers to be a useful and sufficiently rich set of parameters. [#f1]_
+
 **Deployment configurations**, written in `YAML`_, are a simplified but
 comprehensive text files that form a very-high-level description of an
 OpenShift/OKD cluster. Creating an OpenShift cluster requires the compilation
@@ -20,14 +30,6 @@ cluster and install and configure the software. The orchestrator's *deployment
 configuration* file is designed for the non-expert, less technical user
 who simply wants to get a richly-defined OpenShift OKD cluster up and running.
 
->   The OKD Orchestrator is trying to strike a balance between you needing to
-    edit the complex Ansible inventory file expected by the OKD installation
-    and exposing the ability to create rich, useful OKD clusters.
-    The orchestrator build the inventory file for you based on what is
-    considered to be a useful and sufficiently rich set of parameters. Its
-    capabilities will eventually evolve to create a large range of cluster
-    topologies.
-
 .. _ansible: https://www.ansible.com
 .. _json: https://www.json.org
 .. _jinja: http://jinja.pocoo.org
@@ -38,12 +40,12 @@ The Configuration Format and Location
 =====================================
 
 Configuration files are written in `YAML`_ and are located in the
-``deployments`` directory of the OKD Orchestrator project [#f1]_.
+``deployments`` directory of the OKD Orchestrator project [#f2]_.
 
 Deployments are referred to using the base name fo the configuration file
 which should therefore be compact but descriptive. The example configuration
 (*compact-aws-frankfurt-3-11*) can be found in
-``deployments/compact-aws-frankfurt-3-11.yaml`` [#f2]_.
+``deployments/compact-aws-frankfurt-3-11.yaml`` [#f3]_.
 
 The Configuration File Content
 ==============================
@@ -76,8 +78,8 @@ where the Bastion, Master and Infrastructure resources all reside on a single
 machine. It also serves as a good *template* for your own compact deployment.
 
 Refer to the ``compact-aws-frankfurt-3-11.yaml`` configuration file for a
-detailed description of the configuration and the properties it uses for a
-**compact** topology.
+detailed description of the properties it exposes to allow the formation of a
+**compact** topology deployment.
 
 A Complex Topology Example
 --------------------------
@@ -86,8 +88,10 @@ A Complex Topology Example
 
 .. rubric:: Footnotes
 
-.. [#f1] You can place deployment configurations in any directory,
+.. [#f1] Its capabilities will eventually evolve to create a large range of
+         cluster topologies.
+.. [#f2] You can place deployment configurations in any directory,
          placing the path to the deployment into the
          ``TF_VAR_deployments_directory`` environment variable.
-.. [#f2] At the moment configuration files muse have the extension
+.. [#f3] At the moment configuration files muse have the extension
          ``.yaml``

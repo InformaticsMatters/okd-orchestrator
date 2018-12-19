@@ -172,6 +172,12 @@
             
   <div class="section" id="deployment-configurations-v1">
 <h1>Deployment Configurations (v1)<a class="headerlink" href="#deployment-configurations-v1" title="Permalink to this headline">¶</a></h1>
+<p>The OKD Orchestrator is trying to strike a balance between requiring you to
+edit the complex Ansible inventory file expected by the OKD installation
+and a simpler approach, exposing sufficient variables that allow
+the ability to create rich, useful OKD clusters.</p>
+<p>The orchestrator compiles the inventory file for you based on a set of
+what it considers to be a useful and sufficiently rich set of parameters. <a class="footnote-reference" href="#f1" id="id1">[1]</a></p>
 <p><strong>Deployment configurations</strong>, written in <a class="reference external" href="https://yaml.org">YAML</a>, are a simplified but
 comprehensive text files that form a very-high-level description of an
 OpenShift/OKD cluster. Creating an OpenShift cluster requires the compilation
@@ -188,23 +194,14 @@ party tools like Packer, Terraform and Ansible to build the necessary
 cluster and install and configure the software. The orchestrator’s <em>deployment
 configuration</em> file is designed for the non-expert, less technical user
 who simply wants to get a richly-defined OpenShift OKD cluster up and running.</p>
-<dl class="docutils">
-<dt>&gt;   The OKD Orchestrator is trying to strike a balance between you needing to</dt>
-<dd>edit the complex Ansible inventory file expected by the OKD installation
-and exposing the ability to create rich, useful OKD clusters.
-The orchestrator build the inventory file for you based on what is
-considered to be a useful and sufficiently rich set of parameters. Its
-capabilities will eventually evolve to create a large range of cluster
-topologies.</dd>
-</dl>
 <div class="section" id="the-configuration-format-and-location">
 <h2>The Configuration Format and Location<a class="headerlink" href="#the-configuration-format-and-location" title="Permalink to this headline">¶</a></h2>
 <p>Configuration files are written in <a class="reference external" href="https://yaml.org">YAML</a> and are located in the
-<code class="docutils literal notranslate"><span class="pre">deployments</span></code> directory of the OKD Orchestrator project <a class="footnote-reference" href="#f1" id="id1">[1]</a>.</p>
+<code class="docutils literal notranslate"><span class="pre">deployments</span></code> directory of the OKD Orchestrator project <a class="footnote-reference" href="#f2" id="id2">[2]</a>.</p>
 <p>Deployments are referred to using the base name fo the configuration file
 which should therefore be compact but descriptive. The example configuration
 (<em>compact-aws-frankfurt-3-11</em>) can be found in
-<code class="docutils literal notranslate"><span class="pre">deployments/compact-aws-frankfurt-3-11.yaml</span></code> <a class="footnote-reference" href="#f2" id="id2">[2]</a>.</p>
+<code class="docutils literal notranslate"><span class="pre">deployments/compact-aws-frankfurt-3-11.yaml</span></code> <a class="footnote-reference" href="#f3" id="id3">[3]</a>.</p>
 </div>
 <div class="section" id="the-configuration-file-content">
 <h2>The Configuration File Content<a class="headerlink" href="#the-configuration-file-content" title="Permalink to this headline">¶</a></h2>
@@ -232,8 +229,8 @@ Infrastructure instances or as a cost-effective <em>all-in-one</em> deployment
 where the Bastion, Master and Infrastructure resources all reside on a single
 machine. It also serves as a good <em>template</em> for your own compact deployment.</p>
 <p>Refer to the <code class="docutils literal notranslate"><span class="pre">compact-aws-frankfurt-3-11.yaml</span></code> configuration file for a
-detailed description of the configuration and the properties it uses for a
-<strong>compact</strong> topology.</p>
+detailed description of the properties it exposes to allow the formation of a
+<strong>compact</strong> topology deployment.</p>
 </div>
 <div class="section" id="a-complex-topology-example">
 <h3>A Complex Topology Example<a class="headerlink" href="#a-complex-topology-example" title="Permalink to this headline">¶</a></h3>
@@ -242,15 +239,22 @@ detailed description of the configuration and the properties it uses for a
 <table class="docutils footnote" frame="void" id="f1" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>You can place deployment configurations in any directory,
-placing the path to the deployment into the
-<code class="docutils literal notranslate"><span class="pre">TF_VAR_deployments_directory</span></code> environment variable.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Its capabilities will eventually evolve to create a large range of
+cluster topologies.</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="f2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>At the moment configuration files muse have the extension
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>You can place deployment configurations in any directory,
+placing the path to the deployment into the
+<code class="docutils literal notranslate"><span class="pre">TF_VAR_deployments_directory</span></code> environment variable.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>At the moment configuration files muse have the extension
 <code class="docutils literal notranslate"><span class="pre">.yaml</span></code></td></tr>
 </tbody>
 </table>

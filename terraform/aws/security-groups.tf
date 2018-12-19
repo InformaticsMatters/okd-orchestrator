@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 resource "aws_security_group" "openshift" {
-  name = "${var.resource_tag}-openshift"
+  name = "${var.name_tag}-openshift"
   description = "The Master Security Group."
 
   # Open to the outside...
@@ -43,7 +43,7 @@ resource "aws_security_group" "openshift" {
   vpc_id = "${module.vpc.vpc_id}"
 
   tags {
-    Name = "${var.resource_tag}"
+    Name = "${var.name_tag}"
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
   }
 }
@@ -53,7 +53,7 @@ resource "aws_security_group" "openshift" {
 # -----------------------------------------------------------------------------
 
 resource "aws_security_group" "ssh" {
-  name = "${var.resource_tag}-ssh"
+  name = "${var.name_tag}-ssh"
   description = "Allow SSH connections from anywhere."
 
   ingress {
@@ -73,7 +73,7 @@ resource "aws_security_group" "ssh" {
   vpc_id = "${module.vpc.vpc_id}"
 
   tags {
-    Name = "${var.resource_tag}"
+    Name = "${var.name_tag}"
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
   }
 }
@@ -83,7 +83,7 @@ resource "aws_security_group" "ssh" {
 # -----------------------------------------------------------------------------
 
 resource "aws_security_group" "outbound-general" {
-  name = "${var.resource_tag}-outbound"
+  name = "${var.name_tag}-outbound"
   description = "Open-up the outbound connections."
 
   # Any outbound traffic...
@@ -97,7 +97,7 @@ resource "aws_security_group" "outbound-general" {
   vpc_id = "${module.vpc.vpc_id}"
 
   tags {
-    Name = "${var.resource_tag}"
+    Name = "${var.name_tag}"
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
   }
 }

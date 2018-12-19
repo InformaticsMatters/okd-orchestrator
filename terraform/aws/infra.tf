@@ -22,7 +22,7 @@ resource "aws_instance" "infra" {
   }
 
   tags {
-    Name = "${var.resource_tag}-infra"
+    Name = "${var.name_tag}-infra-${format("%03d", count.index + 1)}"
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
   }
 }

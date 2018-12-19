@@ -99,12 +99,12 @@ def _main(cli_args, chosen_deployment_name):
         return False
 
     cmd = 'pip install ansible=={} --user'. \
-        format(deployment['ansible']['version'])
+        format(deployment['okd']['ansible_version'])
     rv, _ = io.run(cmd, '.', cli_args.quiet)
     if not rv:
         return False
 
-    t_dir = deployment['terraform']['dir']
+    t_dir = deployment['okd']['terraform_dir']
     if cli_args.cluster:
 
         # ------
@@ -156,7 +156,7 @@ def _main(cli_args, chosen_deployment_name):
         if not cli_args.skip_pre_okd:
 
             extra_env = ''
-            if deployment['cluster']['certificates']['generate_api_cert']:
+            if deployment['okd']['certificates']['generate_api_cert']:
                 extra_env += ' -e master_cert_email="{}"'. \
                     format(os.environ['TF_VAR_master_certbot_email'])
                 extra_env += ' -e public_hostname="{}"'. \
@@ -224,7 +224,7 @@ def _main(cli_args, chosen_deployment_name):
     if not cli_args.skip_pre_okd:
 
         extra_env = ''
-        if deployment['cluster']['certificates']['generate_api_cert']:
+        if deployment['okd']['certificates']['generate_api_cert']:
             extra_env += ' -e public_hostname={}'. \
                 format(deployment['cluster']['public_hostname'])
         cmd = 'ansible-playbook site.yaml' \
@@ -291,7 +291,7 @@ def _main(cli_args, chosen_deployment_name):
 
         # Now iterate through the plays listed in the cluster's
         # 'post_okd_play' list.
-        for play in deployment['cluster']['post_okd_play']:
+        for play in deployment['okd']['post_okd_play']:
             cmd = 'ansible-playbook playbooks/{}/deploy.yaml' \
                 ' -e okd_api_hostname=https://{}:{}' \
                 ' -e okd_admin=admin' \

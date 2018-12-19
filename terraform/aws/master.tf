@@ -24,7 +24,7 @@ resource "aws_instance" "master" {
   }
 
   tags {
-    Name = "${var.resource_tag}-master"
+    Name = "${var.name_tag}-master-${format("%02d", count.index + 1)}"
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
   }
 }

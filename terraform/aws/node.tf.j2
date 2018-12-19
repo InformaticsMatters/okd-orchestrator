@@ -22,7 +22,7 @@ resource "aws_instance" "node_{{ node.name }}" {
   }
 
   tags {
-    Name = "${var.resource_tag}-node-${format("%03d", count.index + 1)}-{{ node.name }}"
+    Name = "${var.name_tag}-node-${format("%03d", count.index + 1)}-{{ node.name }}"
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
   }
 }

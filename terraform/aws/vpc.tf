@@ -23,11 +23,11 @@ module "vpc" {
   public_subnets = ["10.0.101.0/24"]
 
   nat_eip_tags = {
-    Name = "${var.resource_tag}.nat"
+    Name = "${var.name_tag}.nat"
   }
 
   tags {
-    Name = "${var.resource_tag}"
+    Name = "${var.name_tag}"
     "kubernetes.io/cluster/${var.cluster_id}" = "owned"
   }
 }

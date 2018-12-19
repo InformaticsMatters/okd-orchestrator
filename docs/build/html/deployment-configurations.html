@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Deployment Configurations (v1) &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Building the Docker Image" href="building-the-docker-image.html" />
+    <link rel="prev" title="Getting Started" href="getting-started.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> The OKD Orchestrator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="getting-started.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="getting-started.html#git">Git</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="getting-started.html#docker">Docker</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Deployment Configurations (v1)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-configuration-format-and-location">The Configuration Format and Location</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-configuration-file-content">The Configuration File Content</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="building-the-docker-image.html">Building the Docker Image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="running-without-docker.html">Running Without Docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="using-your-own-deployments.html">Using Your Own Deployments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images-for-aws.html">Compiling Machine Images for AWS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generating-site-certificates.html">Generating SSL Certificates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">The OKD Orchestrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="getting-started.html">Getting Started</a> &raquo;</li>
+        
+      <li>Deployment Configurations (v1)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/deployment-configurations.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="deployment-configurations-v1">
+<h1>Deployment Configurations (v1)<a class="headerlink" href="#deployment-configurations-v1" title="Permalink to this headline">¶</a></h1>
+<p><strong>Deployment configurations</strong>, written in <a class="reference external" href="https://yaml.org">YAML</a>, are a simplified but
+comprehensive text files that form a very-high-level description of an
+OpenShift/OKD cluster. Creating an OpenShift cluster requires the compilation
+of base operating-system images on which the OKD software runs, the creation of
+physical machines on which to run the software and the installation and
+configuration of the software itself and each of these steps can be a
+challenging task and each often utilities a different definition language. So,
+to install OpenShift you often find yourself having to understand
+<a class="reference external" href="https://www.ansible.com">Ansible</a>, <a class="reference external" href="https://www.json.org">JSON</a>, <a class="reference external" href="http://jinja.pocoo.org">Jinja</a>, <a class="reference external" href="https://www.terraform.io/docs/configuration/syntax.html">HCL</a>, and <a class="reference external" href="https://yaml.org">YAML</a> file formats and languages.</p>
+<p>The <em>OKD Orchestrator</em> is design to simplify the creation of a cluster
+by consolidating the definition of your cluster into one simple-to-read
+file format and then automating the vast majority of tasks, relying on 3rd
+party tools like Packer, Terraform and Ansible to build the necessary
+cluster and install and configure the software. The orchestrator’s <em>deployment
+configuration</em> file is designed for the non-expert, less technical user
+who simply wants to get a richly-defined OpenShift OKD cluster up and running.</p>
+<dl class="docutils">
+<dt>&gt;   The OKD Orchestrator is trying to strike a balance between you needing to</dt>
+<dd>edit the complex Ansible inventory file expected by the OKD installation
+and exposing the ability to create rich, useful OKD clusters.
+The orchestrator build the inventory file for you based on what is
+considered to be a useful and sufficiently rich set of parameters. Its
+capabilities will eventually evolve to create a large range of cluster
+topologies.</dd>
+</dl>
+<div class="section" id="the-configuration-format-and-location">
+<h2>The Configuration Format and Location<a class="headerlink" href="#the-configuration-format-and-location" title="Permalink to this headline">¶</a></h2>
+<p>Configuration files are written in <a class="reference external" href="https://yaml.org">YAML</a> and are located in the
+<code class="docutils literal notranslate"><span class="pre">deployments</span></code> directory of the OKD Orchestrator project <a class="footnote-reference" href="#f1" id="id1">[1]</a>.</p>
+<p>Deployments are referred to using the base name fo the configuration file
+which should therefore be compact but descriptive. The example configuration
+(<em>compact-aws-frankfurt-3-11</em>) can be found in
+<code class="docutils literal notranslate"><span class="pre">deployments/compact-aws-frankfurt-3-11.yaml</span></code> <a class="footnote-reference" href="#f2" id="id2">[2]</a>.</p>
+</div>
+<div class="section" id="the-configuration-file-content">
+<h2>The Configuration File Content<a class="headerlink" href="#the-configuration-file-content" title="Permalink to this headline">¶</a></h2>
+<p>The configuration file consists of the a <em>preamble</em> that defines the
+file version, name and description of the configuration followed by
+sections (maps) that define the actual deployment:</p>
+<ol class="arabic simple">
+<li>A <code class="docutils literal notranslate"><span class="pre">cluster</span></code> section that defines the machines and topology of the cluster
+on which OKD will be installed.</li>
+<li>An <code class="docutils literal notranslate"><span class="pre">okd</span></code> section that defines the OpenShift/OKD version to be installed
+and lists the Ansible playbooks that are to be executed to create the
+OKD cluster</li>
+</ol>
+<p>Configurations are typically grouped into <strong>Compact</strong> or <strong>Complex</strong> topologies
+where _Compact_ deployments generally have single Master instances and
+_Complex_ deployments relay on resilient multi-master instances combined with
+a production-grade load-balancer.</p>
+<div class="section" id="a-compact-topology-example">
+<h3>A Compact Topology Example<a class="headerlink" href="#a-compact-topology-example" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">deployments/compact-aws-frankfurt-3-11.yaml</span></code> configuration is a
+reference implementation of a <strong>compact</strong> style of deployment (a non-HA
+deployment).</p>
+<p>It can be easily configured with separate Bastion, Master and
+Infrastructure instances or as a cost-effective <em>all-in-one</em> deployment
+where the Bastion, Master and Infrastructure resources all reside on a single
+machine. It also serves as a good <em>template</em> for your own compact deployment.</p>
+<p>Refer to the <code class="docutils literal notranslate"><span class="pre">compact-aws-frankfurt-3-11.yaml</span></code> configuration file for a
+detailed description of the configuration and the properties it uses for a
+<strong>compact</strong> topology.</p>
+</div>
+<div class="section" id="a-complex-topology-example">
+<h3>A Complex Topology Example<a class="headerlink" href="#a-complex-topology-example" title="Permalink to this headline">¶</a></h3>
+<p><em>TBD</em></p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>You can place deployment configurations in any directory,
+placing the path to the deployment into the
+<code class="docutils literal notranslate"><span class="pre">TF_VAR_deployments_directory</span></code> environment variable.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>At the moment configuration files muse have the extension
+<code class="docutils literal notranslate"><span class="pre">.yaml</span></code></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="building-the-docker-image.html" class="btn btn-neutral float-right" title="Building the Docker Image" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="getting-started.html" class="btn btn-neutral" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Informatics Matters
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

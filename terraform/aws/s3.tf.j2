@@ -2,13 +2,13 @@
 # State Storage (AWS S3)
 # -----------------------------------------------------------------------------
 
-{% if terraform.shared_state.s3 is defined %}
+{% if okd.terraform_shared_state is defined and okd.terraform_shared_state.s3 is defined %}
 terraform {
   backend "s3" {
-    bucket = "{{ terraform.shared_state.s3.bucket }}"
-    key = "{{ terraform.shared_state.s3.key }}"
-    region = "{{ terraform.shared_state.s3.region }}"
-    dynamodb_table = "{{ terraform.shared_state.s3.tale }}"
+    bucket = "{{ okd.terraform_shared_state.s3.bucket }}"
+    key = "{{ okd.terraform_shared_state.s3.key }}"
+    region = "{{ okd.terraform_shared_state.s3.region }}"
+    dynamodb_table = "{{ okd.terraform_shared_state.s3.table }}"
   }
 }
 {% endif %}

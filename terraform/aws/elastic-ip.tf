@@ -14,7 +14,7 @@ resource "aws_eip" "master" {
   instance = "${aws_instance.master.0.id}"
 
   tags {
-    Name = "${var.resource_tag}-master"
+    Name = "${var.name_tag}-master"
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_eip" "infra" {
   instance = "${aws_instance.infra.0.id}"
 
   tags {
-    Name = "${var.resource_tag}-infra"
+    Name = "${var.name_tag}-infra"
   }
 }
 

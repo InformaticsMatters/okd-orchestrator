@@ -4,7 +4,8 @@ Getting Started
 
 The orchestrator is designed to simplify the construction of an OpenShift
 cluster on various cloud providers using **deployments** - high-level
-configuration files written in `YAML`_.
+configuration files written in `YAML`_. The deployment configurations are
+described in the :doc:`deployment-configurations` section of the documentation.
 
 At the moment we have working solutions for Amazon *EC2*, *OpenStack* and
 *Scaleway* and a working example for *EC2* that we use as a tutorial.
@@ -54,6 +55,7 @@ suitable.
     :maxdepth: 1
     :caption: See:
 
+    deployment-configurations
     building-the-docker-image
     running-without-docker
     using-your-own-deployments

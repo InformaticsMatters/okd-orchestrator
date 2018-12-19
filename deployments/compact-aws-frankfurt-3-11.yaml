@@ -1,85 +1,32 @@
 ---
 
-# The configuration file version.
+# --------------------------------------------------------------------------- #
+# An orchestrator deployment configuration file (version 1).                  #
+#                                                                             #
+# This working configuration can also act as a template for your own          #
+# deployment. If the 'compact' style suits your needs then feel free          #
+# to copy this to form the basic of your own deployment.                      #
+#                                                                             #
+# To avoid the comments from becoming out-of-date you should probably strip   #
+# the documentation that accompanies this file from your copy, You can        #
+# rest-assured that this Frankfurt file will be kept up to date               #
+# with any orchestrator changes and new features.                             #
+# --------------------------------------------------------------------------- #
+
+# The configuration file version. This is dictated by the orchestrator.
+# As enhanced file versions are brought online this number will
+# increase. Whether your configuration version is supported is a function of
+# the orchestrator version you are running.
 version: 1
 
-# Name and description of the configuration.
-# This is used for reporting purposes only.
+# The name of the deployment. and description of the configuration.
+#  This is used for reporting purposes only.
 name: Compact AWS Deployment (OKD 3.11) [Frankfurt]
+# A more detailed description of the deployment.
+# This is used for reporting purposes only.
 description: >
-  A combined Bastion/Master/Infra deployment
-  with a one-node compute instance.
-  This also includes certbot certificate creation,
-  metrics and prometheus
-
-# Details of the OpenShift/OKD deployment.
-# These are high-level, abstract, configuration details,
-# that include the tagged version of the software to install
-# and the playbooks to run.
-okd:
-
-  # The version tag for OpenShift Origin/OKD ansible playbooks.
-  # This must be a valid tag in the OpenShift git repository.
-  ansible_tag: openshift-ansible-3.11.58-1
-  # The names of the playbooks to play, in order,
-  # to deploy the OKD software.
-  # This, for 3.11, is typically 'prerequisites'
-  # followed by 'deploy_cluster'.
-  play:
-  - prerequisites
-  - deploy_cluster
-
-  # The directory of the inventory for this deployment.
-  # This directory is expected to exist in `okd/inventories'.
-  # The inventory directory contains template files for the Bastion
-  # and OKD cluster. The templates for a given provider are often
-  # shared between similar deployments.
-  inventory_dir: simple-aws-3-11
-
-# The Terraform templates that are suitable for this configuration.
-# The template choices for a given provider are kept to a minimum
-# but there may be separate templates for 'simple' and 'complex' (HA)
-# deployments.
-terraform:
-
-  # The Terraform template directory
-  # that was used to build the Bastion and the OKD Cluster.
-  dir: aws
-
-  # You can declare whether the Terraform state files are
-  # stored in a globally available shared service. At the moment we support
-  # Amazon S3. Leaving this field blank means that terraform state
-  # is stored locally (within the project's Terraform directory).
-  #
-  # An S3 shared-state configuration would look something like:
-  #
-  #   shared_state:
-  #     s3:
-  #       bucket: <s3-bucket-name>
-  #       key: <s3-key>
-  #       region: <s3-region>
-  #       table: <dynamo-table-name>
-  shared_state:
-
-# Configuration of the ansible software required to install OKD.
-# The version is shared between client (control machine) and Bastion.
-ansible:
-
-  # The Ansible version required to deploy the cluster.
-  version: 2.7.5
-
-# Configuration details of the Bastion instance.
-# This section is ignored if the cluster.master is
-# configured to also act as a Bastion
-# (i.e. cluster.master.is_bastion resolves to true)
-bastion:
-
-  # Machine image name for the Bastion instance.
-  # This should match the start of the Packer-generated image.
-  # The latest image whose name starts with this will be used.
-  # As this is a 'compact' deployment there is no bastion.
-  image_prefix:
-  type:
+  A combined Bastion/Master/Infra deployment with a one-node compute instance.
+  This also includes certbot certificate creation, metrics and prometheus.
 
 # Details of the OKD cluster configuration.
 # As well as the cluster region (provider-specific)
@@ -87,16 +34,26 @@ bastion:
 # cloud instances are defined.
 cluster:
 
-  # A unique name for your cluster.
-  # All your clusters must have a different ID.
-  id: simple-frankfurt-311
-  # Name prefix and suffix values for the names of each cluster instance.
-  # Use this to quickly distinguish between instances.
-  name_prefix: vre
-  name_suffix:
   # The provider 'region' used for cluster instances.
   # The value is provider-specific.
   region: eu-central-1
+  # A unique name for your cluster.
+  # All your clusters must have a different ID.
+  id: compact-frankfurt-311
+  # Machine image name for the cluster instances.
+  # This should match the start of the Packer-generated images.
+  # The latest image whose name starts with this will be used.
+  # The Bastion, if used, uses its own image.
+  image_prefix: okd-machine-image-311-
+
+  # A name prefix for the names of each cluster object instance.
+  # Where supported by your provider this value will be used to alter the
+  # instance names of objects created in your cloud provider.
+  # Nodes will be named 'node-NNN-<nodes-name>' but, if your prefix
+  # is 'vre', nodes named 'compute' will be named 'vre-node-001-general'.
+  # Use this to distinguish between nodes of different clusters in the
+  # same cloud provider.
+  name_tag: vre-compact
   # The external IP address or domain-name of the Master node.
   # If not set the master public DNS will be used.
   # Whatever is used must provide a resolvable route to the master.
@@ -109,58 +66,28 @@ cluster:
   # The Master API/Console Port
   api_port: 8443
 
-  # Machine image name for the cluster instances.
-  # This should match the start of the Packer-generated images.
-  # The latest image whose name starts with this will be used.
-  image_prefix: okd-machine-image-311-
-
-  # Certificate definitions,
-  # currently just the Master API certificate.
-  certificates:
-    # Set to automatically generate a Let's Encrypt/certbot certificate
-    # for the master node when the cluster has been created but prior to
-    # OpenShift installation.
-    generate_api_cert: yes
-
-  # What additional OpenShift/OKD services should be enabled?
-  # Add services to this list like metrics with something like:
-  #
-  #   enable:
-  #   - metrics
-  #
-  # We currently support:
-  # - logging
-  # - metrics
-  # - prometheus
-  enable:
-  - metrics
-  - prometheus
-
-  # You can define extra node groups that your nodes can be assigned to.
-  # These complement the expected/built-in groups
-  # (e.g. master, infra, compute).
-  #
-  # For each group you define a 'node_group_<name>' will be created.
-  #
-  # Node groups consist of:
-  # - A 'name' (following standard variable conventions)
-  # - A 'label' string that's essentially a keyword=value pair.
-  #   The label is used for node selection.
-  # - An 'is_compute_node' which, if it evaluates to true,
-  #   means the node is also treated by OKD as a generally available
-  #   compute node where Pods can be scheduled. If you need an exclusive node
-  #   (only for jobs that name the label explicitly) then set this to false.
-  #   By default this is 'no' so groups are not normally general compute nodes.
-  node_groups:
-  - name: general
-    label: general-node=true
-    is_compute_node: yes
+  # Configuration details of the Bastion instance.
+  # This section is ignored if the cluster.master is
+  # configured to also act as a Bastion
+  # (i.e. cluster.master.is_bastion resolves to true)
+  bastion:
+    # Machine image name for the Bastion instance.
+    # This should match the start of the Packer-generated image.
+    # The latest image whose name starts with this will be used.
+    # Not required if the Master is acting as a Bastion.
+    image_prefix:
+    # Provider-specific machine image type.
+    # See master.type.
+    # Not required if the Master is acting as a Bastion.
+    type:
 
   # Details of the Master nodes.
   #
   # At the moment only 1 master instance is supported.
   master:
     count: 1
+    # Provider-specific machine image type.
+    # i.e. t2.xlarge on AWS or START1-L on Scaleway.
     type: t2.xlarge
     # If you have pre-allocated public IPs for the Master set the value here.
     # This is _not_ normally the IP address itself, it is the cloud-provider's
@@ -175,7 +102,6 @@ cluster:
     is_infra: yes
     # If the master is to also act as the Bastion node
     # then set this field to 'yes'.
-    # There is no need to adjust the bastion configuration.
     is_bastion: yes
 
   # Details of the Infrastructure nodes.
@@ -183,14 +109,50 @@ cluster:
   # At the moment only 0 or 1 infra instance is supported.
   infra:
     count: 0
+    # Provider-specific machine image type.
+    # Not required if the Master is acting as a Bastion.
     type:
     # The (optional) pre-allocated public IP for the Infrastructure.
-    # (See cluster.master.fixed_ip)
+    # (See cluster.master.fixed_ip).
+    # Not required if the Master is acting as a Bastion.
     fixed_ip_id:
+
+  # You can define extra node groups that your nodes can be assigned to.
+  # These complement the expected/built-in groups
+  # (e.g. master, infra, compute).
+  #
+  # For each group you define a 'node_group_<name>' will be created.
+  #
+  # Node groups consist of: -
+  #
+  # - An arbitrary and unique 'name' (following standard variable conventions).
+  #   Stick to letters, numbers and '_'
+  # - A 'label' string that's essentially a 'keyword=value' pair.
+  #   The label is used for Pod node selection.
+  # - An 'is_compute_node' flag. If this evaluates to true
+  #   the node is also treated by OKD as a generally available
+  #   compute node where Pods can be scheduled using default rules.
+  #   If you need an 'exclusive node' (one that is only used for jobs
+  #   that name the label explicitly for selection) then set this to false.
+  #   By default this is 'no' so groups are not general compute nodes.
+  node_groups:
+    - name: general
+      label: general-node=true
+      is_compute_node: yes
 
   # Details of the cluster compute nodes.
   # This is a list that allows you to define different node 'categories'.
   # Each entry in the list supports the the following properties:
+  #
+  # Where the provider allows, nodes are placed in different 'zones'.
+  # AWS typically provides 3 'zones' per region. So, if you create
+  # 6 nodes in a group then two will be placed in 'zone a', two in 'zone b'
+  # and two in 'zone c'. Each new node in a group is placed in a different
+  # zone with the first node in each group being placed in the first zone.
+  #
+  # You must have at least 1 compute node.
+  #
+  # Node consist of: -
   #
   # - A 'name' used simply to tag the resource, for providers that support it.
   # - A numerical 'count' to define the number of nodes of this category to
@@ -205,17 +167,32 @@ cluster:
   #   (like 'node-config-compute'). Here you simply need the name
   #   (i.e 'compute'). If you want to place your node into a build-in
   #   group, you can use that group (i.e. 'compute').
-  #
-  # Where the provider allows, nodes are placed in different 'zones'.
-  # AWS typically provides 3 'zones' per region. So, if you create
-  # 6 nodes in a group then two will be placed in 'zone a', two in 'zone b'
-  # and two in 'zone c'. Each new node in a group is placed in a different
-  # zone with the first node in each group being placed in the first zone.
   nodes:
   - name: general
     count: 1
     type: t2.medium
     node_group: general
+
+# The okd section provides details of the OpenShift/OKD deployment.
+# These are high-level, abstract, configuration details,
+# that include the tagged version of the software to install
+# and the playbooks to run.
+okd:
+
+  # The version tag for OpenShift Origin/OKD ansible playbooks.
+  # This must be a valid tag in the OpenShift git repository.
+  ansible_tag: openshift-ansible-3.11.58-1
+  # The version of Ansible required to deploy the cluster.
+  # The orchestrator will ensure that the correct version of
+  # ansible is installed. v2.7.5 is likely to be suitable for
+  # OKD 3.11 and beyond but change it here if you need to.
+  ansible_version: 2.7.5
+  # The names of the playbooks to play in order to deploy the OKD software.
+  # This, for 3.11, is typically 'prerequisites' followed by
+  # 'deploy_cluster'. You're unlikely to need to change these.
+  play:
+    - prerequisites
+    - deploy_cluster
 
   # Install extra stuff based on playbooks in the 'ansible/post-okd' directory.
   # These playbooks will be run on the 'cli-node', a node with a suitable
@@ -225,4 +202,49 @@ cluster:
   # For each 'play' a corresponding
   # 'ansible/post-okd/playbooks/<play>/deploy.yaml' must exist.
   post_okd_play:
-  - acme-controller
+    - acme-controller
+
+  # What additional OpenShift/OKD services should be enabled?
+  # Add services to this list like metrics with something like:
+  #
+  #   enable:
+  #   - metrics
+  #
+  # We currently support:
+  # - metrics
+  # - prometheus
+  enable:
+    - metrics
+    - prometheus
+
+  # Certificate definitions,
+  # currently just the Master API certificate.
+  certificates:
+    # Set to automatically generate a Let's Encrypt/certbot certificate
+    # for the master node when the cluster has been created but prior to
+    # OpenShift installation.
+    generate_api_cert: no
+
+  # The directory of the OKD Ansible inventory for this deployment.
+  # This directory is expected to exist in `okd/inventories'.
+  # The inventory directory contains template files for the Bastion
+  # and OKD cluster. The templates for a given provider are often
+  # shared between similar deployments.
+  inventory_dir: simple-aws-3-11
+  # The Terraform directory that contains the Terraform definitions
+  # that suitable to build the OKD Cluster machines cloud infrastructure.
+  terraform_dir: aws
+  # You can declare whether the Terraform state files are
+  # stored in a globally available shared service. At the moment we support
+  # Amazon S3. Leaving this field blank means that terraform state
+  # is stored locally (within the project's Terraform directory).
+  #
+  # An S3 shared-state configuration would look something like:
+  #
+  #   terraform_shared_state:
+  #     s3:
+  #       bucket: <s3-bucket-name>
+  #       key: <s3-key>
+  #       region: <s3-region>
+  #       table: <dynamo-table-name>
+  terraform_shared_state:

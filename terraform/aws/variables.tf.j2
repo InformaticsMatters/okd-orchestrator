@@ -54,9 +54,9 @@ variable "inventory_dir" {
   default = "{{ okd.inventory_dir }}"
 }
 
-variable "resource_tag" {
+variable "name_tag" {
   description = "The tag applied to all resources we'll be creating"
-  default = "{{ cluster.name_prefix }}"
+  default = "{{ cluster.name_tag }}"
 }
 
 variable "ansible_dir" {
@@ -113,9 +113,9 @@ variable "infra_image_type" {
 # DEFAULT VARIABLES (Bastion Node)
 
 variable "bastion_image_type" {
-  default = "{{ bastion.type }}"
+  default = "{{ cluster.bastion.type }}"
 }
 
 variable "bastion_image_name_prefix" {
-  default = "{{ bastion.image_prefix }}"
+  default = "{{ cluster.bastion.image_prefix }}"
 }

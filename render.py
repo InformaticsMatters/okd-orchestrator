@@ -90,7 +90,7 @@ def find_template_files(deployment_config):
     :type deployment_config: ``dict``
     :return: A list of template files.
     """
-    terraform_dir = deployment_config['terraform']['dir']
+    terraform_dir = deployment_config['okd']['terraform_dir']
     files = []
     for root, _, file_names in os.walk(_PROJECT_ROOT):
         exclude = False

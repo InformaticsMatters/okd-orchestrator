@@ -8,8 +8,9 @@
 #}
 
 # This is an auto-generated OpenShift/OKD Inventory File.
-# Edit this file with extreme caution because
-# it belongs to and is written by the OKD Orchestrator.
+# Edit this file with extreme caution.
+# It belongs to and is written by the OKD Orchestrator
+# and it will be lost (deleted) when the cluster is destroyed.
 
 all:
   children:
@@ -68,7 +69,7 @@ all:
         openshift_master_api_port: {{ cluster.api_port }}
         openshift_master_console_port: {{ cluster.api_port }}
 
-{% if cluster.certificates.generate_api_cert %}
+{% if okd.certificates.generate_api_cert %}
         # Certificate definitions.
         # At the moment they are created by bastion and pre-okd playbooks
         # using certbot if the user has set generate_api_cert
@@ -91,7 +92,7 @@ all:
 
         # Metrics
         # -------
-{% if cluster.enable and 'metrics' in cluster.enable %}
+{% if okd.enable and 'metrics' in okd.enable %}
         openshift_metrics_install_metrics: true
 {%- else %}
         openshift_metrics_install_metrics: false
@@ -106,7 +107,7 @@ all:
 
         # Logging
         # -------
-{% if cluster.enable and 'logging' in cluster.enable %}
+{% if okd.enable and 'logging' in okd.enable %}
         openshift_logging_install_logging: true
 {%- else %}
         openshift_logging_install_logging: false
@@ -118,12 +119,14 @@ all:
 
         # Prometheus
         # ----------
-{% if cluster.enable and 'prometheus' in cluster.enable %}
+{% if okd.enable and 'prometheus' in okd.enable %}
         openshift_cluster_monitoring_operator_install: true
         openshift_cluster_monitoring_operator_prometheus_storage_enabled: true
         openshift_cluster_monitoring_operator_alertmanager_storage_enabled: true
 {%- else %}
         openshift_cluster_monitoring_operator_install: false
+        openshift_cluster_monitoring_operator_prometheus_storage_enabled: false
+        openshift_cluster_monitoring_operator_alertmanager_storage_enabled: false
 {%- endif %}
 
         # Service Broker
@@ -178,10 +181,9 @@ all:
     ###############
     # Other Hosts #
     ###############
-    # General hosts,
-    # those that may not be running OKD cluster.
-    # For example, the 'cli-node' is a publically-accessible node
-    # the user can rely on having the OC command-line tool-set.
+    # General hosts that are not OKD nodes.
+    # For example, the 'cli-node' is a node with a public route
+    # that the user can rely on having the OC command-line tool-set.
 
     cli-node:
       hosts:

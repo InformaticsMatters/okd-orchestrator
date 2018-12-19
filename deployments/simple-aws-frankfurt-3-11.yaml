@@ -3,59 +3,30 @@
 # --------------------------------------------------------------------------- #
 # An orchestrator deployment configuration file (version 1).                  #
 #                                                                             #
-# Refer to 'compact-aws-frankfurt-3.11'                                       #
-# for a detailed discussion of the                                            #
-# properties defined in this file.                                            #
+# Refer to the 'compact-aws-frankfurt-3-11' deployment configuration          #
+# for a detailed discussion of the  properties defined in this file.          #
 # --------------------------------------------------------------------------- #
 
 version: 1
 
-name: Compact AWS Deployment (OKD 3.11) [Frankfurt]
+name: Simple AWS Deployment (OKD 3.11) [Frankfurt]
 description: >
-  A simple cluster with Bastion, Master and Infra deployment
-  with a one-node compute instance.
-  This also includes metrics and prometheus
-
-okd:
-  ansible_tag: openshift-ansible-3.11.58-1
-  play:
-  - prerequisites
-  - deploy_cluster
-  inventory_dir: simple-aws-3-11
-
-terraform:
-  dir: aws
-  shared_state:
-
-ansible:
-  version: 2.7.5
-
-bastion:
-  image_prefix: okd-bastion-image-311-
-  type: t2.small
+  A simple deployment that forms separate Bastion, Master and Infra instances
+  This also includes certbot certificate creation, metrics and prometheus.
 
 cluster:
-  id: simple-frankfurt-311
-  name_prefix: vre
-  name_suffix:
+
   region: eu-central-1
+  id: simple-frankfurt-311
+  image_prefix: okd-machine-image-311-
+  name_tag: vre-simple
   public_hostname: vre.informaticsmatters.com
   router_basename: vre.informaticsmatters.com
   api_port: 8443
 
-  image_prefix: okd-machine-image-311-
-
-  certificates:
-    generate_api_cert: no
-
-  enable:
-  - metrics
-  - prometheus
-
-  node_groups:
-  - name: general
-    label: general-node=true
-    is_compute_node: yes
+  bastion:
+    image_prefix: okd-bastion-image-311-
+    type: t2.small
 
   master:
     count: 1
@@ -69,11 +40,34 @@ cluster:
     type: t2.xlarge
     fixed_ip_id: eipalloc-037f7a1943abe1174
 
+  node_groups:
+    - name: general
+      label: general-node=true
+      is_compute_node: yes
+
   nodes:
-  - name: general
-    count: 1
-    type: t2.medium
-    node_group: general
+    - name: general
+      count: 1
+      type: t2.medium
+      node_group: general
+
+okd:
+
+  ansible_tag: openshift-ansible-3.11.58-1
+  ansible_version: 2.7.5
+  play:
+  - prerequisites
+  - deploy_cluster
 
   post_okd_play:
   - acme-controller
+
+  enable:
+  - metrics
+  - prometheus
+
+  certificates:
+    generate_api_cert: no
+
+  inventory_dir: simple-aws-3-11
+  terraform_dir: aws

@@ -22,7 +22,7 @@ resource "aws_instance" "bastion" {
   }
 
   tags {
-    Name = "${var.resource_tag}-bastion"
+    Name = "${var.name_tag}-bastion"
   }
 }
 {% endif %}

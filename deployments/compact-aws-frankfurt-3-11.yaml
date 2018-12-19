@@ -1,7 +1,9 @@
 ---
 
 # --------------------------------------------------------------------------- #
-# An orchestrator deployment configuration file (version 1).                  #
+# An orchestrator deployment configuration file.                              #
+#                                                                             #
+# ...compatible with orchestrator configuration file format version 1.        #
 #                                                                             #
 # This working configuration can also act as a template for your own          #
 # deployment. If the 'compact' style suits your needs then feel free          #
@@ -62,7 +64,7 @@ cluster:
   public_hostname: vre.informaticsmatters.com
   # The external IP address or domain-name of the Infrastructure node.
   # (see cluster.public_hostname)
-  router_basename: vre.informaticsmatters.com
+  router_basename: apps.vre.informaticsmatters.com
   # The Master API/Console Port
   api_port: 8443
 
@@ -75,15 +77,16 @@ cluster:
     # This should match the start of the Packer-generated image.
     # The latest image whose name starts with this will be used.
     # Not required if the Master is acting as a Bastion.
-    image_prefix:
+    image_prefix: okd-bastion-image-311-
     # Provider-specific machine image type.
     # See master.type.
     # Not required if the Master is acting as a Bastion.
-    type:
+    type: t2.small
 
   # Details of the Master nodes.
   #
-  # At the moment only 1 master instance is supported.
+  # 'Simple' deployment topologies (as this is)
+  # are suitable when we're using just 1 Master instance.
   master:
     count: 1
     # Provider-specific machine image type.
@@ -99,23 +102,21 @@ cluster:
     fixed_ip_id: eipalloc-010cfe12a8b8c7fa2
     # If the master is to also act as the infrastructure node
     # then set this field to 'yes' while also setting the 'infra.count' to 0.
-    is_infra: yes
+    is_infra: no
     # If the master is to also act as the Bastion node
     # then set this field to 'yes'.
     is_bastion: yes
 
   # Details of the Infrastructure nodes.
-  #
-  # At the moment only 0 or 1 infra instance is supported.
   infra:
-    count: 0
+    count: 1
     # Provider-specific machine image type.
     # Not required if the Master is acting as a Bastion.
-    type:
+    type: t2.xlarge
     # The (optional) pre-allocated public IP for the Infrastructure.
     # (See cluster.master.fixed_ip).
     # Not required if the Master is acting as a Bastion.
-    fixed_ip_id:
+    fixed_ip_id: eipalloc-037f7a1943abe1174
 
   # You can define extra node groups that your nodes can be assigned to.
   # These complement the expected/built-in groups
@@ -135,10 +136,20 @@ cluster:
   #   If you need an 'exclusive node' (one that is only used for jobs
   #   that name the label explicitly for selection) then set this to false.
   #   By default this is 'no' so groups are not general compute nodes.
+  #
+  # DYou must not use the following names,
+  # which are built-in and created automatically during the installation: -
+  #
+  # - master
+  # - infra
+  # - compute
+  # - master-infra
+  # - all-in-one
+  #
   node_groups:
-    - name: general
-      label: general-node=true
-      is_compute_node: yes
+  - name: general
+    label: general-node=true
+    is_compute_node: yes
 
   # Details of the cluster compute nodes.
   # This is a list that allows you to define different node 'categories'.
@@ -191,8 +202,8 @@ okd:
   # This, for 3.11, is typically 'prerequisites' followed by
   # 'deploy_cluster'. You're unlikely to need to change these.
   play:
-    - prerequisites
-    - deploy_cluster
+  - prerequisites
+  - deploy_cluster
 
   # Install extra stuff based on playbooks in the 'ansible/post-okd' directory.
   # These playbooks will be run on the 'cli-node', a node with a suitable
@@ -202,7 +213,7 @@ okd:
   # For each 'play' a corresponding
   # 'ansible/post-okd/playbooks/<play>/deploy.yaml' must exist.
   post_okd_play:
-    - acme-controller
+  - acme-controller
 
   # What additional OpenShift/OKD services should be enabled?
   # Add services to this list like metrics with something like:
@@ -214,8 +225,8 @@ okd:
   # - metrics
   # - prometheus
   enable:
-    - metrics
-    - prometheus
+  - metrics
+  - prometheus
 
   # Certificate definitions,
   # currently just the Master API certificate.

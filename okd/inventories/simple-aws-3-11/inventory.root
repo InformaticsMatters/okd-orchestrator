@@ -146,8 +146,12 @@ all:
             { 'name': 'node-config-master',
               'labels': ['node-role.kubernetes.io/master=true'] },
             { 'name': 'node-config-master-infra',
-              'labels': ['node-role.kubernetes.io/master=true',
-                         'node-role.kubernetes.io/infra=true'] },
+              'labels': ['node-role.kubernetes.io/infra=true',
+                         'node-role.kubernetes.io/master=true'] },
+            { 'name': 'node-config-all-in-one',
+              'labels': ['node-role.kubernetes.io/compute=true',
+                         'node-role.kubernetes.io/infra=true',
+                         'node-role.kubernetes.io/master=true'] },
             { 'name': 'node-config-infra',
               'labels': ['node-role.kubernetes.io/infra=true'] }
         ]

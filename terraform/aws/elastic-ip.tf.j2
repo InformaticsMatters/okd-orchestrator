@@ -18,6 +18,7 @@ resource "aws_eip" "master" {
   }
 }
 
+{% if not cluster.master.is_infra %}
 resource "aws_eip" "infra" {
   # Do this if an EIP has not been provided
   count = "${var.infra_fixed_ip_id == "None" && var.infra_count ? 1 : 0}"
@@ -28,6 +29,7 @@ resource "aws_eip" "infra" {
     Name = "${var.name_tag}-infra"
   }
 }
+{% endif %}
 
 # Associate pre-existing EIPs...
 # ------------------------------
@@ -40,6 +42,7 @@ resource "aws_eip_association" "master" {
   allocation_id = "${var.master_fixed_ip_id}"
 }
 
+{% if not cluster.master.is_infra %}
 resource "aws_eip_association" "infra" {
   # Do this if an EIP has been provided
   count = "${var.infra_fixed_ip_id != "None" && var.infra_count ? 1 : 0}"
@@ -47,3 +50,4 @@ resource "aws_eip_association" "infra" {
   instance_id   = "${aws_instance.infra.0.id}"
   allocation_id = "${var.infra_fixed_ip_id}"
 }
+{% endif %}

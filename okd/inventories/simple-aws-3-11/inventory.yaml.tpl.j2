@@ -37,10 +37,12 @@
               openshift_node_group_name: 'node-config-master'
 {%- endif %}
 
+{% if not cluster.master.is_infra %}
 {%- if cluster.infra.count %}
             ${infra1}:
               openshift_hostname: ${infra1_hostname}
               openshift_node_group_name: 'node-config-infra'
+{%- endif %}
 {%- endif %}
 
 {%- set node_id = namespace(a=1) -%}

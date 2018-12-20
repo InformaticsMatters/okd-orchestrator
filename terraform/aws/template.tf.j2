@@ -54,10 +54,12 @@ data "template_file" "okd_inventory" {
     infra1_hostname = "${aws_instance.infra.0.private_dns}"
     {% endif %}
 
+    {% if not cluster.master.is_infra %}
     {% for item in range(1, cluster.infra.count) %}
     infra{{ item + 1 }} = "${aws_instance.infra.{{ item }}.private_ip}"
     infra{{ item + 1 }}_hostname = "${aws_instance.infra.{{ item }}.private_dns}"
     {% endfor %}
+    {% endif %}
 
     # Compute nodes...
 

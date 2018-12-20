@@ -15,6 +15,7 @@ provider-env/setenv.sh
 # Terraform material...
 terraform/aws/bastion.tf
 terraform/aws/data.tf
+terraform/aws/elastic-ip.tf
 terraform/aws/infra.tf
 terraform/aws/master.tf
 terraform/aws/node.tf

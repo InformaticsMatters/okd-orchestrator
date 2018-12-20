@@ -27,8 +27,11 @@ name: Compact AWS Deployment (OKD 3.11) [Frankfurt]
 # A more detailed description of the deployment.
 # This is used for reporting purposes only.
 description: >
-  A combined Bastion/Master/Infra deployment with a one-node compute instance.
-  This also includes certbot certificate creation, metrics and prometheus.
+  A combined Bastion/Master/Infra/Compute deployment  where a single
+  cloud instance acts as a compute node and the bastion, master and
+  infrastructure node.
+  This example also includes certbot certificate creation,
+  metrics and prometheus.
 
 # Details of the OKD cluster configuration.
 # As well as the cluster region (provider-specific)
@@ -55,7 +58,7 @@ cluster:
   # is 'vre', nodes named 'compute' will be named 'vre-node-001-general'.
   # Use this to distinguish between nodes of different clusters in the
   # same cloud provider.
-  name_tag: vre-compact
+  name_tag: compact
   # The external IP address or domain-name of the Master node.
   # If not set the master public DNS will be used.
   # Whatever is used must provide a resolvable route to the master.
@@ -110,19 +113,29 @@ cluster:
     # If the master is to also act as the Bastion node
     # then set this field to 'yes'.
     is_bastion: yes
+    # Set if you also want the Master nod eto be a general compute node.
+    # You can omit this property.
+    # You can also make the node a general compute node after it's been created
+    # by using with the 'oc label' command: -
+    #     oc label node <node> node-role.kubernetes.io/compute=true
+    is_compute_node: yes
 
   # Details of the Infrastructure nodes.
   infra:
     # Provider-specific machine image type.
-    # Not required (and ignored) if the Master is acting as a Bastion.
-    count: 1
+    # Not required (and ignored) if the Master is acting as a Infrastructure.
+    count: 0
     # Provider-specific machine image type.
-    # Not required (and ignored) if the Master is acting as a Bastion.
-    type: t2.xlarge
+    # Not required (and ignored) if the Master is acting as a Infrastructure.
+#    type:
     # The (optional) pre-allocated public IP for the Infrastructure.
     # (See cluster.master.fixed_ip).
-    # Not required (and ignored) if the Master is acting as a Bastion.
-    fixed_ip_id: eipalloc-037f7a1943abe1174
+    # Not required (and ignored) if the Master is acting as a Infrastructure.
+#    fixed_ip_id:
+    # Set if you also want the Infrastructure nodes to act as general compute node.
+    # See master.is_compute_node
+    # Not required (and ignored) if the Master is acting as a Infrastructure.
+#    is_compute_node: no
 
   # You can define extra node groups that your nodes can be assigned to.
   # These complement the expected/built-in groups
@@ -143,19 +156,23 @@ cluster:
   #   that name the label explicitly for selection) then set this to false.
   #   By default this is 'no' so groups are not general compute nodes.
   #
-  # DYou must not use the following names,
+  # You must not use the following names,
   # which are built-in and created automatically during the installation: -
   #
   # - master
+  # - master-compute
   # - infra
+  # - infra-compute
   # - compute
   # - master-infra
   # - all-in-one
   #
-  node_groups:
-  - name: general
-    label: general-node=true
-    is_compute_node: yes
+  # You can leave this list blank if you do not need any of your own
+  # node groups.
+# node_groups:
+# - name: general
+#   label: general-node=true
+#   is_compute_node: yes
 
   # Details of the cluster compute nodes.
   # This is a list that allows you to define different node 'categories'.
@@ -173,7 +190,8 @@ cluster:
   #
   # - A 'name' used simply to tag the resource, for providers that support it.
   # - A numerical 'count' to define the number of nodes of this category to
-  #   create in the cluster.
+  #   create in the cluster. It can be zero if you do not want any
+  #   independent node groups.
   # - A provider-specific 'type' used to define the compute instance type
   #   for each node in the category. In AWS this might be 't2.medium'.
   # - A 'node_group', used to identify the OKD node group the nodes of this
@@ -185,10 +203,10 @@ cluster:
   #   (i.e 'compute'). If you want to place your node into a build-in
   #   group, you can use that group (i.e. 'compute').
   nodes:
-  - name: general
-    count: 1
-    type: t2.medium
-    node_group: general
+  - count: 0
+#   name: general
+#   type: t2.medium
+#   node_group: general
 
 # The okd section provides details of the OpenShift/OKD deployment.
 # These are high-level, abstract, configuration details,
@@ -230,6 +248,8 @@ okd:
   # We currently support:
   # - metrics
   # - prometheus
+  # - tsb (The Template Service Broker)
+  # - asb (The Ansible Service Broker)
   enable:
   - metrics
   - prometheus
@@ -264,4 +284,4 @@ okd:
   #       key: <s3-key>
   #       region: <s3-region>
   #       table: <dynamo-table-name>
-  terraform_shared_state:
+# terraform_shared_state:

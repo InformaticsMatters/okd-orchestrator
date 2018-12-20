@@ -3,6 +3,7 @@
 # -----------------------------------------------------------------------------
 
 {% for node in cluster.nodes %}
+{% if node.count %}
 
 resource "aws_instance" "node_{{ node.name }}" {
   ami = "${data.aws_ami.cluster.id}"
@@ -27,4 +28,5 @@ resource "aws_instance" "node_{{ node.name }}" {
   }
 }
 
+{% endif %}
 {% endfor %}

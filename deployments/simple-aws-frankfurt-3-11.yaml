@@ -32,8 +32,6 @@ cluster:
     count: 1
     type: t2.xlarge
     fixed_ip_id: eipalloc-010cfe12a8b8c7fa2
-    is_infra: no
-    is_bastion: no
 
   infra:
     count: 1
@@ -41,15 +39,15 @@ cluster:
     fixed_ip_id: eipalloc-037f7a1943abe1174
 
   node_groups:
-    - name: general
-      label: general-node=true
-      is_compute_node: yes
+  - name: general
+    label: general-node=true
+    is_compute_node: yes
 
   nodes:
-    - name: general
-      count: 1
-      type: t2.medium
-      node_group: general
+  - name: general
+    count: 1
+    type: t2.medium
+    node_group: general
 
 okd:
 
@@ -65,6 +63,8 @@ okd:
   enable:
   - metrics
   - prometheus
+  - tsb
+  - asb
 
   certificates:
     generate_api_cert: no

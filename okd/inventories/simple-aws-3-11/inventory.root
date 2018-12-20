@@ -11,6 +11,8 @@
 # Edit this file with extreme caution.
 # It belongs to and is written by the OKD Orchestrator
 # and it will be lost (deleted) when the cluster is destroyed.
+#
+# Do not remove this notice.
 
 all:
   children:
@@ -129,11 +131,22 @@ all:
         openshift_cluster_monitoring_operator_alertmanager_storage_enabled: false
 {%- endif %}
 
-        # Service Broker
-        # --------------
+        # Service Brokers
+        # ---------------
 
+{% if okd.enable and 'tsb' in okd.enable %}
+        template_service_broker_install: true
+{%- else %}
+        template_service_broker_install: false
+{%- endif %}
+
+{% if okd.enable and 'asb' in okd.enable %}
+        ansible_service_broker_install: true
         ansible_service_broker_image_prefix: registry.access.redhat.com/openshift3/ose-
         ansible_service_broker_registry_url: registry.access.redhat.com
+{%- else %}
+        ansible_service_broker_install: false
+{%- endif %}
 
         # Node Groups
         # -----------
@@ -145,6 +158,9 @@ all:
               'labels': ['node-role.kubernetes.io/compute=true'] },
             { 'name': 'node-config-master',
               'labels': ['node-role.kubernetes.io/master=true'] },
+            { 'name': 'node-config-master-compute',
+              'labels': ['node-role.kubernetes.io/compute=true',
+                         'node-role.kubernetes.io/master=true'] },
             { 'name': 'node-config-master-infra',
               'labels': ['node-role.kubernetes.io/infra=true',
                          'node-role.kubernetes.io/master=true'] },
@@ -152,6 +168,9 @@ all:
               'labels': ['node-role.kubernetes.io/compute=true',
                          'node-role.kubernetes.io/infra=true',
                          'node-role.kubernetes.io/master=true'] },
+            { 'name': 'node-config-infra-compute',
+              'labels': ['node-role.kubernetes.io/compute=true',
+                         'node-role.kubernetes.io/infra=true'] },
             { 'name': 'node-config-infra',
               'labels': ['node-role.kubernetes.io/infra=true'] }
         ]

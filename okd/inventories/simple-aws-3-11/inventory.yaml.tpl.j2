@@ -28,22 +28,32 @@
         nodes:
           hosts:
 {%- for item in range(cluster.master.count) %}
-{%- if cluster.master.is_infra %}
             ${master{{ '%d'|format(item + 1) }}}:
               openshift_hostname: ${master{{ '%d'|format(item + 1) }}_hostname}
-              openshift_node_group_name: 'node-config-master-infra'
+{%- if cluster.master.is_infra is defined and cluster.master.is_infra %}
+{%- if cluster.master.is_compute_node is defined and cluster.master.is_compute_node %}
+              openshift_node_group_name: 'node-config-all-in-one'
 {%- else %}
-            ${master{{ '%d'|format(item + 1) }}}:
-              openshift_hostname: ${master{{ '%d'|format(item + 1) }}_hostname}
+              openshift_node_group_name: 'node-config-master-infra'
+{%- endif %}
+{%- else %}
+{%- if cluster.master.is_compute_node is defined and cluster.master.is_compute_node %}
+              openshift_node_group_name: 'node-config-master-compute'
+{%- else %}
               openshift_node_group_name: 'node-config-master'
+{%- endif %}
 {%- endif %}
 {%- endfor -%}
 
-{% if not cluster.master.is_infra %}
+{% if cluster.master.is_infra is not defined or not cluster.master.is_infra %}
 {%- for item in range(cluster.infra.count) %}
             ${infra{{ '%d'|format(item + 1) }}}:
               openshift_hostname: ${infra{{ '%d'|format(item + 1) }}_hostname}
+{%- if cluster.infra.is_compute_node is defined and cluster.infra.is_compute_node %}
+              openshift_node_group_name: 'node-config-infra-compute'
+{%- else %}
               openshift_node_group_name: 'node-config-infra'
+{%- endif %}
 {%- endfor %}
 {%- endif %}
 
@@ -66,6 +76,7 @@
 {# --- node_groups --------------------------------------------------------- #}
 
 {% block node_groups %}
+{%- if cluster.node_groups is defined and cluster.node_groups -%}
 {%- for node_group in cluster.node_groups -%}
 {% if node_group.is_compute_node %}
             { 'name': 'node-config-{{ node_group.name }}',
@@ -76,4 +87,5 @@
               'labels': ['{{  node_group.label }}'] },
 {% endif %}
 {%- endfor -%}
+{%- endif %}
 {% endblock %}

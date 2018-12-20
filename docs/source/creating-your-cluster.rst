@@ -125,11 +125,6 @@ using the password you supplied in your ``setenv.sh`` script.
     You **must** destroy the Cluster using the orchestrator.
     So feel free to **stop** the instance, but **do not** delete it.
 
-You're connected to the bastion, when the cluster's complete you can exit
-and return  to the orchestration container::
-
-    $ exit
-
 When you're finished with the cluster you can follow the
 :doc:`destroying-your-cluster` guide to delete it.
 

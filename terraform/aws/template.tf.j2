@@ -47,7 +47,7 @@ data "template_file" "okd_inventory" {
 
     # Infrastructure nodes...
 
-    {% if not cluster.master.is_infra %}
+    {% if not cluster.master.is_infra is defined or not cluster.master.is_infra %}
     {% if cluster.infra.fixed_ip_id %}
     infra1 = "${aws_eip_association.infra.public_ip}"
     {% else %}
@@ -56,7 +56,7 @@ data "template_file" "okd_inventory" {
     infra1_hostname = "${aws_instance.infra.0.private_dns}"
     {% endif %}
 
-    {% if not cluster.master.is_infra %}
+    {% if not cluster.master.is_infra is defined or not cluster.master.is_infra %}
     {% for item in range(1, cluster.infra.count) %}
     infra{{ item + 1 }} = "${aws_instance.infra.{{ item }}.private_ip}"
     infra{{ item + 1 }}_hostname = "${aws_instance.infra.{{ item }}.private_dns}"
@@ -78,7 +78,7 @@ data "template_file" "okd_inventory" {
     # Ideally a bastion, but can be a master instance.
     # The user expects this to have the oc command-line tools installed.
 
-    {% if not cluster.master.is_bastion %}
+    {% if not cluster.master.is_bastion is defined or not cluster.master.is_bastion %}
     cli-node = "${aws_instance.bastion.public_ip}"
     {% else %}
     {% if cluster.master.fixed_ip_id %}
@@ -125,7 +125,7 @@ data "template_file" "bastion-inventory" {
   vars {
     # The Bastion instance
     # (either a separate machine or the master)
-    {% if cluster.master.is_bastion %}
+    {% if cluster.master.is_bastion is defined and cluster.master.is_bastion %}
     {% if cluster.master.fixed_ip_id %}
     bastion = "${aws_eip_association.master.0.public_ip}"
     {% else %}

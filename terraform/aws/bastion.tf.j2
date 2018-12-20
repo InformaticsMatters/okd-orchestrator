@@ -14,8 +14,6 @@ resource "aws_instance" "bastion" {
   associate_public_ip_address = true
   source_dest_check = false
 
-  count = "${var.master_is_bastion == "False" ? 1 : 0}"
-
   root_block_device {
     volume_size = 10
     volume_type = "gp2"

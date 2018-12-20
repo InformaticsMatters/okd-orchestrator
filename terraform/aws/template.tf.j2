@@ -125,7 +125,7 @@ data "template_file" "bastion-inventory" {
   vars {
     # The Bastion instance
     # (either a separate machine or the master)
-    {% if cluster.master.is_bastion is defined and cluster.master.is_bastion %}
+    {% if cluster.master.is_bastion %}
     {% if cluster.master.fixed_ip_id %}
     bastion = "${aws_eip_association.master.0.public_ip}"
     {% else %}

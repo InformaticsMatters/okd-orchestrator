@@ -61,7 +61,7 @@ all:
         openshift_docker_additional_registries: registry.access.redhat.com
         openshift_docker_insecure_registries: registry.access.redhat.com
         openshift_master_cluster_public_hostname: ${public_hostname}
-        openshift_master_default_subdomain: ${router_basename}
+        openshift_master_default_subdomain: ${default_subdomain}
         # Be aware that the router's ROUTER_SERVICE_HTTPS_PORT variable
         # is likely to be set to 443 by default. So if the router can reside
         # on the same host as the API service you'll need to avoid 443

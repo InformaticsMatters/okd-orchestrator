@@ -11,6 +11,8 @@ data "template_file" "okd_inventory" {
 
   vars {
 
+    # Console/API and default route suffix values...
+
     {% if cluster.public_hostname %}
     public_hostname = "{{ cluster.public_hostname }}"
     {% elif cluster.master.fixed_ip_id %}
@@ -19,13 +21,13 @@ data "template_file" "okd_inventory" {
     public_hostname = "${aws_eip.master.public_ip}"
     {% endif %}
 
-    {% if cluster.router_basename %}
-    router_basename = "{{ cluster.router_basename }}"
+    {% if cluster.default_subdomain %}
+    default_subdomain = "{{ cluster.default_subdomain }}"
     {% else %}
     {% if cluster.infra.fixed_ip_id %}
-    router_basename = "${aws_eip_association.infra.public_ip}"
+    default_subdomain = "${aws_eip_association.infra.public_ip}"
     {% else %}
-    router_basename = "${aws_eip.infra.public_ip}"
+    default_subdomain = "${aws_eip.infra.public_ip}"
     {% endif %}
     {% endif %}
 
@@ -74,6 +76,7 @@ data "template_file" "okd_inventory" {
 
     # The CLI node (public-facing)...
     # Ideally a bastion, but can be a master instance.
+    # The user expects this to have the oc command-line tools installed.
 
     {% if not cluster.master.is_bastion %}
     cli-node = "${aws_instance.bastion.public_ip}"

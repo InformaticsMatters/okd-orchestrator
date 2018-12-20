@@ -24,7 +24,7 @@ to orchestration.
 #.  Place the domain name routed to the master (for the OpenShift console)
     into the value for ``cluster.public_hostname``
 #.  Place the domain name that is routed to the Infrastructure/Router
-    into the value for ``cluster.router_basename``
+    into the value for ``cluster.default_subdomain``
 #.  To instruct the orchestrator to automatically generate
     certificates set the ``cluster.certificates.generate_api_cert`` value
     to ``Yes``

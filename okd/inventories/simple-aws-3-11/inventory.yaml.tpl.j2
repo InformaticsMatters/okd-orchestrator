@@ -27,22 +27,24 @@
 {% block nodes %}
         nodes:
           hosts:
+{%- for item in range(cluster.master.count) %}
 {%- if cluster.master.is_infra %}
-            ${master1}:
-              openshift_hostname: ${master1_hostname}
+            ${master{{ '%d'|format(item + 1) }}}:
+              openshift_hostname: ${master{{ '%d'|format(item + 1) }}_hostname}
               openshift_node_group_name: 'node-config-master-infra'
 {%- else %}
-            ${master1}:
-              openshift_hostname: ${master1_hostname}
+            ${master{{ '%d'|format(item + 1) }}}:
+              openshift_hostname: ${master{{ '%d'|format(item + 1) }}_hostname}
               openshift_node_group_name: 'node-config-master'
 {%- endif %}
+{%- endfor -%}
 
 {% if not cluster.master.is_infra %}
-{%- if cluster.infra.count %}
-            ${infra1}:
-              openshift_hostname: ${infra1_hostname}
+{%- for item in range(cluster.infra.count) %}
+            ${infra{{ '%d'|format(item + 1) }}}:
+              openshift_hostname: ${infra{{ '%d'|format(item + 1) }}_hostname}
               openshift_node_group_name: 'node-config-infra'
-{%- endif %}
+{%- endfor %}
 {%- endif %}
 
 {%- set node_id = namespace(a=1) -%}

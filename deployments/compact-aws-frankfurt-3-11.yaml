@@ -61,10 +61,14 @@ cluster:
   # Whatever is used must provide a resolvable route to the master.
   # So, if you have a domain, ensure it's routed to the pre-allocated
   # public IP of the master (see cluster.master.fixed_ip_id).
-  public_hostname: vre.informaticsmatters.com
-  # The external IP address or domain-name of the Infrastructure node.
-  # (see cluster.public_hostname)
-  router_basename: apps.vre.informaticsmatters.com
+  # If you use an external load balancer, you should specify the address of
+  # the external load balancer.
+  public_hostname: compact.informaticsmatters.com
+  # The external IP address or domain-name for application default routes.
+  # This is a suffix appended to application $service.$namespace routes
+  # for those that need a default. It should resolve to the Infrastructure
+  # (Router) node.
+  default_subdomain: compact.informaticsmatters.com
   # The Master API/Console Port
   api_port: 8443
 

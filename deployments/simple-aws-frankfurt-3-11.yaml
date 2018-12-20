@@ -11,7 +11,7 @@ version: 1
 
 name: Simple AWS Deployment (OKD 3.11) [Frankfurt]
 description: >
-  A simple deployment that forms separate Bastion, Master and Infra instances
+  A simple deployment that forms separate Bastion, Master and Infra instances.
   This also includes certbot certificate creation, metrics and prometheus.
 
 cluster:
@@ -21,7 +21,7 @@ cluster:
   image_prefix: okd-machine-image-311-
   name_tag: vre-simple
   public_hostname: vre.informaticsmatters.com
-  router_basename: apps.vre.informaticsmatters.com
+  default_subdomain: apps.vre.informaticsmatters.com
   api_port: 8443
 
   bastion:

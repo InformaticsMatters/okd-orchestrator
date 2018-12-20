@@ -234,6 +234,12 @@ okd:
   # corresponding 'oc' command-line utility (typically the Master).
   # The named playbooks are executed after the OKD software has been installed.
   #
+  # inspect the 'ansible/post-okd/playbooks' directory for an up-to-date
+  # catalogue. At the time of writing the OKD Orchestrator is bundled
+  # with the following: -
+  #
+  # - acme-controller
+  #
   # For each 'play' a corresponding
   # 'ansible/post-okd/playbooks/<play>/deploy.yaml' must exist.
   post_okd_play:

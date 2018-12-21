@@ -160,14 +160,6 @@ def _main(cli_args, chosen_deployment_name):
                            admin_password=okd_admin_password):
                 return False
 
-            # Simulate the final step in Terraform,
-            # i.e. exposing the bastion.
-            # Doing this simplifies things for the user
-            # i.e. "it looks and feels the same"
-
-            io.banner('terraform output ...')
-            print('bastion_ip = {}'.format(deployment.my_machines.bastion))
-
         else:
 
             # ---------
@@ -223,9 +215,20 @@ def _main(cli_args, chosen_deployment_name):
             if not rv:
                 return False
 
-        if not 'my_machines' in deployment:
+        # Now expose the Bastion's IP...
 
-            # Now expose the Bastion's IP
+        if 'my_machines' in deployment:
+
+            # Simulate the final step in Terraform,
+            # i.e. exposing the bastion.
+            # Doing this simplifies things for the user
+            # i.e. "it looks and feels the same"
+
+            io.banner('terraform output ...')
+            print('bastion_ip = {}'.format(deployment.my_machines.bastion))
+
+        else:
+
             cmd = 'terraform output' \
                   ' -state=.terraform.{}'.format(chosen_deployment_name)
             cwd = 'terraform/{}'.format(t_dir)

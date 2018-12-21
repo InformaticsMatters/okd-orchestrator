@@ -306,7 +306,14 @@ okd:
 # OKD Ansible inventory file (i.e. the file inventory.yaml.tpl that will
 # be found in the the deployment's okd.inventory_dir.
 #
-# 1.  You MUST provide 'master<N>' and 'master<N>_hostname' values for every
+# 1.  You MUST provide a value for 'cli_node' (normally the bastion or a master
+#     node). It should be a node that, after deployment, is expected to contain
+#     the oc command-line utility.
+#
+# 2.  You MUST provide a value for 'bastion' (i.e. the bastion or a master
+#     node). It is from here that the second-stage of deployment takes place.
+#
+# 3.  You MUST provide 'master<N>' and 'master<N>_hostname' values for every
 #     master that this deployment would create if it had used Terraform. So, if
 #     the deployment would create 3 Master instances you will values for
 #     'master1', 'master2', 'master3' and 'master1_hostname', 'master2_hostname'
@@ -315,10 +322,10 @@ okd:
 #       In the unlikely event that you have more than 9 masters, the 10th
 #       value is expected for 'master10'.
 #
-# 2.  Similarly you MUST provide 'infra<N>' and 'infra<N>_hostname' values for
+# 4.  Similarly you MUST provide 'infra<N>' and 'infra<N>_hostname' values for
 #     every every Infrastructure node that this deployment would create.
 #
-# 3.  You MUST provide 'node<NNN>' and 'node<NNN>_hostname' values for every
+# 5.  You MUST provide 'node<NNN>' and 'node<NNN>_hostname' values for every
 #     node that would be created where <NNN> is a zero-padded numerical value,
 #     e.g. '001'.
 #
@@ -343,19 +350,15 @@ okd:
 #       'node002' and the 'compute' nodes are expected to be named 'node003'
 #       and 'node004'.
 #
-# 4.  You MUST provide a value for 'cli_node' (normally the bastion or a master
-#     node). It should be a node that, after deployment, is expected to contain
-#     the oc command-line utility.
-#
-# 5.  You MUST provide a value for 'bastion' (i.e. the bastion or a master
-#     node). It is from here that the second-stage of deployment takes place.
-#
 # The following example illustrates the definition of a pre-exiting cluster
 # with one master, one infrastructure and 2 compute nodes.
 #
 # Modify it accordingly to suite your pre-existing cluster and deployment file.
 
 #my_machines:
+#
+#  cli_node: 10.0.1.1
+#  bastion: 10.0.1.1
 #
 #  master1: 10.0.0.1
 #  master1_hostname: master-1
@@ -367,9 +370,5 @@ okd:
 #  node001_hostname: node-1
 #  node002: 10.0.0.4
 #  node002_hostname: node-2
-#
-#  cli_node: 10.0.1.1
-#
-#  bastion: 10.0.1.1
 
 # -----------------------------------------------------------------------------

@@ -31,7 +31,7 @@ from utils import io
 _TEMPLATE_EXTENSION = '.j2'
 _PROJECT_ROOT = '.'
 _DEPLOYMENT_DIR = io.get_deployments_directory()
-_EXCLUDE = []
+_EXCLUDE = ['openshift-ansible']
 
 
 def error(message):
@@ -96,6 +96,7 @@ def find_template_files(deployment_config):
         exclude = False
         # In excluded list?
         for directory in _EXCLUDE:
+            print('root={}'.format(root))
             if root.find(directory) >= 0:
                 exclude = True
                 break

@@ -55,7 +55,7 @@ This will generate an OKD Ansible inventory file suitable for your cluster
 avoiding the Terraform stage of the deployment::
 
     $ cd okd-orchestrator
-    $ ./create.py --create my-deployment
+    $ ./create.py --cluster my-deployment
 
 Now use the ``--okd`` option to install the OKD container runtime::
 

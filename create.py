@@ -141,18 +141,19 @@ def _main(cli_args, chosen_deployment_name):
             #
             # Here we process the rendered inventory files
             # just as Terraform would do.
-            io.banner('Templating okd')
+            io.banner('Templating ...')
+            print('inventory')
             if not templater.render(deployment):
                 return False
 
-            io.banner('Templating bastion')
+            print('bastion')
             file_name = 'ansible/bastion/inventory.yaml.tpl'
             if not templater.\
                     render(deployment,
                            template_file_name=file_name):
                 return False
 
-            io.banner('Templating post-okd')
+            print('post-okd')
             file_name = 'ansible/post-okd/inventory.yaml.tpl'
             if not templater. \
                     render(deployment,

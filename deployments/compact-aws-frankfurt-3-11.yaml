@@ -347,6 +347,9 @@ okd:
 #     node). It should be a node that, after deployment, is expected to contain
 #     the oc command-line utility.
 #
+# 5.  You MUST provide a value for 'bastion' (i.e. the bastion or a master
+#     node). It is from here that the second-stage of deployment takes place.
+#
 # The following example illustrates the definition of a pre-exiting cluster
 # with one master, one infrastructure and 2 compute nodes.
 #
@@ -366,5 +369,7 @@ okd:
 #  node002_hostname: node-2
 #
 #  cli_node: 10.0.1.1
+#
+#  bastion: 10.0.1.1
 
 # -----------------------------------------------------------------------------

@@ -106,7 +106,6 @@ data "template_file" "post_okd_inventory" {
   vars {
     cli_node = "${aws_instance.master.0.private_dns}"
     admin_password = "${var.okd_admin_password}"
-    ansible_user = "centos"
   }
 }
 

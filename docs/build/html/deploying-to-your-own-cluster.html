@@ -91,6 +91,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Deploying to Your Own Cluster</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#populating-my-machines">Populating my_machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup-your-setenv-sh">Setup your setenv.sh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-create-py">Running create.py</a></li>
 </ul>
 </li>
@@ -191,6 +192,22 @@ that terraform would provide if <em>it</em> were to create the machines.</p>
 <code class="docutils literal notranslate"><span class="pre">deployments/compact-aws-frankfurt-3-11.yaml</span></code>. Look for the annotated
 <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section in the file.</p>
 </div>
+<div class="section" id="setup-your-setenv-sh">
+<h2>Setup your setenv.sh<a class="headerlink" href="#setup-your-setenv-sh" title="Permalink to this headline">¶</a></h2>
+<p>You will need the private key-pair required to ssh to your machine instances
+and create and have installed a <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> suitable
+for your environment. This is likely to include values for:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TF_VAR_keypair_name</span>
+<span class="n">TF_VAR_master_certbot_email</span>
+<span class="n">TF_VAR_okd_admin_password</span>
+<span class="n">TF_VAR_okd_developer_password</span>
+</pre></div>
+</div>
+<p>And then install the variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source provider-env/setenv.sh
+</pre></div>
+</div>
+</div>
 <div class="section" id="running-create-py">
 <h2>Running create.py<a class="headerlink" href="#running-create-py" title="Permalink to this headline">¶</a></h2>
 <p>You need to have cloned this repository onto your <em>control machine</em>
@@ -204,7 +221,7 @@ using a deployment with a correctly populated <code class="docutils literal notr
 This will generate an OKD Ansible inventory file suitable for your cluster
 avoiding the Terraform stage of the deployment:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd okd-orchestrator
-$ ./create.py --create my-deployment
+$ ./create.py --cluster my-deployment
 </pre></div>
 </div>
 <p>Now use the <code class="docutils literal notranslate"><span class="pre">--okd</span></code> option to install the OKD container runtime:</p>

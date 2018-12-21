@@ -20,6 +20,8 @@ Additionally, in case it's not obvious...
 
 -   Your cluster must have access to the *outside world* so that additional
     packages can be downloaded
+-   You must be able to SSH to the designated Bastion from your development
+    machine (i.e. where you have a copy of the orchestrator).
 -   You need to have installed ``git`` so that this repository can be
     cloned to the designated *control machine* in your cluster.
 
@@ -40,23 +42,12 @@ Instructions for how to do this can be found in the reference configuration
 ``deployments/compact-aws-frankfurt-3-11.yaml``. Look for the annotated
 ``my_machines`` section in the file.
 
-Running create.py
-=================
+Populating my_machines
+======================
 
-You need to have cloned this repository onto your *control machine*
-(essentially the Bastion or one of your Masters) and have followed the
-basic setup instructions detailed in the :doc:`getting-started` section::
+With a ``my_machines`` section populatyed the cluster setup is like any
+other...
 
-    $ git clone https://github.com/InformaticsMatters/okd-orchestrator.git
-
-Run ``create.py`` from the root of the cloned project using the
-using a deployment with a correctly populated ``my_machines`` section.
-This will generate an OKD Ansible inventory file suitable for your cluster
-avoiding the Terraform stage of the deployment::
-
-    $ cd okd-orchestrator
-    $ ./create.py --cluster my-deployment
-
-Now use the ``--okd`` option to install the OKD container runtime::
-
-    $ ./create.py --okd
+-   Setup a ``setenv.sh``
+-   Run ``create.py`` as normal using ``--cluster``, hop onto the *Bastion*
+    and run it again using the ``--okd`` option

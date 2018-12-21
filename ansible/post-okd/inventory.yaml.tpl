@@ -6,5 +6,5 @@ all:
     cli-node:
       hosts:
         ${cli_node}:
-          ansible_user: ${ansible_user}
+          ansible_user: centos
           admin_password: ${admin_password}

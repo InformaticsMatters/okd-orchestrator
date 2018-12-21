@@ -89,6 +89,11 @@ def _main(cli_args, chosen_deployment_name):
             print('Phew! That was close!')
             return True
 
+    # Some key information...
+    okd_api_hostname = deployment.cluster.public_hostname
+    okd_admin_password = os.environ[OKD_ADMIN_PASSWORD_ENV]
+    okd_api_port = deployment.cluster.api_port
+
     # -------
     # Ansible (A specific version)
     # -------
@@ -127,10 +132,32 @@ def _main(cli_args, chosen_deployment_name):
         # and the Terraform step is not needed.
         if 'my_machines' in deployment:
 
-            # here we process the rendered inventory file
-            # just as Terraform would do. And then leave.
-            io.banner('Templating')
+            # -----------------
+            # Manual Templating
+            # -----------------
+            # The user has provided their own cluster
+            # and defined it in the my_machines section
+            # of their deployment configuration.
+            #
+            # Here we process the rendered inventory files
+            # just as Terraform would do.
+            io.banner('Templating okd')
             if not templater.render(deployment):
+                return False
+
+            io.banner('Templating bastion')
+            file_name = 'ansible/bastion/inventory.yaml.tpl'
+            if not templater.\
+                    render(deployment,
+                           template_file_name=file_name):
+                return False
+
+            io.banner('Templating post-okd')
+            file_name = 'ansible/post-okd/inventory.yaml.tpl'
+            if not templater. \
+                    render(deployment,
+                           template_file_name=file_name,
+                           admin_password=okd_admin_password):
                 return False
 
         else:
@@ -279,10 +306,6 @@ def _main(cli_args, chosen_deployment_name):
         # - okd_api_hostname
         # - okd_admin
         # - okd_admin_password
-
-        okd_api_hostname = deployment.cluster.public_hostname
-        okd_admin_password = os.environ[OKD_ADMIN_PASSWORD_ENV]
-        okd_api_port = deployment.cluster.api_port
 
         extra_env = ''
         dev_password = os.environ.get(OKD_DEVELOPER_PASSWORD_ENV)

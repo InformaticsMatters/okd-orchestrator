@@ -40,6 +40,23 @@ Instructions for how to do this can be found in the reference configuration
 ``deployments/compact-aws-frankfurt-3-11.yaml``. Look for the annotated
 ``my_machines`` section in the file.
 
+Setup your setenv.sh
+====================
+
+You will need the private key-pair required to ssh to your machine instances
+and create and have installed a ``setenv.sh`` suitable
+for your environment. This is likely to include values for::
+
+    TF_VAR_keypair_name
+    TF_VAR_master_certbot_email
+    TF_VAR_okd_admin_password
+    TF_VAR_okd_developer_password
+
+
+And then install the variables::
+
+    $ source provider-env/setenv.sh
+
 Running create.py
 =================
 
@@ -55,7 +72,7 @@ This will generate an OKD Ansible inventory file suitable for your cluster
 avoiding the Terraform stage of the deployment::
 
     $ cd okd-orchestrator
-    $ ./create.py --create my-deployment
+    $ ./create.py --cluster my-deployment
 
 Now use the ``--okd`` option to install the OKD container runtime::
 

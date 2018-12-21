@@ -96,7 +96,6 @@ def find_template_files(deployment_config):
         exclude = False
         # In excluded list?
         for directory in _EXCLUDE:
-            print('root={}'.format(root))
             if root.find(directory) >= 0:
                 exclude = True
                 break

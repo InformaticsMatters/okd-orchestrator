@@ -90,7 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Deploying to Your Own Cluster</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-my-machines-deployment-section">The my_machines Deployment Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#populating-my-machines">Populating my_machines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-create-py">Running create.py</a></li>
 </ul>
 </li>
@@ -168,35 +168,41 @@ the OKD container platform. Here you just need to provide the
 details of your cluster in a short <a class="reference external" href="https://yaml.org">YAML</a> section of the deployment file.</p>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>Before you can use the orchestrator on your own cluster you must satisfy
-the system and environment requirements defined in the OKD official
-documentation. For v3.11 this can be found <a class="reference external" href="https://docs.okd.io/3.11/install/prerequisites.html">here</a>.</p>
+<p>Before you can use the orchestrator on your own cluster the cluster instances
+must satisfy the <strong>system and environment requirements</strong> defined in the
+official OKD documentation. For v3.11 this can be found <a class="reference external" href="https://docs.okd.io/3.11/install/prerequisites.html">here</a>.</p>
 <p>Additionally, in case it’s not obvious…</p>
 <ul class="simple">
 <li>Your cluster must have access to the <em>outside world</em> so that additional
 packages can be downloaded</li>
-<li>you need to have installed <code class="docutils literal notranslate"><span class="pre">git</span></code> so that this repository can be
-clones to the designated <em>control machine</em> in your cluster.</li>
+<li>You need to have installed <code class="docutils literal notranslate"><span class="pre">git</span></code> so that this repository can be
+cloned to the designated <em>control machine</em> in your cluster.</li>
 </ul>
 </div>
-<div class="section" id="the-my-machines-deployment-section">
-<h2>The my_machines Deployment Section<a class="headerlink" href="#the-my-machines-deployment-section" title="Permalink to this headline">¶</a></h2>
-<p>You need to provide a <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section in the deployment configuration.
-The values you provide are used to populate the rendered OKD inventory file,
-an automatic step when using Terraform. You essentially just have to provide
-the values that terraform would normally provide when it creates the machines.</p>
+<div class="section" id="populating-my-machines">
+<h2>Populating my_machines<a class="headerlink" href="#populating-my-machines" title="Permalink to this headline">¶</a></h2>
+<p>In order to deploy OKD to you cluster the orchestrator has to know about
+the machines that will be involved. This is achieved by adding a
+<code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section to your deployment configuration.</p>
+<p>The values you provide are used to populate the rendered OKD inventory file,
+an automatic step when using Terraform. You essentially provide the values
+that terraform would provide if <em>it</em> were to create the machines.</p>
 <p>Instructions for how to do this can be found in the reference configuration
-<code class="docutils literal notranslate"><span class="pre">deployments/compact-aws-frankfurt-3-11.yaml</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">deployments/compact-aws-frankfurt-3-11.yaml</span></code>. Look for the annotated
+<code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section in the file.</p>
 </div>
 <div class="section" id="running-create-py">
 <h2>Running create.py<a class="headerlink" href="#running-create-py" title="Permalink to this headline">¶</a></h2>
 <p>You need to have cloned this repository onto your <em>control machine</em>
 (essentially the Bastion or one of your Masters) and have followed the
-basic setup instructions detailed in the <a class="reference internal" href="getting-started.html"><span class="doc">Getting Started</span></a> section.</p>
+basic setup instructions detailed in the <a class="reference internal" href="getting-started.html"><span class="doc">Getting Started</span></a> section:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/InformaticsMatters/okd-orchestrator.git
+</pre></div>
+</div>
 <p>Run <code class="docutils literal notranslate"><span class="pre">create.py</span></code> from the root of the cloned project using the
-using a deployment with a correctly populates <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section.
-This will generate an OKD Ansible inventory file for your cluster avoiding
-the terraform stage of the deployment:</p>
+using a deployment with a correctly populated <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section.
+This will generate an OKD Ansible inventory file suitable for your cluster
+avoiding the Terraform stage of the deployment:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd okd-orchestrator
 $ ./create.py --create my-deployment
 </pre></div>

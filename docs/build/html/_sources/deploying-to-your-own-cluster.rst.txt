@@ -12,41 +12,47 @@ details of your cluster in a short `YAML`_ section of the deployment file.
 Prerequisites
 =============
 
-Before you can use the orchestrator on your own cluster you must satisfy
-the system and environment requirements defined in the OKD official
-documentation. For v3.11 this can be found `here`_.
+Before you can use the orchestrator on your own cluster the cluster instances
+must satisfy the **system and environment requirements** defined in the
+official OKD documentation. For v3.11 this can be found `here`_.
 
 Additionally, in case it's not obvious...
 
 -   Your cluster must have access to the *outside world* so that additional
     packages can be downloaded
--   you need to have installed ``git`` so that this repository can be
-    clones to the designated *control machine* in your cluster.
+-   You need to have installed ``git`` so that this repository can be
+    cloned to the designated *control machine* in your cluster.
 
 .. _here: https://docs.okd.io/3.11/install/prerequisites.html
 
-The my_machines Deployment Section
-==================================
+Populating my_machines
+======================
 
-You need to provide a ``my_machines`` section in the deployment configuration.
+In order to deploy OKD to you cluster the orchestrator has to know about
+the machines that will be involved. This is achieved by adding a
+``my_machines`` section to your deployment configuration.
+
 The values you provide are used to populate the rendered OKD inventory file,
-an automatic step when using Terraform. You essentially just have to provide
-the values that terraform would normally provide when it creates the machines.
+an automatic step when using Terraform. You essentially provide the values
+that terraform would provide if *it* were to create the machines.
 
 Instructions for how to do this can be found in the reference configuration
-``deployments/compact-aws-frankfurt-3-11.yaml``.
+``deployments/compact-aws-frankfurt-3-11.yaml``. Look for the annotated
+``my_machines`` section in the file.
 
 Running create.py
 =================
 
 You need to have cloned this repository onto your *control machine*
 (essentially the Bastion or one of your Masters) and have followed the
-basic setup instructions detailed in the :doc:`getting-started` section.
+basic setup instructions detailed in the :doc:`getting-started` section::
+
+    $ git clone https://github.com/InformaticsMatters/okd-orchestrator.git
 
 Run ``create.py`` from the root of the cloned project using the
-using a deployment with a correctly populates ``my_machines`` section.
-This will generate an OKD Ansible inventory file for your cluster avoiding
-the terraform stage of the deployment::
+using a deployment with a correctly populated ``my_machines`` section.
+This will generate an OKD Ansible inventory file suitable for your cluster
+avoiding the Terraform stage of the deployment::
 
     $ cd okd-orchestrator
     $ ./create.py --create my-deployment

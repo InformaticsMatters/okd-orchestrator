@@ -46,7 +46,6 @@ all:
         ]
 
         openshift_skip_deprecation_check: yes
-        openshift_disable_check: disk_availability,docker_storage,memory_availability
         openshift_clock_enabled: true
 
         # Enable htpasswd authentication.

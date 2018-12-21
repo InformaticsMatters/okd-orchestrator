@@ -93,6 +93,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Your Own Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
@@ -167,6 +168,8 @@ All of this can be accomplished from within the orchestrator’s Docker
 container.</p>
 <div class="section" id="creating-the-cluster">
 <h2>Creating the Cluster<a class="headerlink" href="#creating-the-cluster" title="Permalink to this headline">¶</a></h2>
+<p>If you have a pre-existing cluster you should follow the steps described in
+the <a class="reference internal" href="deploying-to-your-own-cluster.html"><span class="doc">Deploying to Your Own Cluster</span></a> section.</p>
 <p>If you haven’t done so already you need to set the password that will be
 assigned to the OpenShift <strong>admin</strong> account the orchestrator creates. Choose
 a suitable value and set it in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> script, replacing
@@ -268,11 +271,6 @@ this functionality and it likely to help will reduce your cluster costs.
 But <strong>do not</strong> <em>delete</em> the Bastion or any other cluster object.
 You <strong>must</strong> destroy the Cluster using the orchestrator.
 So feel free to <strong>stop</strong> the instance, but <strong>do not</strong> delete it.</div></blockquote>
-<p>You’re connected to the bastion, when the cluster’s complete you can exit
-and return  to the orchestration container:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ exit
-</pre></div>
-</div>
 <p>When you’re finished with the cluster you can follow the
 <a class="reference internal" href="destroying-your-cluster.html"><span class="doc">Destroying a Cluster</span></a> guide to delete it.</p>
 </div>

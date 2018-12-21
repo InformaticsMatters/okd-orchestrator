@@ -79,12 +79,12 @@ data "template_file" "okd_inventory" {
     # The user expects this to have the oc command-line tools installed.
 
     {% if not cluster.master.is_bastion is defined or not cluster.master.is_bastion %}
-    cli-node = "${aws_instance.bastion.public_ip}"
+    cli_node = "${aws_instance.bastion.public_ip}"
     {% else %}
     {% if cluster.master.fixed_ip_id %}
-    cli-node = "${aws_eip_association.master.0.public_ip}"
+    cli_node = "${aws_eip_association.master.0.public_ip}"
     {% else %}
-    cli-node = "${aws_eip.master.public_ip}"
+    cli_node = "${aws_eip.master.public_ip}"
     {% endif %}
     {% endif %}
 
@@ -104,9 +104,9 @@ data "template_file" "post_okd_inventory" {
   template = "${file("${var.ansible_dir}/post-okd/inventory.yaml.tpl")}"
 
   vars {
-    cli-node = "${aws_instance.master.0.private_dns}"
-    admin-password = "${var.okd_admin_password}"
-    ansible-user = "centos"
+    cli_node = "${aws_instance.master.0.private_dns}"
+    admin_password = "${var.okd_admin_password}"
+    ansible_user = "centos"
   }
 }
 

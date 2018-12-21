@@ -5,6 +5,6 @@ all:
 
     cli-node:
       hosts:
-        ${cli-node}:
-          ansible_user: ${ansible-user}
-          admin_password: ${admin-password}
+        ${cli_node}:
+          ansible_user: ${ansible_user}
+          admin_password: ${admin_password}

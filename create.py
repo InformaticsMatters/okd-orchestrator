@@ -8,12 +8,13 @@ from __future__ import print_function
 import argparse
 from builtins import input
 import codecs
+from munch import Munch
 import os
 import sys
 
 import yaml
 
-from utils import io
+from utils import io, templater
 
 # Environment variable used to hold the OKD admin and developer passwords.
 OKD_ADMIN_PASSWORD_ENV = 'TF_VAR_okd_admin_password'
@@ -47,7 +48,7 @@ def _main(cli_args, chosen_deployment_name):
               format(chosen_deployment_name))
         return False
     with codecs.open(file, 'r', 'utf8') as stream:
-        deployment = yaml.load(stream)
+        deployment = Munch.fromDict(yaml.load(stream))
 
     # First check:
     # is the version present
@@ -55,17 +56,17 @@ def _main(cli_args, chosen_deployment_name):
     if 'version' not in deployment:
         print('The deployment configuration has no version.')
         return False
-    if deployment['version'] not in SUPPORTED_DEPLOYMENT_VERSIONS:
+    if deployment.version not in SUPPORTED_DEPLOYMENT_VERSIONS:
         supported_versions = str(SUPPORTED_DEPLOYMENT_VERSIONS[0])
         for version in SUPPORTED_DEPLOYMENT_VERSIONS[1:]:
             supported_versions += ', {}'.format(version)
         print('The deployment configuration file version ({})'
-              ' is not supported.'.format(deployment['version']))
+              ' is not supported.'.format(deployment.version))
         print('Supported versions are: {}'.format(supported_versions))
         return False
 
     # There must be an okd/inventories directory
-    inventory_dir = deployment['okd']['inventory_dir']
+    inventory_dir = deployment.okd.inventory_dir
     if not os.path.isdir('okd/inventories/{}'.format(inventory_dir)):
         print('Missing "okd/inventories" directory')
         print('Expected to find the inventory directory "{}"'
@@ -76,7 +77,7 @@ def _main(cli_args, chosen_deployment_name):
     # -----
     # Hello
     # -----
-    io.banner(deployment['name'], full_heading=True, quiet=False)
+    io.banner(deployment.name, full_heading=True, quiet=False)
     if not cli_args.auto_acknowledge and not cli_args.just_plan:
 
         confirmation_word = io.get_confirmation_word()
@@ -99,12 +100,12 @@ def _main(cli_args, chosen_deployment_name):
         return False
 
     cmd = 'pip install ansible=={} --user'. \
-        format(deployment['okd']['ansible_version'])
+        format(deployment.okd.ansible_version)
     rv, _ = io.run(cmd, '.', cli_args.quiet)
     if not rv:
         return False
 
-    t_dir = deployment['okd']['terraform_dir']
+    t_dir = deployment.okd.terraform_dir
     if cli_args.cluster:
 
         # ------
@@ -121,12 +122,23 @@ def _main(cli_args, chosen_deployment_name):
             if not rv:
                 return False
 
-        # ---------
-        # Terraform
-        # ---------
-        # Create compute instances for the cluster.
+        # If the deployment file has a 'my_machines' section
+        # then we assume the user's provided their own cluster
+        # and the Terraform step is not needed.
+        if 'my_machines' in deployment:
 
-        if not cli_args.skip_terraform:
+            # here we process the rendered inventory file
+            # just as Terraform would do. And then leave.
+            io.banner('Templating')
+            if not templater.render(deployment):
+                return False
+
+        else:
+
+            # ---------
+            # Terraform
+            # ---------
+            # Create compute instances for the cluster.
 
             cmd = 'terraform init'
             cwd = 'terraform/{}'.format(t_dir)
@@ -144,9 +156,9 @@ def _main(cli_args, chosen_deployment_name):
             if not rv:
                 return False
 
-            if cli_args.just_plan:
-                # Just plan means just that...
-                return True
+        if cli_args.just_plan:
+            # Just plan means just that...
+            return True
 
         # -------
         # Ansible
@@ -156,11 +168,11 @@ def _main(cli_args, chosen_deployment_name):
         if not cli_args.skip_pre_okd:
 
             extra_env = ''
-            if deployment['okd']['certificates']['generate_api_cert']:
+            if deployment.okd.certificates.generate_api_cert:
                 extra_env += ' -e master_cert_email="{}"'. \
                     format(os.environ['TF_VAR_master_certbot_email'])
                 extra_env += ' -e public_hostname="{}"'. \
-                    format(deployment['cluster']['public_hostname'])
+                    format(deployment.cluster.public_hostname)
             if OKD_DEPLOYMENTS_DIRECTORY != 'deployments':
                 extra_env += ' -e deployments_directory="{}"'.\
                     format(OKD_DEPLOYMENTS_DIRECTORY)
@@ -176,7 +188,7 @@ def _main(cli_args, chosen_deployment_name):
             if not rv:
                 return False
 
-        if not cli_args.skip_terraform:
+        if not 'my_machines' in deployment:
 
             # Now expose the Bastion's IP
             cmd = 'terraform output' \
@@ -211,7 +223,7 @@ def _main(cli_args, chosen_deployment_name):
 
     # Checkout the required OpenShift Ansible TAG
     cmd = 'git checkout tags/{}'. \
-        format(deployment['okd']['ansible_tag'])
+        format(deployment.okd.ansible_tag)
     cwd = 'openshift-ansible'
     rv, _ = io.run(cmd, cwd, cli_args.quiet)
     if not rv:
@@ -224,9 +236,9 @@ def _main(cli_args, chosen_deployment_name):
     if not cli_args.skip_pre_okd:
 
         extra_env = ''
-        if deployment['okd']['certificates']['generate_api_cert']:
+        if deployment.okd.certificates.generate_api_cert:
             extra_env += ' -e public_hostname={}'. \
-                format(deployment['cluster']['public_hostname'])
+                format(deployment.cluster.public_hostname)
         cmd = 'ansible-playbook site.yaml' \
               ' {}' \
               ' -i ../../okd/inventories/{}/inventory.yaml'.\
@@ -244,7 +256,7 @@ def _main(cli_args, chosen_deployment_name):
 
     if not cli_args.skip_okd:
 
-        for play in deployment['okd']['play']:
+        for play in deployment.okd.play:
             cmd = 'ansible-playbook ../openshift-ansible/playbooks/{}.yml' \
                   ' -i inventories/{}/inventory.yaml'.\
                 format(play, inventory_dir)
@@ -268,9 +280,9 @@ def _main(cli_args, chosen_deployment_name):
         # - okd_admin
         # - okd_admin_password
 
-        okd_api_hostname = deployment['cluster']['public_hostname']
+        okd_api_hostname = deployment.cluster.public_hostname
         okd_admin_password = os.environ[OKD_ADMIN_PASSWORD_ENV]
-        okd_api_port = deployment['cluster']['api_port']
+        okd_api_port = deployment.cluster.api_port
 
         extra_env = ''
         dev_password = os.environ.get(OKD_DEVELOPER_PASSWORD_ENV)
@@ -291,7 +303,7 @@ def _main(cli_args, chosen_deployment_name):
 
         # Now iterate through the plays listed in the cluster's
         # 'post_okd_play' list.
-        for play in deployment['okd']['post_okd_play']:
+        for play in deployment.okd.post_okd_play:
             cmd = 'ansible-playbook playbooks/{}/deploy.yaml' \
                 ' -e okd_api_hostname=https://{}:{}' \
                 ' -e okd_admin=admin' \
@@ -350,10 +362,6 @@ if __name__ == '__main__':
                         help='Skip the Jinja2 rendering stage',
                         action='store_true')
 
-    PARSER.add_argument('-st', '--skip-terraform',
-                        help='Skip the terraform stage',
-                        action='store_true')
-
     PARSER.add_argument('-spr', '--skip-pre-okd',
                         help='Skip the Pre-OpenShift/OKD deployment stage',
                         action='store_true')
@@ -388,9 +396,6 @@ if __name__ == '__main__':
         ARGS.okd = True
     if ARGS.just_plan and not ARGS.cluster:
         io.error('Must specify --cluster if using --skip-plan')
-        sys.exit(1)
-    if ARGS.just_plan and ARGS.skip_terraform:
-        io.error('Must --just-plan and --skip-terraform makes no sense')
         sys.exit(1)
 
     # The OKD admin password must be set.

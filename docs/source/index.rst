@@ -2,13 +2,18 @@
 The OKD Orchestrator
 ####################
 
-A Cluster Orchestrator for OpenShift Origin (OKD) v3.11 and beyond.
+..  image:: ../images/vintage-1318361_1280.jpg
+
+A Container Runtime Orchestrator for the Origin Community Distribution of
+Kubernetes (`OKD`_) v3.11 and beyond.
+
 A project sponsored by `OpenRiskNet`_.
 
 .. epigraph::
 
-   OpenRiskNet: Open e-Infrastructure to Support Data Sharing,
-   Knowledge Integration and in silico Analysis and Modelling in Risk Assessment
+   *OpenRiskNet: Open e-Infrastructure to Support Data Sharing,
+   Knowledge Integration and in silico Analysis and Modelling in Risk
+   Assessment*
 
    -- Project Number 731075
 
@@ -26,6 +31,7 @@ A project sponsored by `OpenRiskNet`_.
     generating-site-certificates
     creating-your-cluster
     destroying-your-cluster
+    deploying-to-your-own-cluster
     environment-variables
     faq
 

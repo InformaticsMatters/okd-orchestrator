@@ -12,6 +12,9 @@ container.
 Creating the Cluster
 ====================
 
+If you have a pre-existing cluster you should follow the steps described in
+the :doc:`deploying-to-your-own-cluster` section.
+
 If you haven't done so already you need to set the password that will be
 assigned to the OpenShift **admin** account the orchestrator creates. Choose
 a suitable value and set it in your ``setenv.sh`` script, replacing
@@ -124,11 +127,6 @@ using the password you supplied in your ``setenv.sh`` script.
     But **do not** *delete* the Bastion or any other cluster object.
     You **must** destroy the Cluster using the orchestrator.
     So feel free to **stop** the instance, but **do not** delete it.
-
-You're connected to the bastion, when the cluster's complete you can exit
-and return  to the orchestration container::
-
-    $ exit
 
 When you're finished with the cluster you can follow the
 :doc:`destroying-your-cluster` guide to delete it.

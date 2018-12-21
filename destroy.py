@@ -8,6 +8,7 @@ from __future__ import print_function
 import argparse
 from builtins import input
 import codecs
+from munch import Munch
 import os
 import sys
 
@@ -38,10 +39,10 @@ def _main(cli_args, chosen_deployment_name):
                   format(chosen_deployment_name)))
         return False
     with codecs.open(file, 'r', 'utf8') as stream:
-        deployment = yaml.load(stream)
+        deployment = Munch.fromDict(yaml.load(stream))
 
     # There must be an okd/inventories directory
-    inventory_dir = deployment['okd']['inventory_dir']
+    inventory_dir = deployment.okd.inventory_dir
     if not os.path.isdir('okd/inventories/{}'.format(inventory_dir)):
         io.error('Missing "okd/inventories" directory')
         print('Expected to find the directory "{}" but it was not there.'.
@@ -52,7 +53,7 @@ def _main(cli_args, chosen_deployment_name):
     # -----
     # Hello
     # -----
-    io.banner(deployment['name'], full_heading=True, quiet=False)
+    io.banner(deployment.name, full_heading=True, quiet=False)
 
     if not cli_args.now:
 
@@ -74,14 +75,14 @@ def _main(cli_args, chosen_deployment_name):
     # ---------
     # Destroy the cluster.
 
-    t_dir = deployment['okd']['terraform_dir']
+    t_dir = deployment.okd.terraform_dir
     cmd = 'terraform init'
     cwd = 'terraform/{}'.format(t_dir)
     rv = io.run(cmd, cwd, cli_args.quiet)
     if not rv:
         return False
 
-    t_dir = deployment['okd']['terraform_dir']
+    t_dir = deployment.okd.terraform_dir
     cmd = 'terraform destroy -force -state=.terraform.{}'.\
         format(chosen_deployment_name)
     cwd = 'terraform/{}'.format(t_dir)

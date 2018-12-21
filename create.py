@@ -160,6 +160,14 @@ def _main(cli_args, chosen_deployment_name):
                            admin_password=okd_admin_password):
                 return False
 
+            # Simulate the final step in Terraform,
+            # i.e. exposing the bastion.
+            # Doing this simplifies things for the user
+            # i.e. "it looks and feels the same"
+
+            io.banner('terraform output ...')
+            print('bastion_ip = {}'.format(deployment.my_machines.bastion))
+
         else:
 
             # ---------

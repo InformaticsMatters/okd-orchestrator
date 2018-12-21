@@ -20,6 +20,8 @@ Additionally, in case it's not obvious...
 
 -   Your cluster must have access to the *outside world* so that additional
     packages can be downloaded
+-   You must be able to SSH to the designated Bastion from your development
+    machine (i.e. where you have a copy of the orchestrator).
 -   You need to have installed ``git`` so that this repository can be
     cloned to the designated *control machine* in your cluster.
 
@@ -40,40 +42,15 @@ Instructions for how to do this can be found in the reference configuration
 ``deployments/compact-aws-frankfurt-3-11.yaml``. Look for the annotated
 ``my_machines`` section in the file.
 
-Setup your setenv.sh
-====================
+Deploying OKD
+=============
 
-You will need the private key-pair required to ssh to your machine instances
-and create and have installed a ``setenv.sh`` suitable
-for your environment. This is likely to include values for::
+With a ``my_machines`` section populated, the cluster setup is like any
+other...
 
-    TF_VAR_keypair_name
-    TF_VAR_master_certbot_email
-    TF_VAR_okd_admin_password
-    TF_VAR_okd_developer_password
+-   Setup a ``setenv.sh``
+-   Run ``create.py`` as normal using ``--cluster`` from your development
+    environment. Then hop onto the *Bastion* and run it again using the
+    ``--okd`` option
 
-
-And then install the variables::
-
-    $ source provider-env/setenv.sh
-
-Running create.py
-=================
-
-You need to have cloned this repository onto your *control machine*
-(essentially the Bastion or one of your Masters) and have followed the
-basic setup instructions detailed in the :doc:`getting-started` section::
-
-    $ git clone https://github.com/InformaticsMatters/okd-orchestrator.git
-
-Run ``create.py`` from the root of the cloned project using the
-using a deployment with a correctly populated ``my_machines`` section.
-This will generate an OKD Ansible inventory file suitable for your cluster
-avoiding the Terraform stage of the deployment::
-
-    $ cd okd-orchestrator
-    $ ./create.py --cluster my-deployment
-
-Now use the ``--okd`` option to install the OKD container runtime::
-
-    $ ./create.py --okd
+Just follow the instructions in the :doc:`creating-your-cluster` section.

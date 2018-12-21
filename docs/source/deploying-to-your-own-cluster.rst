@@ -42,12 +42,15 @@ Instructions for how to do this can be found in the reference configuration
 ``deployments/compact-aws-frankfurt-3-11.yaml``. Look for the annotated
 ``my_machines`` section in the file.
 
-Populating my_machines
-======================
+Deploying OKD
+=============
 
-With a ``my_machines`` section populatyed the cluster setup is like any
+With a ``my_machines`` section populated, the cluster setup is like any
 other...
 
 -   Setup a ``setenv.sh``
--   Run ``create.py`` as normal using ``--cluster``, hop onto the *Bastion*
-    and run it again using the ``--okd`` option
+-   Run ``create.py`` as normal using ``--cluster`` from your development
+    environment. Then hop onto the *Bastion* and run it again using the
+    ``--okd`` option
+
+Just follow the instructions in the :doc:`creating-your-cluster` section.

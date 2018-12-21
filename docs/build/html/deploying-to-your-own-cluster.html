@@ -91,8 +91,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Deploying to Your Own Cluster</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#populating-my-machines">Populating my_machines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#setup-your-setenv-sh">Setup your setenv.sh</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-create-py">Running create.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deploying-okd">Deploying OKD</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
@@ -176,6 +175,8 @@ official OKD documentation. For v3.11 this can be found <a class="reference exte
 <ul class="simple">
 <li>Your cluster must have access to the <em>outside world</em> so that additional
 packages can be downloaded</li>
+<li>You must be able to SSH to the designated Bastion from your development
+machine (i.e. where you have a copy of the orchestrator).</li>
 <li>You need to have installed <code class="docutils literal notranslate"><span class="pre">git</span></code> so that this repository can be
 cloned to the designated <em>control machine</em> in your cluster.</li>
 </ul>
@@ -192,42 +193,17 @@ that terraform would provide if <em>it</em> were to create the machines.</p>
 <code class="docutils literal notranslate"><span class="pre">deployments/compact-aws-frankfurt-3-11.yaml</span></code>. Look for the annotated
 <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section in the file.</p>
 </div>
-<div class="section" id="setup-your-setenv-sh">
-<h2>Setup your setenv.sh<a class="headerlink" href="#setup-your-setenv-sh" title="Permalink to this headline">¶</a></h2>
-<p>You will need the private key-pair required to ssh to your machine instances
-and create and have installed a <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> suitable
-for your environment. This is likely to include values for:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TF_VAR_keypair_name</span>
-<span class="n">TF_VAR_master_certbot_email</span>
-<span class="n">TF_VAR_okd_admin_password</span>
-<span class="n">TF_VAR_okd_developer_password</span>
-</pre></div>
-</div>
-<p>And then install the variables:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source provider-env/setenv.sh
-</pre></div>
-</div>
-</div>
-<div class="section" id="running-create-py">
-<h2>Running create.py<a class="headerlink" href="#running-create-py" title="Permalink to this headline">¶</a></h2>
-<p>You need to have cloned this repository onto your <em>control machine</em>
-(essentially the Bastion or one of your Masters) and have followed the
-basic setup instructions detailed in the <a class="reference internal" href="getting-started.html"><span class="doc">Getting Started</span></a> section:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/InformaticsMatters/okd-orchestrator.git
-</pre></div>
-</div>
-<p>Run <code class="docutils literal notranslate"><span class="pre">create.py</span></code> from the root of the cloned project using the
-using a deployment with a correctly populated <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section.
-This will generate an OKD Ansible inventory file suitable for your cluster
-avoiding the Terraform stage of the deployment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd okd-orchestrator
-$ ./create.py --cluster my-deployment
-</pre></div>
-</div>
-<p>Now use the <code class="docutils literal notranslate"><span class="pre">--okd</span></code> option to install the OKD container runtime:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./create.py --okd
-</pre></div>
-</div>
+<div class="section" id="deploying-okd">
+<h2>Deploying OKD<a class="headerlink" href="#deploying-okd" title="Permalink to this headline">¶</a></h2>
+<p>With a <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section populated, the cluster setup is like any
+other…</p>
+<ul class="simple">
+<li>Setup a <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code></li>
+<li>Run <code class="docutils literal notranslate"><span class="pre">create.py</span></code> as normal using <code class="docutils literal notranslate"><span class="pre">--cluster</span></code> from your development
+environment. Then hop onto the <em>Bastion</em> and run it again using the
+<code class="docutils literal notranslate"><span class="pre">--okd</span></code> option</li>
+</ul>
+<p>Just follow the instructions in the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a> section.</p>
 </div>
 </div>
 

@@ -33,6 +33,8 @@ description: >
   This example also includes certbot certificate creation,
   metrics and prometheus.
 
+# --- cluster -----------------------------------------------------------------
+
 # Details of the OKD cluster configuration.
 # As well as the cluster region (provider-specific)
 # and its hostname the size and machine details of the OKD
@@ -291,3 +293,82 @@ okd:
   #       region: <s3-region>
   #       table: <dynamo-table-name>
 # terraform_shared_state:
+
+# --- my_machines -------------------------------------------------------------
+
+# The 'my_machines' section is used when you're running the orchestrator
+# on a pre-existing cluster rather than utilising the orchestrator's
+# terraform-based cluster formation. If you provide a 'my_machines' section
+# it will be processed instead of running Terraform.
+#
+# If this deployment is for a pre-existing cluster you must provide
+# values that will be used to replace the interpolations in the corresponding
+# OKD Ansible inventory file (i.e. the file inventory.yaml.tpl that will
+# be found in the the deployment's okd.inventory_dir.
+#
+# 1.  You MUST provide a value for 'cli_node' (normally the bastion or a master
+#     node). It should be a node that, after deployment, is expected to contain
+#     the oc command-line utility.
+#
+# 2.  You MUST provide a value for 'bastion' (i.e. the bastion or a master
+#     node). It is from here that the second-stage of deployment takes place.
+#
+# 3.  You MUST provide 'master<N>' and 'master<N>_hostname' values for every
+#     master that this deployment would create if it had used Terraform. So, if
+#     the deployment would create 3 Master instances you will values for
+#     'master1', 'master2', 'master3' and 'master1_hostname', 'master2_hostname'
+#     and 'master3_hostname.
+#
+#       In the unlikely event that you have more than 9 masters, the 10th
+#       value is expected for 'master10'.
+#
+# 4.  Similarly you MUST provide 'infra<N>' and 'infra<N>_hostname' values for
+#     every every Infrastructure node that this deployment would create.
+#
+# 5.  You MUST provide 'node<NNN>' and 'node<NNN>_hostname' values for every
+#     node that would be created where <NNN> is a zero-padded numerical value,
+#     e.g. '001'.
+#
+#       Importantly, if you are creating nodes of differing category
+#       i.e. where one set of nodes has node.name of 'general' and one category
+#       has a node.name of 'compute' then you need to keep in mind that the
+#       nodes are created in the order they're placed in the 'cluster.nodes'
+#       list. For example, in the following node definition...
+#
+#         cluster:
+#           nodes:
+#             - count: 2
+#               name: general
+#               type: t2.medium
+#               node_group: general
+#             - count: 2
+#               name: compute
+#               type: t2.medium
+#               node_group: compute
+#
+#       The 'general' nodes will be expected to be named 'node001' and
+#       'node002' and the 'compute' nodes are expected to be named 'node003'
+#       and 'node004'.
+#
+# The following example illustrates the definition of a pre-exiting cluster
+# with one master, one infrastructure and 2 compute nodes.
+#
+# Modify it accordingly to suite your pre-existing cluster and deployment file.
+
+#my_machines:
+#
+#  cli_node: 10.0.1.1
+#  bastion: 10.0.1.1
+#
+#  master1: 10.0.0.1
+#  master1_hostname: master-1
+#
+#  infra1: 10.0.0.2
+#  infra1_hostname: infra-1
+#
+#  node001: 10.0.0.3
+#  node001_hostname: node-1
+#  node002: 10.0.0.4
+#  node002_hostname: node-2
+
+# -----------------------------------------------------------------------------

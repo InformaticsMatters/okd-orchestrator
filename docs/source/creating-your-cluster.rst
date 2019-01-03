@@ -12,6 +12,9 @@ container.
 Creating the Cluster
 ====================
 
+If you have a pre-existing cluster you should follow the steps described in
+the :doc:`deploying-to-your-own-cluster` section.
+
 If you haven't done so already you need to set the password that will be
 assigned to the OpenShift **admin** account the orchestrator creates. Choose
 a suitable value and set it in your ``setenv.sh`` script, replacing

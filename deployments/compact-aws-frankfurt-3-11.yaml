@@ -149,8 +149,8 @@ cluster:
   #
   # - An arbitrary and unique 'name' (following standard variable conventions).
   #   Stick to letters, numbers and '_'
-  # - A 'label' string that's essentially a 'keyword=value' pair.
-  #   The label is used for Pod node selection.
+  # - A set of 'labels' that are essentially 'keyword=value' pairs.
+  #   The labels are used for Pod node selection.
   # - An 'is_compute_node' flag. If this evaluates to true
   #   the node is also treated by OKD as a generally available
   #   compute node where Pods can be scheduled using default rules.
@@ -173,7 +173,8 @@ cluster:
   # node groups.
 # node_groups:
 # - name: general
-#   label: general-node=true
+#   labels:
+#   - general-node=true
 #   is_compute_node: yes
 
   # Details of the cluster compute nodes.

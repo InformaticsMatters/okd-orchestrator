@@ -41,7 +41,9 @@ cluster:
 
   node_groups:
   - name: general
-    label: general-node=true
+    labels:
+    - general-node=true
+    - super-node=true
     is_compute_node: yes
 
   nodes:

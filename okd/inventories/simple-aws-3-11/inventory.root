@@ -36,7 +36,7 @@ all:
         openshift_pkg_version: -3.11.0
 
         # A fix for 3.11 to avoid problems with missing Centos repos
-        # (not fixed by the prerequisites playbook)...
+        # (not fixed by the prerequisites playbook)...
         openshift_additional_repos: [
             { 'id': 'centos-okd-ci',
               'name': 'centos-okd-ci',
@@ -209,4 +209,4 @@ all:
 
     cli-node:
       hosts:
-        ${cli-node}:
+        ${cli_node}:

@@ -98,6 +98,7 @@
 <li class="toctree-l1"><a class="reference internal" href="generating-site-certificates.html">Generating SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Your Own Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
@@ -175,7 +176,7 @@ your own deployment configurations without being disturbed by changes in this,
 the upstream project.</p>
 <p>Here we’re going to deploy an example OKD 3.11 release on a small cluster at
 AWS. The deployment configuration is called <code class="docutils literal notranslate"><span class="pre">compact-aws-frankfurt-3-11</span></code>.</p>
-<p>The orchestrator will be creating the bastion node, the cluster network,
+<p>The orchestrator will be creating the the cluster network,
 the cluster and installing OpenShift/OKD, all from within a Docker container
 hosting the orchestrator’s run-time tools.</p>
 <p>At the end we’ll tear-down the cluster using the orchestrator.</p>

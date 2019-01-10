@@ -31,7 +31,7 @@ from utils import io
 _TEMPLATE_EXTENSION = '.j2'
 _PROJECT_ROOT = '.'
 _DEPLOYMENT_DIR = io.get_deployments_directory()
-_EXCLUDE = []
+_EXCLUDE = ['openshift-ansible']
 
 
 def error(message):

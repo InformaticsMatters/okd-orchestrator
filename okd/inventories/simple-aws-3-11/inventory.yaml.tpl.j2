@@ -75,17 +75,19 @@
 
 {# --- node_groups --------------------------------------------------------- #}
 
-{% block node_groups %}
+{%- block node_groups %}
 {%- if cluster.node_groups is defined and cluster.node_groups -%}
-{%- for node_group in cluster.node_groups -%}
-{% if node_group.is_compute_node %}
+{%- for node_group in cluster.node_groups %}
             { 'name': 'node-config-{{ node_group.name }}',
+{%- if node_group.is_compute_node %}
               'labels': ['node-role.kubernetes.io/compute=true',
-                         '{{  node_group.label }}'] },
-{% else %}
-            { 'name': 'node-config-{{ node_group.name }}',
-              'labels': ['{{  node_group.label }}'] },
-{% endif %}
+{%- else %}
+              'labels': [
+{%- endif %}
+{%- for label in node_group.labels %}
+                         '{{ label }}'{{ "," if not loop.last }}
+{%- endfor -%}
+                        ] },
 {%- endfor -%}
 {%- endif %}
-{% endblock %}
+{%- endblock %}

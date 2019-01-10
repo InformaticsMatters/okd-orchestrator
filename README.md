@@ -47,7 +47,16 @@ accomplish this using the following command sequence: -
 
 See GitHub's help on the topic in its [Syncing a fork] page.
 
+## Image attribution
+
+The orchestrator banner [image] is provided courtesy of [pixaby] under the
+Creative Commons ([CC0]) licence, free for commercial use and no
+attribution is required.
+
 ---
 
+[cc0]: https://creativecommons.org/publicdomain/zero/1.0/deed.en
 [github pages]: https://demo.informaticsmatters.com/okd-orchestrator/
+[image]: https://pixabay.com/en/vintage-retro-silhouette-black-1318361/
+[pixaby]: https://pixabay.com
 [syncing a fork]: https://help.github.com/articles/syncing-a-fork/

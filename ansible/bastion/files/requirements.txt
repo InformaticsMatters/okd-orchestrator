@@ -3,3 +3,6 @@ jmespath == 0.9.3
 
 # For openshift_metrics task...
 passlib == 1.7.1
+
+# For the orchestrator...
+munch == 2.3.2

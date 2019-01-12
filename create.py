@@ -8,7 +8,7 @@ from __future__ import print_function
 import argparse
 from builtins import input
 import codecs
-from munch import Munch
+from munch import DefaultMunch
 import os
 import sys
 
@@ -48,7 +48,7 @@ def _main(cli_args, chosen_deployment_name):
               format(chosen_deployment_name))
         return False
     with codecs.open(file, 'r', 'utf8') as stream:
-        deployment = Munch.fromDict(yaml.load(stream))
+        deployment = DefaultMunch.fromDict(yaml.load(stream))
 
     # First check:
     # is the version present
@@ -313,7 +313,7 @@ def _main(cli_args, chosen_deployment_name):
         # Always run the 'site' playbook
         # This adds the OKD admin and (optional) developer user accounts.
         #
-        # The following variables made available: -
+        # The following variables are made available to all the playbooks: -
         #
         # - okd_api_hostname
         # - okd_admin
@@ -337,15 +337,25 @@ def _main(cli_args, chosen_deployment_name):
             return False
 
         # Now iterate through the plays listed in the cluster's
-        # 'post_okd_play' list.
-        for play in deployment.okd.post_okd_play:
+        # 'post_okd' list...
+
+        for play in deployment.okd.post_okd:
+            # Any user-defined 'extra' variables?
+            play_vars = ''
+            if play.vars:
+                for var in play.vars:
+                    play_vars += '-e {} '.format(var)
+                play_vars = play_vars[:-1]
+            # Run the user playbook...
             cmd = 'ansible-playbook playbooks/{}/deploy.yaml' \
                 ' -e okd_api_hostname=https://{}:{}' \
                 ' -e okd_admin=admin' \
-                ' -e okd_admin_password={}'.\
-                format(play,
+                ' -e okd_admin_password={}' \
+                ' {}'.\
+                format(play.play,
                        okd_api_hostname, okd_api_port,
-                       okd_admin_password)
+                       okd_admin_password,
+                       play_vars)
             cwd = 'ansible/post-okd'
             rv, _ = io.run(cmd, cwd, cli_args.quiet)
             if not rv:

@@ -54,14 +54,14 @@ cluster:
 
 okd:
 
-  ansible_tag: openshift-ansible-3.11.58-1
+  ansible_tag: openshift-ansible-3.11.68-1
   ansible_version: 2.7.5
   play:
   - prerequisites
   - deploy_cluster
 
-  post_okd_play:
-  - acme-controller
+  post_okd:
+  - play: acme-controller
 
   enable:
   - metrics

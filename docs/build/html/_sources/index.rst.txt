@@ -33,6 +33,7 @@ A project sponsored by `OpenRiskNet`_.
     destroying-your-cluster
     deploying-to-your-own-cluster
     environment-variables
+    advanced/advanced-topics
     faq
 
 The **OKD Orchestrator** is a tool to simplify the cloud-deployment of

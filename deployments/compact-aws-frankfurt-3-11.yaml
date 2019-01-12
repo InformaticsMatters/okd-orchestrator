@@ -219,7 +219,7 @@ okd:
 
   # The version tag for OpenShift Origin/OKD ansible playbooks.
   # This must be a valid tag in the OpenShift git repository.
-  ansible_tag: openshift-ansible-3.11.58-1
+  ansible_tag: openshift-ansible-3.11.68-1
   # The version of Ansible required to deploy the cluster.
   # The orchestrator will ensure that the correct version of
   # ansible is installed. v2.7.5 is likely to be suitable for
@@ -245,8 +245,25 @@ okd:
   #
   # For each 'play' a corresponding
   # 'ansible/post-okd/playbooks/<play>/deploy.yaml' must exist.
-  post_okd_play:
-  - acme-controller
+  #
+  # The orchestrator provides three key system variables that playbooks
+  # can utilise. They are the Master's API URL, the cluster admin user
+  # and its password: -
+  #
+  # - okd_api_hostname
+  # - okd_admin
+  # - okd_admin_password
+  #
+  # Additional variables can be passed to playbooks with a 'vars' list.
+  # For example, if you want to provide playbook variables 'x=1' and
+  # 'y=2' you can add the following the the play section: -
+  #
+  # vars:
+  # - x=1
+  # - y=2
+  post_okd:
+  - play: acme-controller
+  - play: add-users
 
   # What additional OpenShift/OKD services should be enabled?
   # Add services to this list like metrics with something like:

@@ -2,7 +2,7 @@
 The OKD Orchestrator
 ####################
 
-..  image:: ../images/vintage-1318361_1280.jpg
+..  image:: ../images/vintage-1318361_1280.png
 
 A Container Runtime Orchestrator for the Origin Community Distribution of
 Kubernetes (`OKD`_) v3.11 and beyond.

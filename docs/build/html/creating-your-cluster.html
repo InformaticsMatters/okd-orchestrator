@@ -95,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Your Own Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced/advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
 
@@ -200,7 +201,7 @@ Enter &quot;yes&quot; to CREATE the Cluster:
 </div>
 <p>If there’s more than one deployment configuration in the project
 you’ll need to name the one you want to create, i.e.:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./create.py --cluster compact-aws-frankfurt-3.11
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./create.py --cluster compact-aws-frankfurt-3-11
 
 +-----------------------------------------------+
 | Compact AWS Deployment (OKD 3.11) [Frankfurt] |
@@ -251,7 +252,7 @@ Enter &quot;yes&quot; to INSTALL OpenShift/OKD:
 <blockquote class="epigraph">
 <div>You do not need to set any environment variables on the bastion or
 use <code class="docutils literal notranslate"><span class="pre">ssh-agent</span></code> as it and your variables are automatically configured
-on the Bastion as part of the cluster creation step.</div></blockquote>
+on the Bastion when the cluster was created.</div></blockquote>
 <p>It may take a significant period of time to install OpenShift, depending on
 the configuration (i.e., the size of the cluster and whether logging,
 metrics, gluster etc. are also being installed). You should allow up to

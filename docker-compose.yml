@@ -1,6 +1,11 @@
 ---
 
-# To build and push the stable docker image: -
+# To build and push the latest (test) docker image: -
+#
+#   docker-compose build
+#   docker-compose push
+#
+# To build and push the stable (official) docker image: -
 #
 #   IMAGE_TAG=stable docker-compose build
 #   IMAGE_TAG=stable docker-compose push

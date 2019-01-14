@@ -9,7 +9,7 @@ output "bastion_ip" {
     {% if cluster.master.fixed_ip_id %}
     value = "${aws_eip_association.master.0.public_ip}"
     {% else %}
-    value = "${aws_eip.master.public_ip}"
+    value = "${aws_eip.master.0.public_ip}"
     {% endif %}
     {% else %}
     value = "${aws_instance.bastion.0.public_ip}"

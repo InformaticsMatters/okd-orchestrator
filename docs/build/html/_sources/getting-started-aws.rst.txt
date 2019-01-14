@@ -11,7 +11,9 @@ your own deployment configurations without being disturbed by changes in this,
 the upstream project.
 
 Here we're going to deploy an example OKD 3.11 release on a small cluster at
-AWS. The deployment configuration is called ``compact-aws-frankfurt-3-11``.
+AWS. The deployment configuration is called ``compact-aws-frankfurt-3-11``,
+where a single compute instance is used as a _Bastion_ and for the
+OKD Master, Infrastructure and compute nodes.
 
 The orchestrator will be creating the the cluster network,
 the cluster and installing OpenShift/OKD, all from within a Docker container

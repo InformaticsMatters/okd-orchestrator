@@ -46,7 +46,7 @@ run the ``create.py`` utility using the ``--cluster`` option::
 If there's more than one deployment configuration in the project
 you'll need to name the one you want to create, i.e.::
 
-    $ ./create.py --cluster compact-aws-frankfurt-3.11
+    $ ./create.py --cluster compact-aws-frankfurt-3-11
 
     +-----------------------------------------------+
     | Compact AWS Deployment (OKD 3.11) [Frankfurt] |
@@ -103,7 +103,7 @@ Acknowledge the warning prompt to begin the installation.
 
     You do not need to set any environment variables on the bastion or
     use ``ssh-agent`` as it and your variables are automatically configured
-    on the Bastion as part of the cluster creation step.
+    on the Bastion when the cluster was created.
 
 It may take a significant period of time to install OpenShift, depending on
 the configuration (i.e., the size of the cluster and whether logging,

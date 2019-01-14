@@ -18,8 +18,13 @@ export TF_VAR_aws_secret_key=SetMe
 # The following variables are required to orchestrate the cluster
 # -----------------------------------------------------------------------------
 
-# The SSH key-pair name known by the cloud provider.
-# Instances will be created using this key-pair and you will
+# The SSH key-pair name known by the cloud provider and expected to be located
+# in the root of this project. If you use 'okdo-keypair' (the default name)
+# the project's .gitignore will prevent it from being committed to the
+# repository. The private part fo the keypair file needs to have this name
+# and be located in the orchestrator project's root directory.
+#
+# Cloud compute instances will be created using this key-pair and you will
 # need it to connect to them. You need to change this if you have
 # used a different key-pair.
 export TF_VAR_keypair_name=okdo-keypair

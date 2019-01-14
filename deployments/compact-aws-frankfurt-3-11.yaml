@@ -12,7 +12,7 @@
 # To avoid the comments from becoming out-of-date you should probably strip   #
 # the documentation that accompanies this file from your copy, You can        #
 # rest-assured that this Frankfurt file will be kept up to date               #
-# with any orchestrator changes and new features.                             #
+# with any orchestrator changes and new features.                             #
 # --------------------------------------------------------------------------- #
 
 # The configuration file version. This is dictated by the orchestrator.
@@ -22,7 +22,7 @@
 version: 1
 
 # The name of the deployment. and description of the configuration.
-#  This is used for reporting purposes only.
+# This is used for reporting purposes only.
 name: Compact AWS Deployment (OKD 3.11) [Frankfurt]
 # A more detailed description of the deployment.
 # This is used for reporting purposes only.
@@ -219,7 +219,7 @@ okd:
 
   # The version tag for OpenShift Origin/OKD ansible playbooks.
   # This must be a valid tag in the OpenShift git repository.
-  ansible_tag: openshift-ansible-3.11.68-1
+  ansible_tag: openshift-ansible-3.11.69-1
   # The version of Ansible required to deploy the cluster.
   # The orchestrator will ensure that the correct version of
   # ansible is installed. v2.7.5 is likely to be suitable for
@@ -263,7 +263,6 @@ okd:
   # - y=2
   post_okd:
   - play: acme-controller
-  - play: add-users
 
   # What additional OpenShift/OKD services should be enabled?
   # Add services to this list like metrics with something like:

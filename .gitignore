@@ -1,5 +1,6 @@
 # Expected ssh private key-pair files
 okdo-keypair
+okdo-keypair.pub
 
 # Translated (jinja2) material...
 okd/inventories/**/inventory.yaml

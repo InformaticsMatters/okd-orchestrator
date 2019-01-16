@@ -3,11 +3,12 @@
 """io.py - I/O utilities.
 """
 
-import glob
 import os
 import random
 import subprocess
 import sys
+
+OKD_CONFIG_FILE = 'configuration.yaml'
 
 _OKD_DEPLOYMENTS_DIRECTORY_ENV = 'TF_VAR_deployments_directory'
 
@@ -46,7 +47,7 @@ def get_deployments_directory():
 
 def get_deployment_config_name(deployment=None,
                                display_deployments=False):
-    """Gets the configuration file name from the deployments directory.
+    """Gets the configuration directory name from the deployments directory.
     A deployment does not have to be named if there's only one deployment.
 
     :param deployment: The deployment name (or None)
@@ -57,7 +58,19 @@ def get_deployment_config_name(deployment=None,
     :rtype: ``str``
     """
 
-    deployments = glob.glob('{}/*.yaml'.format(get_deployments_directory()))
+    possible_deployments = os.listdir(get_deployments_directory())
+    # An entry is only of use if it's a directory
+    # and contains a 'configuration.yaml'.
+    deployments = []
+    for possible_deployment in possible_deployments:
+        deployment_dir = os.path.join(get_deployments_directory(),
+                                      possible_deployment)
+        if os.path.isdir(deployment_dir):
+            deployment_cfg = os.path.join(deployment_dir,
+                                          OKD_CONFIG_FILE)
+            if os.path.isfile(deployment_cfg):
+                deployments.append(possible_deployment)
+
     # If there are no deployments, we can do nothing!
     if not deployments:
         print('Your deployments directory is empty')
@@ -67,9 +80,8 @@ def get_deployment_config_name(deployment=None,
     # 1. 'display deployments'
     if display_deployments:
         for deployment in deployments:
-            # Display the deployment without the path
-            # and removing the '.yaml' suffix.
-            print(os.path.basename(deployment)[:-5])
+            # Display the deployment (a directory name)
+            print(deployment)
         sys.exit(0)
 
     # If a deployment wasn't named, and there's more than one,
@@ -81,21 +93,13 @@ def get_deployment_config_name(deployment=None,
             for deployment in deployments:
                 # Display the deployment without the path
                 # and removing the '.yaml' suffix.
-                print(os.path.basename(deployment)[:-5])
+                print(deployment)
             sys.exit(1)
-        deployment_file = os.path.basename(deployments[0])[:-5]
+        deployment_dir = deployments[0]
     else:
-        deployment_file = deployment
+        deployment_dir = deployment
 
-    # Load the deployment's configuration file...
-    config_file = '{}/{}.yaml'.format(get_deployments_directory(),
-                                      deployment_file)
-    if not os.path.exists(config_file):
-        error('No config file ({}) for an "{}" deployment'.
-              format(config_file, deployment_file))
-        sys.exit(1)
-
-    return deployment_file
+    return deployment_dir
 
 
 def banner(heading, full_heading=False, quiet=False):

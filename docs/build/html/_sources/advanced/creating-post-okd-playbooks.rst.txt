@@ -16,7 +16,8 @@ the following requirements: -
     ``ansible/post-okd/playbooks/<playbook-name>/deploy.yaml``
 #.  Accept OKD URL and administrator details in the variables
     ``okd_api_hostname``, ``okd_admin`` and ``okd_admin_password``
-#.  Ideally it wil be implemented using an Ansible **Role**, with the Role
+#.  Accept OKD deployment name the variable ``okd_deployment``
+#.  Ideally it will be implemented using an Ansible **Role**, with the Role
     located in ``ansible/post-okd/roles/<playbook-name>``
 
 If you follow the above rules the ``deploy.yaml`` playbook for a ``my-app``

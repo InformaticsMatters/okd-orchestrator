@@ -15,3 +15,4 @@ operation.
     :caption: Topics
 
     creating-post-okd-playbooks
+    deploying-application-templates

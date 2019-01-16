@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Advanced Topics &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  <title>Deploying Application Templates &mdash; The OKD Orchestrator 1.0.0 documentation</title>
   
 
   
@@ -27,9 +27,7 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Creating Post-OKD Playbooks" href="creating-post-okd-playbooks.html" />
-    <link rel="prev" title="Environment Variables" href="../environment-variables.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -79,7 +77,7 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting-started-aws.html">Getting Started with AWS</a></li>
@@ -90,11 +88,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../destroying-your-cluster.html">Destroying a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../deploying-to-your-own-cluster.html">Deploying to Your Own Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../environment-variables.html">Environment Variables</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Topics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="creating-post-okd-playbooks.html">Creating Post-OKD Playbooks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploying-application-templates.html">Deploying Application Templates</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
 </ul>
 
@@ -141,13 +135,13 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Advanced Topics</li>
+      <li>Deploying Application Templates</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/advanced/advanced-topics.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/advanced/deploying-application-templates.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -160,18 +154,48 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="advanced-topics">
-<h1>Advanced Topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">¶</a></h1>
-<p>This section covers topics beyond the basics of orchestration and covers
-topics like creating your own post-OKD installation playbooks.</p>
-<p>You should only tackle these area if you’re familiar with the orchestrator
-operation.</p>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Topics</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="creating-post-okd-playbooks.html">Creating Post-OKD Playbooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deploying-application-templates.html">Deploying Application Templates</a></li>
-</ul>
+  <div class="section" id="deploying-application-templates">
+<h1>Deploying Application Templates<a class="headerlink" href="#deploying-application-templates" title="Permalink to this headline">¶</a></h1>
+<p>A template describes a set of objects that can be parameterised and processed
+to produce a list of objects for creation by OpenShift Container Platform.
+A template can be processed to create anything you have permission to create
+within a project.</p>
+<p>You can create template objects form the CLI or upload templates to a project
+or the global template library. Here we discuss the latter.</p>
+<p>This is not a description of templates, it is a description of how the
+orchestrator allows you to to defined a set of templates for deployment
+to your cluster.</p>
+<p><a class="reference external" href="https://docs.openshift.com/container-platform/3.11/dev_guide/templates.html">Templates for OKD 3.11</a> are well described on the RedHat site.</p>
+<div class="section" id="orchestrator-template-file-location">
+<h2>Orchestrator template file location<a class="headerlink" href="#orchestrator-template-file-location" title="Permalink to this headline">¶</a></h2>
+<p>The orchestrator looks for template files in the <code class="docutils literal notranslate"><span class="pre">templates</span></code>
+sub-directory of your deployment so you need to place all the
+templates you wish to deploy in that directory.</p>
+</div>
+<div class="section" id="orchestrator-template-configuration">
+<h2>Orchestrator template configuration<a class="headerlink" href="#orchestrator-template-configuration" title="Permalink to this headline">¶</a></h2>
+<p>To successfully deploy templates you will need to <em>enable</em> the
+template service broker by adding it to the <code class="docutils literal notranslate"><span class="pre">okd.enable</span></code> list:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">okd</span><span class="p">:</span>
+  <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+  <span class="n">enable</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">tsb</span>
+</pre></div>
+</div>
+<p>You then need to declare the template destination project using the
+<code class="docutils literal notranslate"><span class="pre">template</span></code> configuration block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">okd</span><span class="p">:</span>
+  <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+  <span class="n">template</span><span class="p">:</span>
+    <span class="n">namespace</span><span class="p">:</span> <span class="n">openshift</span>
+</pre></div>
+</div>
+<p>The namespace must be a namespace (project) that exists in your OKD
+deployment. <code class="docutils literal notranslate"><span class="pre">openshift</span></code> is a global/default project often used to house
+application templates.</p>
+<p>Templates are deployed by the Ansible playbook
+<code class="docutils literal notranslate"><span class="pre">ansible/post-okd/templates.yaml</span></code>. It inspects the selected directory,
+expecting every file in it to be an OpenShift template for your cluster.</p>
 </div>
 </div>
 
@@ -180,15 +204,6 @@ operation.</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="creating-post-okd-playbooks.html" class="btn btn-neutral float-right" title="Creating Post-OKD Playbooks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../environment-variables.html" class="btn btn-neutral" title="Environment Variables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

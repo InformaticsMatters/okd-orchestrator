@@ -278,6 +278,16 @@ okd:
   enable:
   - metrics
   - prometheus
+  - tsb
+
+  # The namespace (project) where templates will be loaded.
+  # The templates are expected to live in the 'templates' directory
+  # of the deployment. It is an error to set this if there isn't a
+  # 'templates' directory or if 'tsb' has not been enabled (see above).
+  #
+  # If this is not defined, templates will not be installed.
+#  template:
+#    namespace: openshift
 
   # Certificate definitions,
   # currently just the Master API certificate.

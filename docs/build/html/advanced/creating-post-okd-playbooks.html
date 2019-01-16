@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Building the deployment container image" href="building-the-deployment-container-image.html" />
+    <link rel="next" title="Deploying Application Templates" href="deploying-application-templates.html" />
     <link rel="prev" title="Advanced Topics" href="advanced-topics.html" /> 
 
   
@@ -95,7 +95,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#exposing-playbook-variables">Exposing Playbook Variables</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="building-the-deployment-container-image.html">Building the deployment container image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploying-application-templates.html">Deploying Application Templates</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
@@ -178,7 +178,8 @@ the following requirements: -</p>
 <code class="docutils literal notranslate"><span class="pre">ansible/post-okd/playbooks/&lt;playbook-name&gt;/deploy.yaml</span></code></li>
 <li>Accept OKD URL and administrator details in the variables
 <code class="docutils literal notranslate"><span class="pre">okd_api_hostname</span></code>, <code class="docutils literal notranslate"><span class="pre">okd_admin</span></code> and <code class="docutils literal notranslate"><span class="pre">okd_admin_password</span></code></li>
-<li>Ideally it wil be implemented using an Ansible <strong>Role</strong>, with the Role
+<li>Accept OKD deployment name the variable <code class="docutils literal notranslate"><span class="pre">okd_deployment</span></code></li>
+<li>Ideally it will be implemented using an Ansible <strong>Role</strong>, with the Role
 located in <code class="docutils literal notranslate"><span class="pre">ansible/post-okd/roles/&lt;playbook-name&gt;</span></code></li>
 </ol>
 <p>If you follow the above rules the <code class="docutils literal notranslate"><span class="pre">deploy.yaml</span></code> playbook for a <code class="docutils literal notranslate"><span class="pre">my-app</span></code>
@@ -233,7 +234,7 @@ values for them are defined using a <code class="docutils literal notranslate"><
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="building-the-deployment-container-image.html" class="btn btn-neutral float-right" title="Building the deployment container image" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="deploying-application-templates.html" class="btn btn-neutral float-right" title="Deploying Application Templates" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="advanced-topics.html" class="btn btn-neutral" title="Advanced Topics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -270,6 +271,7 @@ values for them are defined using a <code class="docutils literal notranslate"><
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
 
   

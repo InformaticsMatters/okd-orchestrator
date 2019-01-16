@@ -41,13 +41,14 @@ def _main(cli_args, chosen_deployment_name):
     :rtype: ``bool``
     """
 
-    file = os.path.join(OKD_DEPLOYMENTS_DIRECTORY,
-                        chosen_deployment_name + '.yaml')
-    if not os.path.isfile(file):
+    config_file = os.path.join(OKD_DEPLOYMENTS_DIRECTORY,
+                               chosen_deployment_name,
+                               io.OKD_CONFIG_FILE)
+    if not os.path.isfile(config_file):
         print('Config file does not exist ({})'.
               format(chosen_deployment_name))
         return False
-    with codecs.open(file, 'r', 'utf8') as stream:
+    with codecs.open(config_file, 'r', 'utf8') as stream:
         deployment = DefaultMunch.fromDict(yaml.load(stream))
 
     # First check:
@@ -310,8 +311,9 @@ def _main(cli_args, chosen_deployment_name):
 
     if not cli_args.skip_post_okd:
 
-        # Always run the 'site' playbook
-        # This adds the OKD admin and (optional) developer user accounts.
+        # Always run the 'site' playbook.
+        # This adds the OKD admin and (optional) developer user accounts
+        # and other common things like template deployment.
         #
         # The following variables are made available to all the playbooks: -
         #
@@ -323,14 +325,20 @@ def _main(cli_args, chosen_deployment_name):
         dev_password = os.environ.get(OKD_DEVELOPER_PASSWORD_ENV)
         if dev_password:
             extra_env += ' -e okd_developer_password={}'.format(dev_password)
+        # The template namespace
+        # (optionally defined in the configuration)
+        if deployment.okd.template and deployment.okd.template.namespace:
+            template_namespace = deployment.okd.template.namespace
+            extra_env += ' -e template_namespace={}'.format(template_namespace)
         cmd = 'ansible-playbook site.yaml' \
-              ' {}' \
+              '{}' \
               ' -e okd_api_hostname=https://{}:{}' \
               ' -e okd_admin=admin' \
-              ' -e okd_admin_password={}'.\
-            format(extra_env,
+              ' -e okd_admin_password={}' \
+              ' -e okd_deployment={}'. \
+                    format(extra_env,
                    okd_api_hostname, okd_api_port,
-                   okd_admin_password)
+                   okd_admin_password, chosen_deployment_name)
         cwd = 'ansible/post-okd'
         rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
@@ -351,10 +359,11 @@ def _main(cli_args, chosen_deployment_name):
                 ' -e okd_api_hostname=https://{}:{}' \
                 ' -e okd_admin=admin' \
                 ' -e okd_admin_password={}' \
+                ' -e okd_deployment={}' \
                 ' {}'.\
                 format(play.play,
                        okd_api_hostname, okd_api_port,
-                       okd_admin_password,
+                       okd_admin_password, chosen_deployment_name,
                        play_vars)
             cwd = 'ansible/post-okd'
             rv, _ = io.run(cmd, cwd, cli_args.quiet)
@@ -429,10 +438,14 @@ if __name__ == '__main__':
 
     ARGS = PARSER.parse_args()
 
+    # Go...
+    deployment_name = io.get_deployment_config_name(ARGS.deployment,
+                                                    ARGS.display_deployments)
+
     # User must have specified 'cluster' or 'open-shift'
     if not ARGS.cluster and not ARGS.okd:
         # If 'destroy' exists then we need to know whether
-        # we're creating a cluster or an oKD deployment
+        # we're creating a cluster or an OKD deployment
         # (on an existing cluster)
         if os.path.isfile('destroy.py'):
             io.error('Must specify --cluster or --okd')
@@ -449,9 +462,6 @@ if __name__ == '__main__':
                  format(OKD_ADMIN_PASSWORD_ENV))
         sys.exit(1)
 
-    # Go...
-    deployment_name = io.get_deployment_config_name(ARGS.deployment,
-                                                    ARGS.display_deployments)
     success = _main(ARGS, deployment_name)
 
     # Done

@@ -40,12 +40,13 @@ The Configuration Format and Location
 =====================================
 
 Configuration files are written in `YAML`_ and are located in the
-``deployments`` directory of the OKD Orchestrator project [#f2]_.
+``deployments`` directory of the OKD Orchestrator project [#f2]_
+where a directory exists for each deployment.
 
-Deployments are referred to using the base name fo the configuration file
+Deployments are referred to using the base name of the configuration directory
 which should therefore be compact but descriptive. The example configuration
 (*compact-aws-frankfurt-3-11*) can be found in
-``deployments/compact-aws-frankfurt-3-11.yaml`` [#f3]_.
+``deployments/compact-aws-frankfurt-3-11/configuration.yaml`` [#f3]_.
 
 The Configuration File Content
 ==============================
@@ -68,7 +69,7 @@ a production-grade load-balancer.
 A Compact Topology Example
 --------------------------
 
-The ``deployments/compact-aws-frankfurt-3-11.yaml`` configuration is a
+The ``deployments/compact-aws-frankfurt-3-11`` configuration is a
 reference implementation of a **compact** style of deployment (a non-HA
 deployment).
 
@@ -77,7 +78,7 @@ Infrastructure instances or as a cost-effective *all-in-one* deployment
 where the Bastion, Master and Infrastructure resources all reside on a single
 machine. It also serves as a good *template* for your own compact deployment.
 
-Refer to the ``compact-aws-frankfurt-3-11.yaml`` configuration file for a
+Refer to the ``compact-aws-frankfurt-3-11`` configuration file for a
 detailed description of the properties it exposes to allow the formation of a
 **compact** topology deployment.
 

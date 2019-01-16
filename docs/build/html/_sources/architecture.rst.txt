@@ -77,7 +77,7 @@ like CentOS in order to form an OS and utilities suitable for OKD.
 
 The YAML *template* files are organised in directories relating to OKD
 version and cloud provider. For example there is an AWS *bastion image*
-template for OKD 3.9 in ``yacker/3.9/aws``.
+template for OKD 3.11 in ``yacker/3.11/aws``.
 
 **Yacker** is employed once per OKD release and cloud provider combination.
 The images produced are suitable for any cluster for the given OKD release on

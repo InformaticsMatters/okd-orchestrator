@@ -39,8 +39,8 @@ an automatic step when using Terraform. You essentially provide the values
 that terraform would provide if *it* were to create the machines.
 
 Instructions for how to do this can be found in the reference configuration
-``deployments/compact-aws-frankfurt-3-11.yaml``. Look for the annotated
-``my_machines`` section in the file.
+``deployments/compact-aws-frankfurt-3-11``. Look for the annotated
+``my_machines`` section in the configuration file.
 
 Deploying OKD
 =============

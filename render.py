@@ -64,7 +64,9 @@ def load_deployment_configuration(deployment):
     :type deployment: ``str``
     :return: The deployment configuration (a dictionary)
     """
-    deployment_file = os.path.join(_DEPLOYMENT_DIR, deployment + '.yaml')
+    deployment_file = os.path.join(_DEPLOYMENT_DIR,
+                                   deployment,
+                                   io.OKD_CONFIG_FILE)
     if not os.path.exists(deployment_file):
         error('Deployment is not known ({})'.format(deployment_file))
 

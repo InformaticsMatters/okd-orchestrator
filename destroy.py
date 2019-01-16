@@ -32,13 +32,14 @@ def _main(cli_args, chosen_deployment_name):
     :rtype: ``bool``
     """
 
-    file = os.path.join(OKD_DEPLOYMENTS_DIRECTORY,
-                        chosen_deployment_name + '.yaml')
-    if not os.path.isfile(file):
-        io.error(('Config file does not exist ({})'.
-                  format(chosen_deployment_name)))
+    config_file = os.path.join(OKD_DEPLOYMENTS_DIRECTORY,
+                               chosen_deployment_name,
+                               io.OKD_CONFIG_FILE)
+    if not os.path.isfile(config_file):
+        io.error('Configuration file does not exist in the deployment ({})'.
+                 format(chosen_deployment_name))
         return False
-    with codecs.open(file, 'r', 'utf8') as stream:
+    with codecs.open(config_file, 'r', 'utf8') as stream:
         deployment = Munch.fromDict(yaml.load(stream))
 
     # There must be an okd/inventories directory

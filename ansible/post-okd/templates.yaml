@@ -1,0 +1,33 @@
+---
+
+# This playbook should run an a CLI node
+# (typically the cluster bastion or master).
+# It executes post-OKD installation actions such as: -
+#
+# - Deploying templates
+#
+# These tasks only execute if 'template_namespace' is defined.
+# If it is defined we also expect 'deployment' to be defined
+# (which directs us to the template directory).
+
+- hosts: cli-node
+
+  tasks:
+
+  - name: Login (admin)
+    shell: >
+      oc login {{ okd_api_hostname }}
+      --insecure-skip-tls-verify=true
+      -u admin -p {{ okd_admin_password }}
+    changed_when: False
+    when:
+    - template_namespace is defined
+
+  # Deploy templates from the configuration's 'templates' directory...
+
+  - name: Deploy configuration templates
+    shell: oc create -f {{ item }} -n {{ template_namespace }}
+    with_fileglob:
+      - "../../deployments/{{ okd_deployment }}/templates/*"
+    when:
+    - template_namespace is defined

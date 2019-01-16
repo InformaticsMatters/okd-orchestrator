@@ -336,7 +336,7 @@ def _main(cli_args, chosen_deployment_name):
               ' -e okd_admin=admin' \
               ' -e okd_admin_password={}' \
               ' -e okd_deployment={}'. \
-                    format(extra_env,
+            format(extra_env,
                    okd_api_hostname, okd_api_port,
                    okd_admin_password, chosen_deployment_name)
         cwd = 'ansible/post-okd'

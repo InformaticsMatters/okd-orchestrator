@@ -1,0 +1,95 @@
+---
+
+# --------------------------------------------------------------------------- #
+# An orchestrator deployment configuration file (version 1).                  #
+#                                                                             #
+# Refer to the 'compact-aws-frankfurt-3-11' deployment configuration          #
+# for a detailed discussion of the  properties defined in this file.          #
+# --------------------------------------------------------------------------- #
+
+version: 1
+
+name: ORN DEV Deployment (OKD 3.11) [HPC2N]
+description: >
+  The deployment for the ORN DEV site.
+
+# --- cluster -----------------------------------------------------------------
+
+cluster:
+
+  id: orn-dev-311
+
+  name_tag: orn
+  public_hostname: dev.openrisknet.org
+  default_subdomain: dev.openrisknet.org
+  api_port: 8443
+
+  master:
+    count: 1
+    is_infra: no
+    is_bastion: no
+    is_compute_node: no
+
+  infra:
+    count: 1
+    is_compute_node: no
+
+  nodes:
+  - count: 4
+    node_group: compute
+
+  glusterfs:
+    count: 3
+
+okd:
+
+  ansible_tag: openshift-ansible-3.11.73-1
+  ansible_version: 2.7.5
+  play:
+  - prerequisites
+  - deploy_cluster
+
+  post_okd:
+  - play: acme-controller
+
+  enable:
+  - tsb
+
+  certificates:
+    generate_api_cert: no
+
+  inventory_dir: simple-os-3-11
+
+# --- my_machines -------------------------------------------------------------
+
+my_machines:
+
+  cli_node: 192.168.0.11
+  bastion: 130.239.81.208
+
+  master1: 192.168.0.11
+  master1_hostname: orn-master.openstacklocal
+
+  infra1: 192.168.0.5
+  infra1_hostname: orn-infra.openstacklocal
+
+  node001: 192.168.0.6
+  node001_hostname: orn-node-001.openstacklocal
+  node002: 192.168.0.21
+  node002_hostname: orn-node-002.openstacklocal
+  node003: 192.168.0.13
+  node003_hostname: orn-node-003.openstacklocal
+  node004: 192.168.0.7
+  node004_hostname: orn-node-004.openstacklocal
+
+  glusterfs1: 192.168.0.16
+  glusterfs1_hostname: orn-glusterfs-01.openstacklocal
+  glusterfs1_device1: /dev/vdb
+  glusterfs2: 192.168.0.10
+  glusterfs2_hostname: orn-glusterfs-02.openstacklocal
+  glusterfs2_device1: /dev/vdb
+  glusterfs3: 192.168.0.12
+  glusterfs3_hostname: orn-glusterfs-03.openstacklocal
+  glusterfs3_device1: /dev/vdb
+
+# -----------------------------------------------------------------------------

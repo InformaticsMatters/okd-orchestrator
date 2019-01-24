@@ -92,7 +92,13 @@ def find_template_files(deployment_config):
     :type deployment_config: ``dict``
     :return: A list of template files.
     """
-    terraform_dir = deployment_config['okd']['terraform_dir']
+    t_root = './terraform/'
+    i_root = './okd/inventories'
+
+    terraform_dir = None
+    if 'terraform_dir' in deployment_config['okd']:
+        terraform_dir = deployment_config['okd']['terraform_dir']
+    inventory_dir = deployment_config['okd']['inventory_dir']
     files = []
     for root, _, file_names in os.walk(_PROJECT_ROOT):
         exclude = False
@@ -102,9 +108,13 @@ def find_template_files(deployment_config):
                 exclude = True
                 break
         # Not our terraform directory?
-        if (root.startswith('./terraform/') and
-                not root.startswith('./terraform/{}'.format(terraform_dir))):
-            exclude = True
+        if root.startswith(t_root):
+            if not terraform_dir or \
+                    not root.startswith('{}/{}'.format(t_root, terraform_dir)):
+                exclude = True
+        if not exclude and root.startswith(i_root):
+            if not root.startswith('{}/{}'.format(i_root, inventory_dir)):
+                exclude = True
         # If the directory's not been excluded then
         # add it to our jinja2 search list....
         if not exclude:

@@ -203,8 +203,9 @@ cluster:
   #   (see the node_groups section above) and place your node into one of
   #   those groups. By convention groups are called 'node-config-<name>'
   #   (like 'node-config-compute'). Here you simply need the name
-  #   (i.e 'compute'). If you want to place your node into a build-in
-  #   group, you can use that group (i.e. 'compute').
+  #   (i.e 'compute'). If you want to place your node into a built-in
+  #   group, you can use that group (i.e. 'compute') but every node
+  #   must be in a group, even if it's simply `compute'
   nodes:
   - count: 0
 #   name: general
@@ -219,7 +220,7 @@ okd:
 
   # The version tag for OpenShift Origin/OKD ansible playbooks.
   # This must be a valid tag in the OpenShift git repository.
-  ansible_tag: openshift-ansible-3.11.69-1
+  ansible_tag: openshift-ansible-3.11.73-1
   # The version of Ansible required to deploy the cluster.
   # The orchestrator will ensure that the correct version of
   # ansible is installed. v2.7.5 is likely to be suitable for
@@ -353,8 +354,8 @@ okd:
 #     every every Infrastructure node that this deployment would create.
 #
 # 5.  You MUST provide 'node<NNN>' and 'node<NNN>_hostname' values for every
-#     node that would be created where <NNN> is a zero-padded numerical value,
-#     e.g. '001'.
+#     node that would be created where <NNN> is a non-zero, zero-padded
+#     numerical value, e.g. '001'.
 #
 #       Importantly, if you are creating nodes of differing category
 #       i.e. where one set of nodes has node.name of 'general' and one category
@@ -377,6 +378,11 @@ okd:
 #       'node002' and the 'compute' nodes are expected to be named 'node003'
 #       and 'node004'.
 #
+# 6.  You MUST provide 'glusterfs<N>', 'gluster<N>_hostname' and
+#     'gluster<N>_device<M>'values for every gluster node
+#     that would be created where <N> is a non-zero numerical value,
+#     e.g. '1'.
+#
 # The following example illustrates the definition of a pre-exiting cluster
 # with one master, one infrastructure and 2 compute nodes.
 #
@@ -397,5 +403,15 @@ okd:
 #  node001_hostname: node-1
 #  node002: 10.0.0.4
 #  node002_hostname: node-2
+#
+#  glusterfs1: 10.0.0.5
+#  glusterfs1_hostname: node-g1
+#  glusterfs1_device1: /dev/vdb
+#  glusterfs2: 10.0.0.5
+#  glusterfs2_hostname: node-g2
+#  glusterfs2_device1: /dev/vdb
+#  glusterfs3: 10.0.0.5
+#  glusterfs3_hostname: node-g3
+#  glusterfs3_device1: /dev/vdb
 
 # -----------------------------------------------------------------------------

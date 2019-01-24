@@ -249,25 +249,27 @@ def _main(cli_args, chosen_deployment_name):
     # -----
     # ...and checkout the revision defined by the deployment tag.
 
-    # If the expected clone directory does not exist
-    # then clone OpenShift Ansible.
-    if not os.path.exists('openshift-ansible'):
+    if not cli_args.skip_okd:
 
-        cmd = 'git clone' \
-              ' https://github.com/openshift/openshift-ansible.git' \
-              ' --no-checkout'
-        cwd = '.'
+        # If the expected clone directory does not exist
+        # then clone OpenShift Ansible.
+        if not os.path.exists('openshift-ansible'):
+
+            cmd = 'git clone' \
+                  ' https://github.com/openshift/openshift-ansible.git' \
+                  ' --no-checkout'
+            cwd = '.'
+            rv, _ = io.run(cmd, cwd, cli_args.quiet)
+            if not rv:
+                return False
+
+        # Checkout the required OpenShift Ansible TAG
+        cmd = 'git checkout tags/{}'. \
+            format(deployment.okd.ansible_tag)
+        cwd = 'openshift-ansible'
         rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:
             return False
-
-    # Checkout the required OpenShift Ansible TAG
-    cmd = 'git checkout tags/{}'. \
-        format(deployment.okd.ansible_tag)
-    cwd = 'openshift-ansible'
-    rv, _ = io.run(cmd, cwd, cli_args.quiet)
-    if not rv:
-        return False
 
     # -------
     # Ansible (Pre-OKD)

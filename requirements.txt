@@ -2,9 +2,9 @@
 # You'll also need suitable installations of Packer and Terraform.
 
 ansible == 2.7.5
-awscli == 1.16.76
+awscli == 1.16.100
 boto == 2.49.0
-boto3 == 1.9.66
+boto3 == 1.9.90
 jinja2 == 2.10
 matildapeak-yacker == 2018.5
 munch == 2.3.2

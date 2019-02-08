@@ -188,28 +188,30 @@ cloned to the designated <em>control machine</em> in your cluster.</li>
 the machines that will be involved. This is achieved by adding a
 <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section to your deployment configuration.</p>
 <p>The values you provide are used to populate the rendered OKD inventory file,
-an automatic step when using Terraform. You essentially provide the values
-that terraform would provide if <em>it</em> were to create the machines.</p>
-<p>Instructions for how to do this can be found in the reference configuration
-<code class="docutils literal notranslate"><span class="pre">deployments/compact-aws-frankfurt-3-11</span></code>. Look for the annotated
-<code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section in the configuration file.</p>
+which would be part of the automatic step that would be managed by <a class="reference external" href="https://www.terraform.io">Terraform</a>
+when using the Orchestrator to create the cluster. As <em>you</em> have created the
+machines then you provide the values that Terraform would have provided.</p>
+<p>Instructions for populating the configuration can be found in the reference
+configuration file (<code class="docutils literal notranslate"><span class="pre">deployments/compact-aws-frankfurt-3-11</span></code>). Just look for
+the annotated <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section in the configuration file.</p>
 </div>
 <div class="section" id="deploying-okd">
 <h2>Deploying OKD<a class="headerlink" href="#deploying-okd" title="Permalink to this headline">¶</a></h2>
 <p>With a <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section populated, the cluster setup is like any
 other…</p>
 <ul class="simple">
-<li>Setup a <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code></li>
+<li>Craft a suitable <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> and <code class="docutils literal notranslate"><span class="pre">source</span></code> it</li>
 <li>Run <code class="docutils literal notranslate"><span class="pre">create.py</span></code> as normal using <code class="docutils literal notranslate"><span class="pre">--cluster</span></code> from your development
-environment. Then hop onto the <em>Bastion</em> and run it again using the
+environment/desktop. Then hop onto the <em>Bastion</em> and run it again using the
 <code class="docutils literal notranslate"><span class="pre">--okd</span></code> option</li>
 </ul>
-<p>Just follow the instructions in the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a> section.</p>
+<p>From here just follow the instructions in the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a>
+section.</p>
 <p>If you have your own bastion you might want to use the OKD Orchestrator in
-<em>just plan</em> mode to that you can render the OKD inventory file
+<em>just plan</em> mode so that you can render the OKD inventory file
 based on your <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> definition without resorting to configuring
-the Bastion. If so you will need to copy the generated inventory file
-to the Bastion for subsequent deployment of the OK platform. You
+the Bastion. If so you will need to copy the generated <code class="docutils literal notranslate"><span class="pre">inventory.yaml</span></code> file
+to the Bastion for subsequent manual deployment of the OK platform. You
 can run <em>just plan</em> by adding <code class="docutils literal notranslate"><span class="pre">--just-plan</span></code> to <code class="docutils literal notranslate"><span class="pre">create.py</span></code>.</p>
 </div>
 </div>

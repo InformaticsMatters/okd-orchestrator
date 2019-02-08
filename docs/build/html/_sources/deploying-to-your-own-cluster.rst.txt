@@ -61,9 +61,6 @@ other...
     ``okd-orchestrator`` directory that will have been created and run
     ``./create.py --okd``
 
-From here just follow the instructions in the **Installing OpenShift/OKD**
-section in :doc:`creating-your-cluster`.
-
 If you have your own bastion you might want to use the OKD Orchestrator in
 *just plan* mode so that you can render the OKD inventory file
 based on your ``my_machines`` definition without resorting to configuring

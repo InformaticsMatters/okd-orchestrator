@@ -12,6 +12,7 @@ details of your cluster in a short `YAML`_ section of the deployment file.
 Prerequisites
 =============
 
+Familiarise yourself with basic, automated installations but reading
 Before you can use the orchestrator on your own cluster the cluster instances
 must satisfy the **system and environment requirements** defined in the
 official OKD documentation. For v3.11 this can be found `here`_.
@@ -21,7 +22,8 @@ Additionally, in case it's not obvious...
 -   Your cluster must have access to the *outside world* so that additional
     packages can be downloaded
 -   You must be able to SSH to the designated Bastion from your development
-    machine (i.e. where you have a copy of the orchestrator).
+    machine (i.e. where you have a copy of the orchestrator) using the keypair
+    available to the Orchestrator (i.e. the keypair you
 -   You need to have installed ``git`` so that this repository can be
     cloned to the designated *control machine* in your cluster.
 
@@ -51,13 +53,16 @@ Deploying OKD
 With a ``my_machines`` section populated, the cluster setup is like any
 other...
 
--   Craft a suitable ``setenv.sh`` and ``source`` it
--   Run ``create.py`` as normal using ``--cluster`` from your development
-    environment/desktop. Then hop onto the *Bastion* and run it again using the
-    ``--okd`` option
+-   Craft a suitable ``setenv.sh``
+-   Start and enter the OKD container with ``./okdo-start.sh``
+-   Run ``create.py --cluster``. You will need to add the name of the
+    relevant deployment if the orchestrator has more than one.
+-   When this is complete, hop onto the *Bastion*, move to the
+    ``okd-orchestrator`` directory that will have been created and run
+    ``create.py --okd``
 
-From here just follow the instructions in the :doc:`creating-your-cluster`
-section.
+From here just follow the instructions in the **Installing OpenShift/OKD**
+section in :doc:`creating-your-cluster`.
 
 If you have your own bastion you might want to use the OKD Orchestrator in
 *just plan* mode so that you can render the OKD inventory file

@@ -169,7 +169,8 @@ the OKD container platform. Here you just need to provide the
 details of your cluster in a short <a class="reference external" href="https://yaml.org">YAML</a> section of the deployment file.</p>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>Before you can use the orchestrator on your own cluster the cluster instances
+<p>Familiarise yourself with basic, automated installations but reading
+Before you can use the orchestrator on your own cluster the cluster instances
 must satisfy the <strong>system and environment requirements</strong> defined in the
 official OKD documentation. For v3.11 this can be found <a class="reference external" href="https://docs.okd.io/3.11/install/prerequisites.html">here</a>.</p>
 <p>Additionally, in case it’s not obvious…</p>
@@ -177,7 +178,8 @@ official OKD documentation. For v3.11 this can be found <a class="reference exte
 <li>Your cluster must have access to the <em>outside world</em> so that additional
 packages can be downloaded</li>
 <li>You must be able to SSH to the designated Bastion from your development
-machine (i.e. where you have a copy of the orchestrator).</li>
+machine (i.e. where you have a copy of the orchestrator) using the keypair
+available to the Orchestrator (i.e. the keypair you</li>
 <li>You need to have installed <code class="docutils literal notranslate"><span class="pre">git</span></code> so that this repository can be
 cloned to the designated <em>control machine</em> in your cluster.</li>
 </ul>
@@ -200,13 +202,16 @@ the annotated <code class="docutils literal notranslate"><span class="pre">my_ma
 <p>With a <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section populated, the cluster setup is like any
 other…</p>
 <ul class="simple">
-<li>Craft a suitable <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> and <code class="docutils literal notranslate"><span class="pre">source</span></code> it</li>
-<li>Run <code class="docutils literal notranslate"><span class="pre">create.py</span></code> as normal using <code class="docutils literal notranslate"><span class="pre">--cluster</span></code> from your development
-environment/desktop. Then hop onto the <em>Bastion</em> and run it again using the
-<code class="docutils literal notranslate"><span class="pre">--okd</span></code> option</li>
+<li>Craft a suitable <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code></li>
+<li>Start and enter the OKD container with <code class="docutils literal notranslate"><span class="pre">./okdo-start.sh</span></code></li>
+<li>Run <code class="docutils literal notranslate"><span class="pre">create.py</span> <span class="pre">--cluster</span></code>. You will need to add the name of the
+relevant deployment if the orchestrator has more than one.</li>
+<li>When this is complete, hop onto the <em>Bastion</em>, move to the
+<code class="docutils literal notranslate"><span class="pre">okd-orchestrator</span></code> directory that will have been created and run
+<code class="docutils literal notranslate"><span class="pre">create.py</span> <span class="pre">--okd</span></code></li>
 </ul>
-<p>From here just follow the instructions in the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a>
-section.</p>
+<p>From here just follow the instructions in the <strong>Installing OpenShift/OKD</strong>
+section in <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a>.</p>
 <p>If you have your own bastion you might want to use the OKD Orchestrator in
 <em>just plan</em> mode so that you can render the OKD inventory file
 based on your <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> definition without resorting to configuring

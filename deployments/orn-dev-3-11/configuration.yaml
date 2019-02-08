@@ -43,7 +43,7 @@ cluster:
 
 okd:
 
-  ansible_tag: openshift-ansible-3.11.73-1
+  ansible_tag: openshift-ansible-3.11.82-1
   ansible_version: 2.7.5
   play:
   - prerequisites
@@ -54,9 +54,10 @@ okd:
 
   enable:
   - tsb
+  - metrics
 
   certificates:
-    generate_api_cert: no
+    generate_api_cert: yes
 
   inventory_dir: simple-os-3-11
 
@@ -68,28 +69,20 @@ my_machines:
   bastion: 130.239.81.208
 
   master1: 192.168.0.15
-  master1_hostname: orn-master.openstacklocal
 
-  infra1: 192.168.0.14
-  infra1_hostname: orn-infra.openstacklocal
+  infra1: 192.168.0.16
 
-  node001: 192.168.0.6
-  node001_hostname: orn-node-001.openstacklocal
-  node002: 192.168.0.9
-  node002_hostname: orn-node-002.openstacklocal
-  node003: 192.168.0.19
-  node003_hostname: orn-node-003.openstacklocal
-  node004: 192.168.0.23
-  node004_hostname: orn-node-004.openstacklocal
+  node001: 192.168.0.7
+  node002: 192.168.0.10
+  node003: 192.168.0.18
+  node004: 192.168.0.13
 
-  glusterfs1: 192.168.0.13
-  glusterfs1_hostname: orn-glusterfs-01.openstacklocal
+  glusterfs1: 192.168.0.22
+  glusterfs2: 192.168.0.11
+  glusterfs3: 192.168.0.5
+
   glusterfs1_device1: /dev/vdb
-  glusterfs2: 192.168.0.12
-  glusterfs2_hostname: orn-glusterfs-02.openstacklocal
   glusterfs2_device1: /dev/vdb
-  glusterfs3: 192.168.0.22
-  glusterfs3_hostname: orn-glusterfs-03.openstacklocal
   glusterfs3_device1: /dev/vdb
 
 # -----------------------------------------------------------------------------

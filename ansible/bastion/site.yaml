@@ -9,6 +9,8 @@
 
 - hosts: bastion
   gather_facts: no
+  vars:
+    setenv_file: ../../provider-env/setenv.sh
 
   tasks:
 
@@ -16,7 +18,24 @@
   # Preamble
   # --------
 
+  # The user's 'setenv.sh' file is important.
+  # if it does not exist we must not continue...
+
+  - name: Get status of setenv.sh
+    stat:
+      path: "{{ setenv_file }}"
+    register: setenv
+    delegate_to: localhost
+    changed_when: False
+
+  - name: Assert setenv.sh exists
+    fail:
+      msg: "Your setenv.sh is missing"
+    when: not setenv.stat.exists
+
+  # OK - we have a setenv.sh...
   # Wait for the the host...
+
   - name: Wait for SSH
     wait_for:
       host: "{{ ansible_ssh_host }}"
@@ -67,11 +86,11 @@
       dest: "{{ ansible_env.HOME }}/.ssh/config"
       mode: 0400
 
-  # The path to the deployment-specific directory
+  # The path to the file
   # is relative to this (ansible/bastion) directory.
   - name: Install bastion.sh
     copy:
-      src: "bastion.sh"
+      src: "{{ setenv_file }}"
       dest: "/etc/profile.d/okd.sh"
       mode: 0644
     become: yes
@@ -94,15 +113,22 @@
 
   # Here we copy crucial parts of the orchestrator to the Bastion.
   # We will checkout the OpenShift Ansible repository directly on the bastion
-  # when `create.py` is run so we just copy crucial files and directories here.
+  # when `create.py` is run so we just copy common directories here.
   - name: Copy orchestrator directories
     copy:
       src: "../../{{ item }}/"
       dest: "{{ ansible_env.HOME }}/okd-orchestrator/{{ item }}"
     loop:
       - ansible
-      - okd
       - utils
+
+  - name: Copy orchestrator files
+    copy:
+      src: "../../{{ item }}"
+      dest: "{{ ansible_env.HOME }}/okd-orchestrator/{{ item }}"
+    loop:
+      - okd/ansible.cfg
+      - okd/inventories/{{ inventory_dir }}/inventory.yaml
 
   # Create the deployment directory
   - name: Create deployments directory
@@ -139,7 +165,7 @@
 
 # -----------------------------------------------------------------------------
 
-- hosts: master1
+- hosts: cli-node
   gather_facts: no
 
   tasks:
@@ -157,9 +183,13 @@
       delay: 5
     vars:
       ansible_connection: local
+    when:
+      - master_cert_email is defined
 
   - name: Gathering facts
     setup:
+    when:
+      - master_cert_email is defined
 
   # ---------------------------
   # Generate an SSL certificate

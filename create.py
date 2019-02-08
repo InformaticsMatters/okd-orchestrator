@@ -19,6 +19,8 @@ from utils import io, templater
 # Environment variable used to hold the OKD admin and developer passwords.
 OKD_ADMIN_PASSWORD_ENV = 'TF_VAR_okd_admin_password'
 OKD_DEVELOPER_PASSWORD_ENV = 'TF_VAR_okd_developer_password'
+OKD_KEYPAIR_NAME_ENV = 'TF_VAR_keypair_name'
+OKD_CERTBOT_EMAIL_ENV = 'TF_VAR_master_certbot_email'
 OKD_DEPLOYMENTS_DIRECTORY = io.get_deployments_directory()
 
 # The list of supported deployment configuration file versions.
@@ -91,8 +93,11 @@ def _main(cli_args, chosen_deployment_name):
             return True
 
     # Some key information...
+    okd_admin_password = os.environ.get(OKD_ADMIN_PASSWORD_ENV)
+    if not okd_admin_password:
+        io.error('You must define {}'.format(OKD_ADMIN_PASSWORD_ENV))
+
     okd_api_hostname = deployment.cluster.public_hostname
-    okd_admin_password = os.environ[OKD_ADMIN_PASSWORD_ENV]
     okd_api_port = deployment.cluster.api_port
 
     # -------
@@ -147,14 +152,14 @@ def _main(cli_args, chosen_deployment_name):
             if not templater.render(deployment):
                 return False
 
-            print('bastion')
+            print('bastion/inventory')
             file_name = 'ansible/bastion/inventory.yaml.tpl'
             if not templater.\
                     render(deployment,
                            template_file_name=file_name):
                 return False
 
-            print('post-okd')
+            print('post-okd/inventory')
             file_name = 'ansible/post-okd/inventory.yaml.tpl'
             if not templater. \
                     render(deployment,
@@ -198,19 +203,32 @@ def _main(cli_args, chosen_deployment_name):
 
             extra_env = ''
             if deployment.okd.certificates.generate_api_cert:
-                extra_env += ' -e master_cert_email="{}"'. \
-                    format(os.environ['TF_VAR_master_certbot_email'])
+
+                certbot_email = os.environ.get(OKD_CERTBOT_EMAIL_ENV)
+                if not certbot_email:
+                    io.error('You must define {}'.format(OKD_CERTBOT_EMAIL_ENV))
+                    return False
+
+                extra_env += ' -e master_cert_email="{}"'.format(certbot_email)
                 extra_env += ' -e public_hostname="{}"'. \
                     format(deployment.cluster.public_hostname)
+
             if OKD_DEPLOYMENTS_DIRECTORY != 'deployments':
                 extra_env += ' -e deployments_directory="{}"'.\
                     format(OKD_DEPLOYMENTS_DIRECTORY)
-            keypair_name = os.environ['TF_VAR_keypair_name']
+
+            keypair_name = os.environ.get(OKD_KEYPAIR_NAME_ENV)
+            if not keypair_name:
+                io.error('You must define {}'.format(OKD_KEYPAIR_NAME_ENV))
+                return False
+
             cmd = 'ansible-playbook site.yaml' \
                   ' {}' \
                   ' -e keypair_name={}' \
+                  ' -e inventory_dir={}' \
                   ' -e deployment_name={}'.format(extra_env,
                                                   keypair_name,
+                                                  deployment.okd.inventory_dir,
                                                   chosen_deployment_name)
             cwd = 'ansible/bastion'
             rv, _ = io.run(cmd, cwd, cli_args.quiet)

@@ -9,8 +9,8 @@ all:
           ansible_connection: ssh
           ansible_user: centos
 
-    master1:
+    cli-node:
       hosts:
-        ${master1}:
+        ${cli_node}:
           ansible_connection: ssh
           ansible_user: centos

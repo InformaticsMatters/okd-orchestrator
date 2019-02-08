@@ -147,24 +147,3 @@ resource "local_file" "bastion-inventory" {
   content = "${data.template_file.bastion-inventory.rendered}"
   filename = "${var.ansible_dir}/bastion/inventory.yaml"
 }
-
-# -----------------------------
-# Bastion Environment Variables
-# -----------------------------
-
-data "template_file" "sh" {
-  template = "${file("${var.ansible_dir}/bastion/bastion.sh.tpl")}"
-
-  vars {
-    aws_access_key = "${var.aws_access_key}"
-    aws_secret_key = "${var.aws_secret_key}"
-    okd_admin_password = "${var.okd_admin_password}"
-    okd_developer_password = "${var.okd_developer_password}"
-    deployments_directory = "${var.deployments_directory}"
-  }
-}
-
-resource "local_file" "bastion-sh" {
-  content = "${data.template_file.sh.rendered}"
-  filename = "${var.ansible_dir}/bastion/bastion.sh"
-}

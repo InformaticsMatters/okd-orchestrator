@@ -5,8 +5,9 @@ ansible == 2.7.5
 awscli == 1.16.100
 boto == 2.49.0
 boto3 == 1.9.90
+future == 0.17.1
 jinja2 == 2.10
-matildapeak-yacker == 2018.5
+matildapeak-yacker == 2019.1
 munch == 2.3.2
 passlib == 1.7.1
 pyOpenSSL == 18.0.0

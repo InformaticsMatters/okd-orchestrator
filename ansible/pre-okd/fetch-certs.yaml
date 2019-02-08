@@ -1,4 +1,4 @@
-link---
+---
 
 # This playbook should run an the Bastion node.
 # It executes pre-OKD installation actions such as: -

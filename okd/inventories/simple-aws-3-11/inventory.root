@@ -71,14 +71,16 @@ all:
         openshift_master_console_port: {{ cluster.api_port }}
 
 {% if okd.certificates.generate_api_cert %}
+{% raw %}
         # Certificate definitions.
         # At the moment they are created by bastion and pre-okd playbooks
         # using certbot if the user has set generate_api_cert
         openshift_master_named_certificates: [
-            { 'certfile': '/home/centos/fullchain.pem',
-              'keyfile': '/home/centos/privkey.pem' }
+            { 'certfile': "{{ lookup('env','HOME') }}/fullchain.pem",
+              'keyfile': "{{ lookup('env','HOME') }}/privkey.pem" }
         ]
         openshift_master_overwrite_named_certificates: true
+{%- endraw %}
 {%- endif %}
 
 {% raw %}
@@ -99,7 +101,7 @@ all:
         openshift_metrics_install_metrics: false
 {%- endif %}
         openshift_metrics_hawkular_hostname: metrics.${public_hostname}
-        openshift_hosted_metrics_deployer_version: v3.11
+        openshift_hosted_metrics_image_version: v3.11
         openshift_metrics_cassandra_storage_type: dynamic
         openshift_metrics_cassandra_pvc_size: 5Gi
         openshift_metrics_cassandra_limits_memory: 2Gi

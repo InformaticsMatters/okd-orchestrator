@@ -134,11 +134,11 @@ data "template_file" "bastion-inventory" {
     bastion = "${aws_instance.bastion.0.public_ip}"
     {% endif %}
 
-    # The Master
+    # The CLI node (Master)
     {% if cluster.master.fixed_ip_id %}
-    master1 = "${aws_eip_association.master.0.public_ip}"
+    cli_node = "${aws_eip_association.master.0.public_ip}"
     {% else %}
-    master1 = "${aws_eip.master.public_ip}"
+    cli_node = "${aws_eip.master.public_ip}"
     {% endif %}
   }
 }

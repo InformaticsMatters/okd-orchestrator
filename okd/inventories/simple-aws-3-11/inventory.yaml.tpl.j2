@@ -29,7 +29,6 @@
           hosts:
 {%- for item in range(cluster.master.count) %}
             ${master{{ '%d'|format(item + 1) }}}:
-              openshift_hostname: ${master{{ '%d'|format(item + 1) }}_hostname}
 {%- if cluster.master.is_infra is defined and cluster.master.is_infra %}
 {%- if cluster.master.is_compute_node is defined and cluster.master.is_compute_node %}
               openshift_node_group_name: 'node-config-all-in-one'
@@ -48,7 +47,6 @@
 {% if cluster.master.is_infra is not defined or not cluster.master.is_infra %}
 {%- for item in range(cluster.infra.count) %}
             ${infra{{ '%d'|format(item + 1) }}}:
-              openshift_hostname: ${infra{{ '%d'|format(item + 1) }}_hostname}
 {%- if cluster.infra.is_compute_node is defined and cluster.infra.is_compute_node %}
               openshift_node_group_name: 'node-config-infra-compute'
 {%- else %}
@@ -61,7 +59,6 @@
 {%- for node in cluster.nodes %}
 {%- for item in range(node.count) %}
             ${node{{ '%03d'|format(node_id.a) }}}:
-              openshift_hostname: ${node{{ '%03d'|format(node_id.a) }}_hostname}
               openshift_node_group_name: 'node-config-{{ node.node_group }}'
 {%- set node_id.a = node_id.a + 1 -%}
 {%- endfor %}

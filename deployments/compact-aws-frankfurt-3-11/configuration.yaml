@@ -220,7 +220,7 @@ okd:
 
   # The version tag for OpenShift Origin/OKD ansible playbooks.
   # This must be a valid tag in the OpenShift git repository.
-  ansible_tag: openshift-ansible-3.11.73-1
+  ansible_tag: openshift-ansible-3.11.82-1
   # The version of Ansible required to deploy the cluster.
   # The orchestrator will ensure that the correct version of
   # ansible is installed. v2.7.5 is likely to be suitable for
@@ -334,26 +334,27 @@ okd:
 # OKD Ansible inventory file (i.e. the file inventory.yaml.tpl that will
 # be found in the the deployment's okd.inventory_dir.
 #
-# 1.  You MUST provide a value for 'cli_node' (normally the bastion or a master
-#     node). It should be a node that, after deployment, is expected to contain
-#     the oc command-line utility.
+# 1.  You MUST provide a value for 'cli-node' (normally the master
+#     node). This node must be accessible from the development machine
+#     as well as the bastion. It should be a node that, after deployment,
+#     is expected to contain the oc command-line utility and handle
+#     certificate generation.
 #
 # 2.  You MUST provide a value for 'bastion' (i.e. the bastion or a master
 #     node). It is from here that the second-stage of deployment takes place.
 #
-# 3.  You MUST provide 'master<N>' and 'master<N>_hostname' values for every
-#     master that this deployment would create if it had used Terraform. So, if
+# 3.  You MUST provide 'master<N>' values for every master that this
+#     deployment would create if it had used Terraform. So, if
 #     the deployment would create 3 Master instances you will values for
-#     'master1', 'master2', 'master3' and 'master1_hostname', 'master2_hostname'
-#     and 'master3_hostname.
+#     'master1', 'master2', 'master3'.
 #
 #       In the unlikely event that you have more than 9 masters, the 10th
 #       value is expected for 'master10'.
 #
-# 4.  Similarly you MUST provide 'infra<N>' and 'infra<N>_hostname' values for
+# 4.  Similarly you MUST provide 'infra<N>'values for
 #     every every Infrastructure node that this deployment would create.
 #
-# 5.  You MUST provide 'node<NNN>' and 'node<NNN>_hostname' values for every
+# 5.  You MUST provide 'node<NNN>' values for every
 #     node that would be created where <NNN> is a non-zero, zero-padded
 #     numerical value, e.g. '001'.
 #
@@ -378,7 +379,7 @@ okd:
 #       'node002' and the 'compute' nodes are expected to be named 'node003'
 #       and 'node004'.
 #
-# 6.  You MUST provide 'glusterfs<N>', 'gluster<N>_hostname' and
+# 6.  You MUST provide 'glusterfs<N>' and
 #     'gluster<N>_device<M>'values for every gluster node
 #     that would be created where <N> is a non-zero numerical value,
 #     e.g. '1'.
@@ -394,24 +395,17 @@ okd:
 #  bastion: 10.0.1.1
 #
 #  master1: 10.0.0.1
-#  master1_hostname: master-1
 #
 #  infra1: 10.0.0.2
-#  infra1_hostname: infra-1
 #
 #  node001: 10.0.0.3
-#  node001_hostname: node-1
 #  node002: 10.0.0.4
-#  node002_hostname: node-2
 #
 #  glusterfs1: 10.0.0.5
-#  glusterfs1_hostname: node-g1
+#  glusterfs2: 10.0.0.6
+#  glusterfs3: 10.0.0.7
 #  glusterfs1_device1: /dev/vdb
-#  glusterfs2: 10.0.0.5
-#  glusterfs2_hostname: node-g2
 #  glusterfs2_device1: /dev/vdb
-#  glusterfs3: 10.0.0.5
-#  glusterfs3_hostname: node-g3
 #  glusterfs3_device1: /dev/vdb
 
 # -----------------------------------------------------------------------------

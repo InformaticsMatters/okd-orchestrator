@@ -67,28 +67,28 @@ my_machines:
   cli_node: 130.239.81.149
   bastion: 130.239.81.208
 
-  master1: 192.168.0.11
+  master1: 192.168.0.15
   master1_hostname: orn-master.openstacklocal
 
-  infra1: 192.168.0.5
+  infra1: 192.168.0.14
   infra1_hostname: orn-infra.openstacklocal
 
   node001: 192.168.0.6
   node001_hostname: orn-node-001.openstacklocal
-  node002: 192.168.0.21
+  node002: 192.168.0.9
   node002_hostname: orn-node-002.openstacklocal
-  node003: 192.168.0.13
+  node003: 192.168.0.19
   node003_hostname: orn-node-003.openstacklocal
-  node004: 192.168.0.7
+  node004: 192.168.0.23
   node004_hostname: orn-node-004.openstacklocal
 
-  glusterfs1: 192.168.0.16
+  glusterfs1: 192.168.0.13
   glusterfs1_hostname: orn-glusterfs-01.openstacklocal
   glusterfs1_device1: /dev/vdb
-  glusterfs2: 192.168.0.10
+  glusterfs2: 192.168.0.12
   glusterfs2_hostname: orn-glusterfs-02.openstacklocal
   glusterfs2_device1: /dev/vdb
-  glusterfs3: 192.168.0.12
+  glusterfs3: 192.168.0.22
   glusterfs3_hostname: orn-glusterfs-03.openstacklocal
   glusterfs3_device1: /dev/vdb
 

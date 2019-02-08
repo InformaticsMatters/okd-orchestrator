@@ -102,7 +102,7 @@ def get_deployment_config_name(deployment=None,
     return deployment_dir
 
 
-def banner(heading, full_heading=False, quiet=False):
+def banner(heading, e_dir='', full_heading=False, quiet=False):
     """Prints the string in a banner if not quiet. If not quiet,
     and given 'Blob' it prints:
 
@@ -116,6 +116,8 @@ def banner(heading, full_heading=False, quiet=False):
 
     :param heading: The message to turn into a banner.
     :type heading: ``str``
+    :param e_dir: The execution directory.
+    :type e_dir: ``str``
     :param full_heading: True to avoid creating a short heading.
                          This is ignored if 'quiet' is True.
     :type full_heading: ``bool``
@@ -131,9 +133,12 @@ def banner(heading, full_heading=False, quiet=False):
             if the_heading != heading:
                 the_heading += ' ...'
         heading_w = len(the_heading)
+        in_dir = ''
+        if e_dir:
+            in_dir = '(in {})'.format(e_dir)
         print('')
         print('+' + '-' * (heading_w + 2) + '+')
-        print('| {} |'.format(the_heading))
+        print('| {} | {}'.format(the_heading, in_dir))
         print('+' + '-' * (heading_w + 2) + '+')
     else:
         print('> {}'.format(heading))
@@ -153,10 +158,10 @@ def run(cmd, cwd, quiet=False):
     :return: A typle of success and process object
     :rtype: ``tuple``
     """
-    expnaded_cmd = os.path.expanduser(cmd)
-    banner(expnaded_cmd, quiet)
+    expanded_cmd = os.path.expanduser(cmd)
+    banner(expanded_cmd, cwd, quiet)
     stdout_type = subprocess.PIPE if quiet else None
-    process = subprocess.Popen(expnaded_cmd.split(),
+    process = subprocess.Popen(expanded_cmd.split(),
                                cwd=os.path.expanduser(cwd),
                                stderr=stdout_type,
                                stdout=stdout_type)

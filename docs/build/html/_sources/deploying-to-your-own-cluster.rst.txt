@@ -61,9 +61,11 @@ other...
     ``okd-orchestrator`` directory that will have been created and run
     ``./create.py --okd``
 
-If you have your own bastion you might want to use the OKD Orchestrator in
-*just plan* mode so that you can render the OKD inventory file
-based on your ``my_machines`` definition without resorting to configuring
-the Bastion. If so you will need to copy the generated ``inventory.yaml`` file
-to the Bastion for subsequent manual deployment of the OK platform. You
-can run *just plan* by adding ``--just-plan`` to ``create.py``.
+.. epigraph::
+
+    If you have your own bastion you might want to use the OKD Orchestrator in
+    *just plan* mode so that you can render the OKD inventory file
+    based on your ``my_machines`` definition without resorting to configuring
+    the Bastion. If so you will need to copy the generated ``inventory.yaml``
+    file to the Bastion for subsequent manual deployment of the OK platform.
+    You can run *just plan* by adding ``--just-plan`` to ``create.py``.

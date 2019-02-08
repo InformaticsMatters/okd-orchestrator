@@ -55,11 +55,11 @@ other...
 
 -   Craft a suitable ``setenv.sh``
 -   Start and enter the OKD container with ``./okdo-start.sh``
--   Run ``create.py --cluster``. You will need to add the name of the
+-   Run ``./create.py --cluster``. You will need to add the name of the
     relevant deployment if the orchestrator has more than one.
 -   When this is complete, hop onto the *Bastion*, move to the
     ``okd-orchestrator`` directory that will have been created and run
-    ``create.py --okd``
+    ``./create.py --okd``
 
 From here just follow the instructions in the **Installing OpenShift/OKD**
 section in :doc:`creating-your-cluster`.

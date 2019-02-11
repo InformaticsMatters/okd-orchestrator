@@ -23,6 +23,35 @@
     when:
     - template_namespace is defined
 
+  # Create the template project?
+
+  - name: Get projects
+    shell: oc get projects
+    register: projects_result
+    changed_when: False
+    when:
+    - template_namespace is defined
+
+  - name: Create Template Project
+    shell: >
+      oc new-project {{ template_namespace }}
+      --display-name="The Template Project"
+      --description="A location where application Templates can be found"
+    when:
+    - template_namespace is defined
+    - not projects_result.stdout
+      | regex_search('^%s\s' % template_namespace, multiline=True)
+
+  # Add the developer user?
+  - name: Add Developer to Template Project
+    shell: >
+      oc adm policy add-role-to-user edit developer -n {{ template_namespace }}
+    when:
+    - template_namespace is defined
+    - not projects_result.stdout
+      | regex_search('^%s\s' % template_namespace, multiline=True)
+    - okd_developer_password is defined
+
   # Deploy templates from the configuration's 'templates' directory...
 
   - name: Deploy configuration templates

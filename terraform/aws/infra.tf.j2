@@ -2,7 +2,7 @@
 # Infra instance definitions
 # -----------------------------------------------------------------------------
 
-{% if not cluster.master.is_infra %}
+{% if not cluster.master.is_infra -%}
 resource "aws_instance" "infra" {
   ami = "${data.aws_ami.cluster.id}"
   instance_type = "${var.infra_image_type}"
@@ -27,4 +27,4 @@ resource "aws_instance" "infra" {
     "kubernetes.io/cluster/{{ cluster.id }}" = "owned"
   }
 }
-{% endif %}
+{% endif -%}

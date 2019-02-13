@@ -2,7 +2,7 @@
 # The Bastion node definition
 # -----------------------------------------------------------------------------
 
-{% if not cluster.master.is_bastion %}
+{% if not cluster.master.is_bastion -%}
 resource "aws_instance" "bastion" {
   ami = "${data.aws_ami.bastion.id}"
   instance_type = "${var.bastion_image_type}"
@@ -23,4 +23,4 @@ resource "aws_instance" "bastion" {
     Name = "${var.name_tag}-bastion"
   }
 }
-{% endif %}
+{% endif -%}

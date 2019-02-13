@@ -4,23 +4,19 @@
 # The Docker image provides you with an OKD orchestrattion enviornment.
 # You simply need to mount your orchestrator working dirctory
 # (and SSH directory) into it and run image building and orchestration
-# from within the container.
+# from within the container. You can start an denter the container
+# using the convenient project script: -
+#
+#   ./okdo-start.sh
 #
 # You will need to define suitable environment variables for your
 # cloud-provide and, when orchestrating the image IDs for the Bastion and
 # Cluster nodes and the OpenShift initial admin account password.
 #
-# A typical container launch for AWS from your orchestrator directory
-# would be: -
-#
-#   docker run -it \
-#     -v `pwd`/..:/home/okdo/okd-orchestrator:Z \
-#     --rm informaticsmatters/okd-orchestrator:stable /bin/bash
-#
 # Refer to the project's documention for a detailed discussion of
 # the orchestrator.
 
-FROM python:3.6.7
+FROM python:3.7.2
 
 ARG terraform_version=0.11.11
 ARG packer_version=1.3.3

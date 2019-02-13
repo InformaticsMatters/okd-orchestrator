@@ -66,7 +66,8 @@ def load_deployment_configuration(deployment):
     """
     deployment_file = os.path.join(_DEPLOYMENT_DIR,
                                    deployment,
-                                   io.OKD_CONFIG_FILE)
+                                   io.get_deployment_config_filename(
+                                       deployment))
     if not os.path.exists(deployment_file):
         error('Deployment is not known ({})'.format(deployment_file))
 
@@ -96,8 +97,8 @@ def find_template_files(deployment_config):
     i_root = './okd/inventories/'
 
     terraform_dir = None
-    if 'terraform_dir' in deployment_config['okd']:
-        terraform_dir = deployment_config['okd']['terraform_dir']
+    if 'terraform_dir' in deployment_config['cluster']:
+        terraform_dir = deployment_config['cluster']['terraform_dir']
     inventory_dir = deployment_config['okd']['inventory_dir']
     files = []
     for root, _, file_names in os.walk(_PROJECT_ROOT):

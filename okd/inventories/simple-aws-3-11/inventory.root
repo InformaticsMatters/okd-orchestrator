@@ -70,26 +70,52 @@ all:
         openshift_master_api_port: {{ cluster.api_port }}
         openshift_master_console_port: {{ cluster.api_port }}
 
-{% if okd.certificates.generate_api_cert %}
-{% raw %}
-        # Certificate definitions.
+{% if okd.certificates and okd.certificates.generate_api_cert %}
+
+        # Auto-generated certificate definitions.
         # At the moment they are created by bastion and pre-okd playbooks
         # using certbot if the user has set generate_api_cert
         openshift_master_named_certificates: [
+{% raw %}
             { 'certfile': "{{ lookup('env','HOME') }}/fullchain.pem",
               'keyfile': "{{ lookup('env','HOME') }}/privkey.pem" }
+{%- endraw %}
         ]
         openshift_master_overwrite_named_certificates: true
+
+{%- elif okd.certificates and okd.certificates.wildcard_cert %}
+
+        # Pre-provisioned wildcard certificate definitions.
+        openshift_hosted_router_certificate: [
+{% raw %}
+            { 'certfile': "{{ lookup('env','HOME') }}/okd-orchestrator/cert.crt",
+              'keyfile': "{{ lookup('env','HOME') }}/okd-orchestrator/private.key",
+              'cafile': "{{ lookup('env','HOME') }}/okd-orchestrator/ca-bundle.crt" }
 {%- endraw %}
+        ]
+        openshift_master_overwrite_named_certificates: true
+
+{%- elif okd.certificates and okd.certificates.master_api_cert is defined %}
+        # Pre-provisioned Master API certificate definitions.
+        openshift_master_named_certificates: [
+{% raw %}
+            { 'certfile': "{{ lookup('env','HOME') }}/okd-orchestrator/cert.crt",
+              'keyfile': "{{ lookup('env','HOME') }}/okd-orchestrator/private.key",
+              'cafile': "{{ lookup('env','HOME') }}/okd-orchestrator/ca-bundle.crt",
+{%- endraw %}
+              'names': ["{{ okd.certificates.master_api_cert }}"] }
+        ]
+        openshift_master_overwrite_named_certificates: true
+
 {%- endif %}
 
-{% raw %}
         # AWS
         # ---
 
         openshift_cloudprovider_kind: aws
-        openshift_cloudprovider_aws_access_key: "{{ lookup('env','TF_VAR_aws_access_key') }}"
-        openshift_cloudprovider_aws_secret_key: "{{ lookup('env','TF_VAR_aws_secret_key') }}"
+{% raw %}
+        openshift_cloudprovider_aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY') }}"
+        openshift_cloudprovider_aws_secret_key: "{{ lookup('env','AWS_SECRET_KEY') }}"
 {%- endraw %}
         openshift_clusterid: {{ cluster.id }}
 

@@ -76,7 +76,7 @@ all:
         openshift_master_api_port: {{ cluster.api_port }}
         openshift_master_console_port: {{ cluster.api_port }}
 
-{% if okd.certificates.generate_api_cert %}
+{% if okd.certificates and okd.certificates.generate_api_cert %}
 {% raw %}
         # Certificate definitions.
         # At the moment they are created by bastion and pre-okd playbooks

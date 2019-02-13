@@ -62,15 +62,11 @@ sign-up.
 API Access Keys
 ^^^^^^^^^^^^^^^
 
-**Access Keys** and **Key Pairs** are described on the Amazon `Access Keys`_
-page. You will need both the access ``key`` and the corresponding ``secret``
-value.
+**Access Keys** and are described on the Amazon `Access Keys`_
+page. You will need environment AWS-compliant environment variables defined::
 
-Put the access ``key`` and ``secret`` in your ``setenv.sh`` script.
-These should replace any existing values for::
-
-    TF_VAR_aws_access_key
-    TF_VAR_aws_secret_key
+    AWS_ACCESS_KEY
+    AWS_SECRET_KEY
 
 SSH Key Pair
 ^^^^^^^^^^^^

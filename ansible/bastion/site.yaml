@@ -2,15 +2,22 @@
 
 # This playbook interacts with the bastion and master node.
 
-# It installs the user's OpenShift-specific tools and files
-# assuming a base Bastion image is being used on the cloud-provider.
+# It installs the user's OKD-specific tools and files
+# on the Bastion node, which can also be the Master if the Master
+# is acting as a Bastion.
 
 # -----------------------------------------------------------------------------
+
+  # Paths are relative to this (ansible/bastion) directory...
 
 - hosts: bastion
   gather_facts: no
   vars:
     setenv_file: ../../provider-env/setenv.sh
+    user_cert_file: >-
+      {{ deployments_directory }}/{{ deployment_name }}/certificates/cert.crt
+    vault_password_file: >-
+      {{ deployments_directory }}/{{ deployment_name }}/vault-pass.txt
 
   tasks:
 
@@ -88,7 +95,7 @@
 
   # The path to the file
   # is relative to this (ansible/bastion) directory.
-  - name: Install bastion.sh
+  - name: Install setenv.sh (as okd.sh)
     copy:
       src: "{{ setenv_file }}"
       dest: "/etc/profile.d/okd.sh"
@@ -163,6 +170,54 @@
     loop:
       - create.py
 
+  # Optional user-provided certificate information.
+  #          -------------
+  #
+  # This block runs if the user has provided their own SSL certificate files.
+  # Certificates files are expected in a directory called 'certificates'
+  # in the user's deployment directory. The following (vault-encrypted) files
+  # must exist:
+  #
+  # - private.key
+  # - cert.crt
+  # - caBundle.crt
+  #
+  # If there's a cert.crt file then we'll assume all the files exist.
+  #
+  # Note: If the user is providing their own SSL certificates they must be
+  #       encrypted using ansible vault and the encryption  password must be
+  #       present in the root of the user's deployment directory in the file
+  #       'vault-pass.txt'
+
+  - name: Get status of user certificates (cert.crt)
+    stat:
+      path: "{{ user_cert_file }}"
+    register: user_cert
+    delegate_to: localhost
+    changed_when: False
+
+  - name: Get status of certificate vault password file (vault-pass.txt)
+    stat:
+      path: "{{ vault_password_file }}"
+    register: vault_password
+    when: user_cert.stat.exists
+
+  - name: Assert vault password file (vault-pass.txt)
+    assert:
+      that: vault_password.stat.exists
+    when: user_cert.stat.exists
+
+  - name: Copy user certificates
+    copy:
+      src: "{{ item }}"
+      dest: "{{ ansible_env.HOME }}/okd-orchestrator/"
+      mode: 0644
+    loop:
+    - "{{ user_cert_file }}"
+    - "{{ deployments_directory}}/{{ deployment_name }}/certificates/private.key"
+    - "{{ deployments_directory}}/{{ deployment_name }}/certificates/ca-bundle.crt"
+    when: user_cert.stat.exists
+
 # -----------------------------------------------------------------------------
 
 - hosts: cli-node
@@ -195,7 +250,9 @@
   # Generate an SSL certificate
   # ---------------------------
   # We do this if the master_cert_email is defined
-  # (which is true if the okd.certificates.generate_api_cert property is set).
+  # (which is normally true if the okd.certificates.generate_api_cert property
+  # is set).
+  #
   # The master's 'public_hostname' is located in the deployment configuration
   # and the certbot registration email is expected to be set in the
   # user's 'setenv.sh'

@@ -5,15 +5,10 @@
 # ENVIRONMENT VARIABLES
 # Define these secrets as environment variables
 #
-# - TF_VAR_aws_access_key                 Your AWS access token
-# - TF_VAR_aws_secret_key                 Your AWS secret key
-#
 # - TF_VAR_keypair_name                   The cluster keypair name
 #
 # - TF_VAR_okd_admin_password             The initial OpenShift admin user password
 
-variable "aws_access_key" {}
-variable "aws_secret_key" {}
 variable "keypair_name" {}
 variable "okd_admin_password" {}
 
@@ -107,6 +102,7 @@ variable "infra_image_type" {
 # -----------------------------------------------------------------------------
 # DEFAULT VARIABLES (Bastion Node)
 
+{% if cluster.bastion %}
 variable "bastion_image_type" {
   default = "{{ cluster.bastion.type }}"
 }
@@ -114,3 +110,4 @@ variable "bastion_image_type" {
 variable "bastion_image_name_prefix" {
   default = "{{ cluster.bastion.image_prefix }}"
 }
+{% endif %}

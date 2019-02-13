@@ -52,6 +52,24 @@ cluster:
   # The latest image whose name starts with this will be used.
   # The Bastion, if used, uses its own image.
   image_prefix: okd-machine-image-311-
+  # The Terraform directory that contains the Terraform definitions
+  # that suitable to build the OKD Cluster machines cloud infrastructure.
+  terraform_dir: aws
+  # You can declare whether the Terraform state files are
+  # stored in a globally available shared service. At the moment we support
+  # Amazon S3. Leaving this field blank means that terraform state
+  # is stored locally (within the project's Terraform directory).
+  # If you provide this information you *MUST* define
+  #
+  # An S3 shared-state configuration would look something like:
+  #
+  #   terraform_shared_state:
+  #     aws:
+  #       s3_bucket: <s3-bucket-name>
+  #       s3_key: <s3-key>
+  #       db_region: <s3-region>
+  #       db_table: <dynamo-table-name>
+  #terraform_shared_state:
 
   # A name prefix for the names of each cluster object instance.
   # Where supported by your provider this value will be used to alter the
@@ -212,6 +230,8 @@ cluster:
 #   type: t2.medium
 #   node_group: general
 
+# --- okd ---------------------------------------------------------------------
+
 # The okd section provides details of the OpenShift/OKD deployment.
 # These are high-level, abstract, configuration details,
 # that include the tagged version of the software to install
@@ -220,7 +240,7 @@ okd:
 
   # The version tag for OpenShift Origin/OKD ansible playbooks.
   # This must be a valid tag in the OpenShift git repository.
-  ansible_tag: openshift-ansible-3.11.82-1
+  ansible_tag: openshift-ansible-3.11.83-1
   # The version of Ansible required to deploy the cluster.
   # The orchestrator will ensure that the correct version of
   # ansible is installed. v2.7.5 is likely to be suitable for
@@ -296,7 +316,33 @@ okd:
     # Set to automatically generate a Let's Encrypt/certbot certificate
     # for the master node when the cluster has been created but prior to
     # OpenShift installation.
+    #
+    # If generating certificates you *MUST* provide the certbot
+    # email address for certification in your provider-env/setenv.sh,
+    # typically in the 'TF_VAR_master_certbot_email' environment variable.
     generate_api_cert: no
+    # Alternatively, if you have your own wildcard certificate
+    # for your domain then you can place the certificate files
+    # (which must consist of files named 'cert.crt', 'private.key'
+    # and 'ca-bundle.crt') into the root of the OKD orchestrator
+    # directory and set 'wildcard_cert' to 'yes.
+    #
+    # Here you *MUST NOT* define an email address for certification.
+    # i.e. 'TF_VAR_master_certbot_email' must not be set.
+    #wildcard_cert: yes
+    # If you have a certificate that you want to use to provision
+    # as a master API certificate then place the certificate files
+    # (which must consist of files named 'cert.crt', 'private.key'
+    # and 'ca-bundle.crt') into the root of the OKD orchestrator
+    # directory and provide the certificate set URL in the 'master_api_cert'
+    # value.
+    #
+    # Here you *MUST NOT* define an email address for certification.
+    # i.e. 'TF_VAR_master_certbot_email' must not be set.
+    #master_api_cert: master.hostname.com
+    # For the above, refer to the following OpenShift documentation:
+    # https://docs.openshift.com/container-platform/3.11/
+    #     install_config/certificate_customization.html
 
   # The directory of the OKD Ansible inventory for this deployment.
   # This directory is expected to exist in `okd/inventories'.
@@ -304,23 +350,6 @@ okd:
   # and OKD cluster. The templates for a given provider are often
   # shared between similar deployments.
   inventory_dir: simple-aws-3-11
-  # The Terraform directory that contains the Terraform definitions
-  # that suitable to build the OKD Cluster machines cloud infrastructure.
-  terraform_dir: aws
-  # You can declare whether the Terraform state files are
-  # stored in a globally available shared service. At the moment we support
-  # Amazon S3. Leaving this field blank means that terraform state
-  # is stored locally (within the project's Terraform directory).
-  #
-  # An S3 shared-state configuration would look something like:
-  #
-  #   terraform_shared_state:
-  #     s3:
-  #       bucket: <s3-bucket-name>
-  #       key: <s3-key>
-  #       region: <s3-region>
-  #       table: <dynamo-table-name>
-# terraform_shared_state:
 
 # --- my_machines -------------------------------------------------------------
 

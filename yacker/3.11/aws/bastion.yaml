@@ -24,7 +24,7 @@ provisioners:
 - type: shell
   inline:
 
-  # On top of basic ODK requirements the 'control node'
+  # On top of basic OKD requirements the 'control node'
   # needs the following for Metrics installation:
   #
   #  httpd-tools
@@ -75,6 +75,8 @@ variables:
 
   aws_access_key: '{{env `TF_VAR_aws_access_key`}}'
   aws_secret_key: '{{env `TF_VAR_aws_secret_key`}}'
+  aws_region: eu-central-1
+  aws_source_ami: ami-dd3c0f36
   aws_i_type: t2.micro
   aws_user: centos
   base_ami_name: okd-bastion-image-311-03
@@ -89,9 +91,9 @@ builders:
   ami_description: '{{user `description`}}'
   ami_name: '{{user `base_ami_name`}}'
   instance_type: '{{user `aws_i_type`}}'
-  name: '{{user `our_name`}} Frankfurt'
-  region: eu-central-1
+  name: '{{user `our_name`}} {{user `aws_region`}}'
+  region: '{{user `aws_region`}}'
   secret_key: '{{user `aws_secret_key`}}'
-  source_ami: ami-dd3c0f36
+  source_ami: '{{user `aws_source_ami`}}'
   ssh_username: '{{user `aws_user`}}'
   type: amazon-ebs

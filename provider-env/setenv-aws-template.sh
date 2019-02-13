@@ -5,14 +5,15 @@
 # Copy as `setenv.sh`, edit and then install with `source setenv.sh`
 
 # -----------------------------------------------------------------------------
-# The following variables are required to compile machine images
-# and orchestrate the cluster on the cloud provider
+# The following variables are required to compile machine images on AWS,
+# orchestrate the cluster or use S3 state storage.
 # -----------------------------------------------------------------------------
 
-# AWS API access and secret keys.
+# AWS API access key, secret key and default region.
 # Required by the orchestrator to create resources on the cloud provider.
-export TF_VAR_aws_access_key=SetMe
-export TF_VAR_aws_secret_key=SetMe
+export AWS_ACCESS_KEY=SetMe
+export AWS_SECRET_KEY=SetMe
+export AWS_REGION=SetMe
 
 # -----------------------------------------------------------------------------
 # The following variables are required to orchestrate the cluster

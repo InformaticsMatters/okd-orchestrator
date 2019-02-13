@@ -69,23 +69,23 @@ provisioners:
 
 variables:
 
-  im_target_image_name: okd-machine-image-311-02
-  im_ssh_username: centos
-  im_domain_name: "{{env `OS_USER_DOMAIN_NAME`}}"
-  im_tenant_id: "{{env `OS_PROJECT_ID`}}"
-  im_packer_flavour_name: ssc.medium
-  im_source_image_id: 408790fb-cbd0-49f5-bd43-61d2321065c3
-  im_network: 3fd902bb-1d62-4b9a-bba7-4442d7c07cb3
+  os_domain_name: "{{env `OS_USER_DOMAIN_NAME`}}"
+  os_tenant_id: "{{env `OS_PROJECT_ID`}}"
+  os_packer_flavour_name: ssc.medium
+  os_source_image_id: 408790fb-cbd0-49f5-bd43-61d2321065c3
+  os_network: 3fd902bb-1d62-4b9a-bba7-4442d7c07cb3
+  ssh_username: centos
+  our_name: okd-machine-image-311-02
 
 builders:
 
 # OpenStack Builder
 
 - type: openstack
-  domain_name: "{{user `im_domain_name`}}"
-  tenant_id: "{{user `im_tenant_id`}}"
-  ssh_username: "{{user `im_ssh_username`}}"
-  flavor: "{{user `im_packer_flavour_name`}}"
-  image_name: "{{user `im_target_image_name`}}"
-  source_image: "{{user `im_source_image_id`}}"
-  networks: "{{ user `im_network` }}"
+  domain_name: "{{user `os_domain_name`}}"
+  tenant_id: "{{user `os_tenant_id`}}"
+  ssh_username: "{{user `ssh_username`}}"
+  flavor: "{{user `os_packer_flavour_name`}}"
+  image_name: "{{user `our_name`}}"
+  source_image: "{{user `os_source_image_id`}}"
+  networks: "{{ user `os_network` }}"

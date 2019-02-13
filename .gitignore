@@ -2,6 +2,11 @@
 okdo-keypair
 okdo-keypair.pub
 
+# Protect the user's SSL certificates
+ca-bundle.crt
+cert.crt
+private.key
+
 # Translated (jinja2) material...
 okd/inventories/**/inventory.yaml
 okd/inventories/**/inventory.yaml.tpl

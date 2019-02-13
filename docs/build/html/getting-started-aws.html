@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Your Own Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploying-ssl-certificates.html">Deploying SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced/advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
@@ -218,13 +219,10 @@ sign-up.</p>
 </div>
 <div class="section" id="api-access-keys">
 <h3>API Access Keys<a class="headerlink" href="#api-access-keys" title="Permalink to this headline">¶</a></h3>
-<p><strong>Access Keys</strong> and <strong>Key Pairs</strong> are described on the Amazon <a class="reference external" href="https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys">Access Keys</a>
-page. You will need both the access <code class="docutils literal notranslate"><span class="pre">key</span></code> and the corresponding <code class="docutils literal notranslate"><span class="pre">secret</span></code>
-value.</p>
-<p>Put the access <code class="docutils literal notranslate"><span class="pre">key</span></code> and <code class="docutils literal notranslate"><span class="pre">secret</span></code> in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> script.
-These should replace any existing values for:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TF_VAR_aws_access_key</span>
-<span class="n">TF_VAR_aws_secret_key</span>
+<p><strong>Access Keys</strong> and are described on the Amazon <a class="reference external" href="https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys">Access Keys</a>
+page. You will need environment AWS-compliant environment variables defined:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AWS_ACCESS_KEY</span>
+<span class="n">AWS_SECRET_KEY</span>
 </pre></div>
 </div>
 </div>

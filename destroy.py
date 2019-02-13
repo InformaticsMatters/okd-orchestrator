@@ -34,7 +34,8 @@ def _main(cli_args, chosen_deployment_name):
 
     config_file = os.path.join(OKD_DEPLOYMENTS_DIRECTORY,
                                chosen_deployment_name,
-                               io.OKD_CONFIG_FILE)
+                               io.get_deployment_config_filename(
+                                   chosen_deployment_name))
     if not os.path.isfile(config_file):
         io.error('Configuration file does not exist in the deployment ({})'.
                  format(chosen_deployment_name))
@@ -76,14 +77,14 @@ def _main(cli_args, chosen_deployment_name):
     # ---------
     # Destroy the cluster.
 
-    t_dir = deployment.okd.terraform_dir
+    t_dir = deployment.cluster.terraform_dir
     cmd = 'terraform init'
     cwd = 'terraform/{}'.format(t_dir)
     rv = io.run(cmd, cwd, cli_args.quiet)
     if not rv:
         return False
 
-    t_dir = deployment.okd.terraform_dir
+    t_dir = deployment.cluster.terraform_dir
     cmd = 'terraform destroy -force -state=.terraform.{}'.\
         format(chosen_deployment_name)
     cwd = 'terraform/{}'.format(t_dir)

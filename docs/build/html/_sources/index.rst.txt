@@ -33,6 +33,7 @@ A project sponsored by `OpenRiskNet`_.
     destroying-your-cluster
     deploying-to-your-own-cluster
     environment-variables
+    provisioning-ssl-certificates
     advanced/advanced-topics
     faq
 

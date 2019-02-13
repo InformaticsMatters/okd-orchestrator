@@ -3,9 +3,12 @@
 """template.py - template rendering.
 
 This module basically replicates the Terraform rendering actions
-when orchestrating pre-existing clusters. It is used to replace the
-node definitions in the OKD Ansible inventory file (normally found
-in 'okd/inventories/?/'.
+when orchestrating pre-existing (bare-metal) clusters. It is used to replace
+the node definitions in the OKD Ansible inventory file (normally found
+in 'okd/inventories/?/').
+
+Alan Christie
+February 2019
 """
 
 import codecs

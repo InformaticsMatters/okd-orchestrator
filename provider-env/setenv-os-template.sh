@@ -5,11 +5,11 @@
 # Copy as `setenv.sh`, edit and then install with `source setenv.sh`
 
 # -----------------------------------------------------------------------------
-# The following variables are required to compile machine images
-# and orchestrate the cluster on the cloud provider
+# The following variables are required to use S3 state storage.
 # -----------------------------------------------------------------------------
 
-# TBD
+export AWS_ACCESS_KEY=SetMe
+export AWS_SECRET_KEY=SetMe
 
 # -----------------------------------------------------------------------------
 # The following variables are required to orchestrate the cluster

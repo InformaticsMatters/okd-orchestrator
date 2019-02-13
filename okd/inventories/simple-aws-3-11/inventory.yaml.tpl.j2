@@ -80,7 +80,7 @@
               'labels': ['node-role.kubernetes.io/compute=true',
 {%- else %}
               'labels': [
-{%- endif %}
+{%- endif -%}
 {%- for label in node_group.labels %}
                          '{{ label }}'{{ "," if not loop.last }}
 {%- endfor -%}

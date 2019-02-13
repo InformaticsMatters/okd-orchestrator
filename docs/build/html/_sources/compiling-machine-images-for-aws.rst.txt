@@ -87,6 +87,35 @@ Once configured you can find the AMI for **"Canada (Central)"**
         | jq -r '.Images[0].ImageId'
     ami-e802818c
 
-This value should be used in an appropriate ``source_ami`` **builders**
-section property in your Yacker YAML template file, where you will also
-need to adjust the ``name`` and ``region`` properties accordingly.
+This value can be used on the command-line to execute a **builder**
+for an image in that region. For example, the following can be added to the
+yacker command to build images for the specific regions
+(valid February 2019) [#f1]_: -
+
+*   ``-var 'aws_region=us-east-1' -var 'aws_source_ami=ami-9887c6e7'``
+*   ``-var 'aws_region=us-east-2' -var 'aws_source_ami=ami-9c0638f9'``
+*   ``-var 'aws_region=us-west-1' -var 'aws_source_ami=ami-4826c22b'``
+*   ``-var 'aws_region=us-west-2' -var 'aws_source_ami=ami-3ecc8f46'``
+*   ``-var 'aws_region=ap-south-1' -var 'aws_source_ami=ami-1780a878'``
+*   ``-var 'aws_region=ap-northeast-1' -var 'aws_source_ami=ami-8e8847f1'``
+*   ``-var 'aws_region=ap-northeast-2' -var 'aws_source_ami=ami-bf9c36d1'``
+*   ``-var 'aws_region=ap-southeast-1' -var 'aws_source_ami=ami-8e0205f2'``
+*   ``-var 'aws_region=ap-southeast-2' -var 'aws_source_ami=ami-d8c21dba'``
+*   ``-var 'aws_region=ca-central-1' -var 'aws_source_ami=ami-e802818c'``
+*   ``-var 'aws_region=eu-west-1' -var 'aws_source_ami=ami-3548444c'``
+*   ``-var 'aws_region=eu-west-2' -var 'aws_source_ami=ami-00846a67'``
+*   ``-var 'aws_region=eu-west-3' -var 'aws_source_ami=ami-262e9f5b'``
+*   ``-var 'aws_region=eu-north-1' -var 'aws_source_ami=ami-b133bccf'``
+*   ``-var 'aws_region=sa-east-1' -var 'aws_source_ami=ami-cb5803a7'``
+
+As an example, to build the base OKD base image for Singapore
+(``ap-southeast-1``) you would run::
+
+    $ yacker build \
+        -var 'aws_region=ap-southeast-1' -var 'aws_source_ami=ami-8e0205f2' \
+        yacker/3.11/aws/okd.yaml
+
+
+.. rubric:: Footnotes
+
+.. [#f1] Does not include Asia Pacific (Osaka-Local), China or GovCloud

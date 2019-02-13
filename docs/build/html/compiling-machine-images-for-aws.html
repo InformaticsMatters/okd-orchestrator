@@ -93,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Your Own Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deploying-ssl-certificates.html">Deploying SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced/advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
@@ -235,9 +236,41 @@ and output format can be left at <strong>None</strong>.</p>
 ami-e802818c
 </pre></div>
 </div>
-<p>This value should be used in an appropriate <code class="docutils literal notranslate"><span class="pre">source_ami</span></code> <strong>builders</strong>
-section property in your Yacker YAML template file, where you will also
-need to adjust the <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">region</span></code> properties accordingly.</p>
+<p>This value can be used on the command-line to execute a <strong>builder</strong>
+for an image in that region. For example, the following can be added to the
+yacker command to build images for the specific regions
+(valid February 2019) <a class="footnote-reference" href="#f1" id="id1">[1]</a>: -</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=us-east-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-9887c6e7'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=us-east-2'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-9c0638f9'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=us-west-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-4826c22b'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=us-west-2'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-3ecc8f46'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ap-south-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-1780a878'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ap-northeast-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-8e8847f1'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ap-northeast-2'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-bf9c36d1'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ap-southeast-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-8e0205f2'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ap-southeast-2'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-d8c21dba'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ca-central-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-e802818c'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=eu-west-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-3548444c'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=eu-west-2'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-00846a67'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=eu-west-3'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-262e9f5b'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=eu-north-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-b133bccf'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=sa-east-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-cb5803a7'</span></code></li>
+</ul>
+<p>As an example, to build the base OKD base image for Singapore
+(<code class="docutils literal notranslate"><span class="pre">ap-southeast-1</span></code>) you would run:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ yacker build \
+    -var &#39;aws_region=ap-southeast-1&#39; -var &#39;aws_source_ami=ami-8e0205f2&#39; \
+    yacker/3.11/aws/okd.yaml
+</pre></div>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Does not include Asia Pacific (Osaka-Local), China or GovCloud</td></tr>
+</tbody>
+</table>
 </div>
 </div>
 

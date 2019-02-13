@@ -8,7 +8,8 @@ import random
 import subprocess
 import sys
 
-OKD_CONFIG_FILE = 'configuration.yaml'
+_OKD_CONFIG_BASE = 'configuration'
+_OKD_CONFIG_EXTENSIONS = ['.yml', '.yaml']
 
 _OKD_DEPLOYMENTS_DIRECTORY_ENV = 'TF_VAR_deployments_directory'
 
@@ -34,9 +35,9 @@ def get_confirmation_word():
 
 
 def get_deployments_directory():
-    """Returns a defined deployments directory, the value of
-    the _OKD_DEPLOYMENTS_DIRECTORY_ENV environment variable,
-    or 'deployments' if not defined or empty.
+    """Returns a defined deployments directory. This is the value of
+    the _OKD_DEPLOYMENTS_DIRECTORY_ENV environment variable if it's defined,
+    or 'deployments'.
 
     :returns: The deployments directory or 'deployments'
     :rtype: ``str``
@@ -45,10 +46,33 @@ def get_deployments_directory():
     return directory if directory else 'deployments'
 
 
+def get_deployment_config_filename(deployment):
+    """Returns the configuration file from the configuration directory.
+    If there are two files then the one with the shortened extension ('.yml) is
+    returned.
+
+    :param deployment: The deployment directory
+    :type deployment: ``str``
+    :returns: The configuration file name (without the directory)
+              or None if a configuration file does not exist
+    '"""
+    deployment_dir = os.path.join(get_deployments_directory(), deployment)
+    for ext in _OKD_CONFIG_EXTENSIONS:
+        filename = _OKD_CONFIG_BASE + ext
+        if os.path.isfile(os.path.join(deployment_dir, filename)):
+            return filename
+    # Not found...
+    return None
+
+
 def get_deployment_config_name(deployment=None,
                                display_deployments=False):
     """Gets the configuration directory name from the deployments directory.
     A deployment does not have to be named if there's only one deployment.
+    A deployment exists if s directory exists that contains a 'configuration'
+    file.
+
+    A configuration file ends '.yaml' or .'yml'.
 
     :param deployment: The deployment name (or None)
     :type deployment: ``str``
@@ -66,9 +90,7 @@ def get_deployment_config_name(deployment=None,
         deployment_dir = os.path.join(get_deployments_directory(),
                                       possible_deployment)
         if os.path.isdir(deployment_dir):
-            deployment_cfg = os.path.join(deployment_dir,
-                                          OKD_CONFIG_FILE)
-            if os.path.isfile(deployment_cfg):
+            if get_deployment_config_filename(possible_deployment):
                 deployments.append(possible_deployment)
 
     # If there are no deployments, we can do nothing!

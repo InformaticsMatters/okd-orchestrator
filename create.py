@@ -45,7 +45,8 @@ def _main(cli_args, chosen_deployment_name):
 
     config_file = os.path.join(OKD_DEPLOYMENTS_DIRECTORY,
                                chosen_deployment_name,
-                               io.OKD_CONFIG_FILE)
+                               io.get_deployment_config_filename(
+                                   chosen_deployment_name))
     if not os.path.isfile(config_file):
         print('Config file does not exist ({})'.
               format(chosen_deployment_name))
@@ -116,7 +117,7 @@ def _main(cli_args, chosen_deployment_name):
     if not rv:
         return False
 
-    t_dir = deployment.okd.terraform_dir
+    t_dir = deployment.cluster.terraform_dir
     if cli_args.cluster:
 
         # ------
@@ -202,16 +203,26 @@ def _main(cli_args, chosen_deployment_name):
         if not cli_args.skip_pre_okd:
 
             extra_env = ''
-            if deployment.okd.certificates.generate_api_cert:
+            if deployment.okd.certificates:
+                if deployment.okd.certificates.generate_api_cert:
 
-                certbot_email = os.environ.get(OKD_CERTBOT_EMAIL_ENV)
-                if not certbot_email:
-                    io.error('You must define {}'.format(OKD_CERTBOT_EMAIL_ENV))
-                    return False
+                    certbot_email = os.environ.get(OKD_CERTBOT_EMAIL_ENV)
+                    if not certbot_email:
+                        io.error('You must define {}'.format(OKD_CERTBOT_EMAIL_ENV))
+                        return False
 
-                extra_env += ' -e master_cert_email="{}"'.format(certbot_email)
-                extra_env += ' -e public_hostname="{}"'. \
-                    format(deployment.cluster.public_hostname)
+                    extra_env += ' -e master_cert_email="{}"'.format(certbot_email)
+                    extra_env += ' -e public_hostname="{}"'. \
+                        format(deployment.cluster.public_hostname)
+                else:
+
+                    # User-supplied certificates -
+                    # expect a vault password file
+                    # in the deployment directory
+                    extra_env += ' --vault-password-file' \
+                                 ' {}/{}/vault-pass.txt'.\
+                        format(OKD_DEPLOYMENTS_DIRECTORY,
+                               chosen_deployment_name)
 
             if OKD_DEPLOYMENTS_DIRECTORY != 'deployments':
                 extra_env += ' -e deployments_directory="{}"'.\
@@ -296,7 +307,8 @@ def _main(cli_args, chosen_deployment_name):
     if not cli_args.skip_pre_okd:
 
         extra_env = ''
-        if deployment.okd.certificates.generate_api_cert:
+        if deployment.okd.certificates and\
+                deployment.okd.certificates.generate_api_cert:
             extra_env += ' -e public_hostname={}'. \
                 format(deployment.cluster.public_hostname)
         cmd = 'ansible-playbook site.yaml' \
@@ -367,28 +379,29 @@ def _main(cli_args, chosen_deployment_name):
         # Now iterate through the plays listed in the cluster's
         # 'post_okd' list...
 
-        for play in deployment.okd.post_okd:
-            # Any user-defined 'extra' variables?
-            play_vars = ''
-            if play.vars:
-                for var in play.vars:
-                    play_vars += '-e {} '.format(var)
-                play_vars = play_vars[:-1]
-            # Run the user playbook...
-            cmd = 'ansible-playbook playbooks/{}/deploy.yaml' \
-                ' -e okd_api_hostname=https://{}:{}' \
-                ' -e okd_admin=admin' \
-                ' -e okd_admin_password={}' \
-                ' -e okd_deployment={}' \
-                ' {}'.\
-                format(play.play,
-                       okd_api_hostname, okd_api_port,
-                       okd_admin_password, chosen_deployment_name,
-                       play_vars)
-            cwd = 'ansible/post-okd'
-            rv, _ = io.run(cmd, cwd, cli_args.quiet)
-            if not rv:
-                return False
+        if deployment.okd.post_okd:
+            for play in deployment.okd.post_okd:
+                # Any user-defined 'extra' variables?
+                play_vars = ''
+                if play.vars:
+                    for var in play.vars:
+                        play_vars += '-e {} '.format(var)
+                    play_vars = play_vars[:-1]
+                # Run the user playbook...
+                cmd = 'ansible-playbook playbooks/{}/deploy.yaml' \
+                    ' -e okd_api_hostname=https://{}:{}' \
+                    ' -e okd_admin=admin' \
+                    ' -e okd_admin_password={}' \
+                    ' -e okd_deployment={}' \
+                    ' {}'.\
+                    format(play.play,
+                           okd_api_hostname, okd_api_port,
+                           okd_admin_password, chosen_deployment_name,
+                           play_vars)
+                cwd = 'ansible/post-okd'
+                rv, _ = io.run(cmd, cwd, cli_args.quiet)
+                if not rv:
+                    return False
 
     # -------
     # Success

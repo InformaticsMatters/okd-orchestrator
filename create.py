@@ -208,10 +208,12 @@ def _main(cli_args, chosen_deployment_name):
 
                     certbot_email = os.environ.get(OKD_CERTBOT_EMAIL_ENV)
                     if not certbot_email:
-                        io.error('You must define {}'.format(OKD_CERTBOT_EMAIL_ENV))
+                        io.error('You must define {}'.
+                                 format(OKD_CERTBOT_EMAIL_ENV))
                         return False
 
-                    extra_env += ' -e master_cert_email="{}"'.format(certbot_email)
+                    extra_env += ' -e master_cert_email="{}"'.\
+                        format(certbot_email)
                     extra_env += ' -e public_hostname="{}"'. \
                         format(deployment.cluster.public_hostname)
                 else:

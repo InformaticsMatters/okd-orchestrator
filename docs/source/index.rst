@@ -23,6 +23,7 @@ A project sponsored by `OpenRiskNet`_.
     :maxdepth: 1
     :caption: Contents:
 
+    orientation
     architecture
     getting-started
     getting-started-aws

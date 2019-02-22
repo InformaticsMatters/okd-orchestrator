@@ -21,6 +21,6 @@ attribution is required.
 ---
 
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/deed.en
-[github pages]: https://demo.informaticsmatters.com/okd-orchestrator/
+[github pages]: https://docs.informaticsmatters.com/okd-orchestrator/
 [image]: https://pixabay.com/en/vintage-retro-silhouette-black-1318361/
 [pixaby]: https://pixabay.com

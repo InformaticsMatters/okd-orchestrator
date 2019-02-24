@@ -1,0 +1,129 @@
+# -----------------------------------------------------------------------------
+# Templating
+# -----------------------------------------------------------------------------
+
+# -------------
+# OKD Inventory
+# -------------
+
+data "template_file" "okd_inventory" {
+  template = "${file("${var.okd_dir}/inventories/${var.inventory_dir}/inventory.yaml.tpl")}"
+
+  vars {
+
+    # Console/API and default route suffix values...
+
+    public_hostname = "{{ cluster.public_hostname }}"
+    default_subdomain = "{{ cluster.default_subdomain }}"
+
+    # Masters...
+
+    {% if cluster.master.fixed_ip_id %}
+    master1 = "{{ cluster.master.fixed_ip_id }}"
+    {% else %}
+    master1 = "${google_compute_instance.master.0.network_interface.0.access_config.0.nat_ip}"
+    {% endif %}
+
+    {% for item in range(1, cluster.master.count) %}
+    master{{ item + 1 }} = "${google_compute_instance.master.{{ item }}.network_interface.0.network_ip}"
+    {% endfor %}
+
+    # Infrastructure nodes...
+
+    {% if not cluster.master.is_infra is defined or not cluster.master.is_infra %}
+    {% if cluster.infra.fixed_ip_id %}
+    infra1 = "{{ cluster.infra.fixed_ip_id }}"
+    {% else %}
+    infra1 = "${google_compute_instance.infra.network_interface.0.access_config.0.nat_ip}"
+    {% endif %}
+    {% endif %}
+
+    {% if not cluster.master.is_infra is defined or not cluster.master.is_infra %}
+    {% for item in range(1, cluster.infra.count) %}
+    infra{{ item + 1 }} = "${google_compute_instance.infra.{{ item }}.network_interface.0.network_ip}"
+    {% endfor %}
+    {% endif %}
+
+    # Compute nodes...
+
+    {% set node_id = namespace(a=1) %}
+    {% for node in cluster.nodes %}
+    {% for item in range(node.count) %}
+    node{{ '%03d'|format(node_id.a) }} = "${google_compute_instance.node_{{ node.name }}.{{ item }}.network_interface.0.network_ip}"
+    {% set node_id.a = node_id.a + 1 %}
+    {% endfor %}
+    {% endfor %}
+
+    # The CLI node (public-facing)...
+    # Ideally a bastion, but can be a master instance.
+    # The user expects this to have the oc command-line tools installed.
+
+    {% if not cluster.master.is_bastion is defined or not cluster.master.is_bastion %}
+    cli_node = "${google_compute_instance.bastion.network_interface.0.access_config.0.nat_ip}"
+    {% else %}
+    {% if cluster.master.fixed_ip_id %}
+    cli_node = "{{ cluster.master.fixed_ip_id }}"
+    {% else %}
+    cli_node = "{{ cluster.master.fixed_ip_id }}"
+    {% endif %}
+    {% endif %}
+
+  }
+}
+
+resource "local_file" "okd_inventory" {
+  content = "${data.template_file.okd_inventory.rendered}"
+  filename = "${var.okd_dir}/inventories/${var.inventory_dir}/inventory.yaml"
+}
+
+# ------------------
+# Post-OKD Inventory
+# ------------------
+
+data "template_file" "post_okd_inventory" {
+  template = "${file("${var.ansible_dir}/post-okd/inventory.yaml.tpl")}"
+
+  vars {
+    cli_node = "{{ cluster.master.fixed_ip_id }}"
+    admin_password = "${var.okd_admin_password}"
+  }
+}
+
+resource "local_file" "post_okd_inventory" {
+  content = "${data.template_file.post_okd_inventory.rendered}"
+  filename = "${var.ansible_dir}/post-okd/inventory.yaml"
+}
+
+# ---------------------
+# The Bastion Inventory
+# ---------------------
+
+data "template_file" "bastion-inventory" {
+  template = "${file("${var.ansible_dir}/bastion/inventory.yaml.tpl")}"
+
+  vars {
+    # The Bastion instance
+    # (either a separate machine or the master)
+    {% if cluster.master.is_bastion %}
+    {% if cluster.master.fixed_ip_id %}
+    bastion = "{{ cluster.master.fixed_ip_id }}"
+    {% else %}
+    bastion = "${google_compute_instance.master.0.network_interface.0.access_config.0.nat_ip}"
+    {% endif %}
+    {% else %}
+    bastion = "${google_compute_instance.bastion.0.network_interface.0.access_config.0.nat_ip}"
+    {% endif %}
+
+    # The CLI node (Master)
+    {% if cluster.master.fixed_ip_id %}
+    cli_node = "{{ cluster.master.fixed_ip_id }}"
+    {% else %}
+    cli_node = "${google_compute_instance.master.0.network_interface.0.access_config.0.nat_ip}"
+    {% endif %}
+  }
+}
+
+resource "local_file" "bastion-inventory" {
+  content = "${data.template_file.bastion-inventory.rendered}"
+  filename = "${var.ansible_dir}/bastion/inventory.yaml"
+}

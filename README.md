@@ -12,6 +12,9 @@ A project sponsored by OpenRiskNet.
 
 Refer to this project's [GitHub Pages] for detailed documentation.
 
+>   The OKD Orchestrator documentation has been written using the [Sphinx]
+    documentation generator.
+
 ## Image attribution
 
 The orchestrator banner [image] is provided courtesy of [pixaby] under the
@@ -24,3 +27,4 @@ attribution is required.
 [github pages]: https://docs.informaticsmatters.com/build/html/index.html
 [image]: https://pixabay.com/en/vintage-retro-silhouette-black-1318361/
 [pixaby]: https://pixabay.com
+[sphnx]: http://www.sphinx-doc.org/en/master/

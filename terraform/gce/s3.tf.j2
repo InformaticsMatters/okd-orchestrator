@@ -1,0 +1,14 @@
+# -----------------------------------------------------------------------------
+# State Storage (AWS S3/DynamoDB)
+# -----------------------------------------------------------------------------
+
+{% if cluster.terraform_shared_state is defined and cluster.terraform_shared_state.aws is defined -%}
+terraform {
+  backend "s3" {
+    bucket = "{{ cluster.terraform_shared_state.aws.s3_bucket }}"
+    key = "{{ cluster.terraform_shared_state.aws.s3_key }}"
+    region = "{{ cluster.terraform_shared_state.aws.db_region }}"
+    dynamodb_table = "{{ cluster.terraform_shared_state.aws.db_table }}"
+  }
+}
+{% endif -%}

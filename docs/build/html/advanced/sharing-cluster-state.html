@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Sharing Cluster State &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Post-Deployment Package Options" href="post-deployment-package-options.html" />
+    <link rel="prev" title="Deploying to Bare Metal" href="deploying-to-your-own-cluster.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> The OKD Orchestrator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../orientation.html">Orientation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compiling-machine-images.html">Compiling Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../anatomy-of-a-deployment-configuration.html">Anatomy of a Deployment Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generating-site-certificates.html">Generating SSL Certificates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../creating-your-cluster.html">Creating a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="creating-post-okd-playbooks.html">Creating Post-OKD Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploying-application-templates.html">Deploying Application Templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-your-own-deployments.html">Using Your Own Deployments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running-without-docker.html">Running Without Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building-the-docker-image.html">Building the Docker Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="provisioning-ssl-certificates.html">Provisioning SSL Certificates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Bare Metal</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Sharing Cluster State</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shared-state-storage">Shared state storage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#on-aws">On AWS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="post-deployment-package-options.html">Post-Deployment Package Options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">The OKD Orchestrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="advanced-topics.html">Advanced Topics</a> &raquo;</li>
+        
+      <li>Sharing Cluster State</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/advanced/sharing-cluster-state.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sharing-cluster-state">
+<h1>Sharing Cluster State<a class="headerlink" href="#sharing-cluster-state" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>In order to instantiate cloud-based hardware the OKD Orchestrator relies on
+<a class="reference external" href="https://www.terraform.io">Terraform</a>, an <em>infrastructure as code</em> provisioning tool by <a class="reference external" href="https://www.hashicorp.com">HashiCorp</a>.</p>
+<p><strong>Terraform</strong> is a powerful tool that uses a <em>declarative</em> language, i.e.
+language where you tell it what you want and it does what’s required,
+in the right order, to satisfy your needs.</p>
+<p>As a side-effect, <strong>Terraform</strong> creates <em>state files</em> in order to track the
+objects it creates. These files are kept in the orchestrator’s <code class="docutils literal notranslate"><span class="pre">terraform</span></code>
+directory and it’s therefore extremely important not to remove them.
+If lost Terraform will have difficulty adjusting or removing your cluster
+hardware.</p>
+<p>The disadvantage of storing state files in the <code class="docutils literal notranslate"><span class="pre">terraform</span></code> directory
+is that only <em>you</em> can manage (and destroy) the cluster and, importantly,
+you have to keep the files until you do destroy the cluster.</p>
+</div>
+<div class="section" id="shared-state-storage">
+<h2>Shared state storage<a class="headerlink" href="#shared-state-storage" title="Permalink to this headline">¶</a></h2>
+<p>Instead of storing state files on your workstation you can use Terraform’s
+built-in remote state storage and locking feature.</p>
+<p>For a detailed discussion of state storage and locking refer
+to Terraform’s own comprehensive
+<a class="reference external" href="https://www.terraform.io/docs/backends/state.html">State Storage and Locking</a>
+documentation.</p>
+<div class="section" id="on-aws">
+<h3>On AWS<a class="headerlink" href="#on-aws" title="Permalink to this headline">¶</a></h3>
+<p>the OKD Orchestrator exposes the ability to store Terraform state in an AWS
+S3 bucket <a class="footnote-reference" href="#f1" id="id1">[1]</a>. You do this by defining the <code class="docutils literal notranslate"><span class="pre">terraform_shared_state</span></code>
+properties in your deployment configuration.</p>
+<p>Before you can use shared state storage you will need to create a bucket
+on S3 and a related DynamoDB table, which provides
+state locking (preventing concurrent cluster modifications).</p>
+<p>You need to provide the following and add the details to your deployment
+configuration. The properties are documented in the example
+<code class="docutils literal notranslate"><span class="pre">compact-aws-frankfurt-3-11</span></code> configuration</p>
+<ul class="simple">
+<li>An S3 bucket (which is a unique name in AWS)</li>
+<li>A key in the bucket (a name in your bucket)</li>
+<li>A dynamo DB table with a <em>primary key</em> string called <cite>LockID</cite>.
+The table name and the database region goes into your configuration.</li>
+</ul>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Other backend types may be supported in future releases.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="post-deployment-package-options.html" class="btn btn-neutral float-right" title="Post-Deployment Package Options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="deploying-to-your-own-cluster.html" class="btn btn-neutral" title="Deploying to Bare Metal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Informatics Matters
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

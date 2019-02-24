@@ -84,6 +84,11 @@ def _main(cli_args, chosen_deployment_name):
     io.banner(deployment.name, full_heading=True, quiet=False)
     if not cli_args.auto_acknowledge and not cli_args.just_plan:
 
+        # Display the orchestration description
+        # (f there is one)
+        if deployment.description:
+            io.description(deployment.description)
+
         confirmation_word = io.get_confirmation_word()
         target = 'CREATE the Cluster' \
             if cli_args.cluster else 'INSTALL OpenShift/OKD'
@@ -229,6 +234,8 @@ def _main(cli_args, chosen_deployment_name):
             if OKD_DEPLOYMENTS_DIRECTORY != 'deployments':
                 extra_env += ' -e deployments_directory="{}"'.\
                     format(OKD_DEPLOYMENTS_DIRECTORY)
+            else:
+                extra_env += ' -e deployments_directory="../../deployments"'
 
             keypair_name = os.environ.get(OKD_KEYPAIR_NAME_ENV)
             if not keypair_name:

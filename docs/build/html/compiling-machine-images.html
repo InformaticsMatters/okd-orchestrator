@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Compiling Machine Images for AWS" href="compiling-machine-images-for-aws.html" />
-    <link rel="prev" title="Getting Started with AWS" href="getting-started-aws.html" /> 
+    <link rel="next" title="Anatomy of a Deployment Configuration" href="anatomy-of-a-deployment-configuration.html" />
+    <link rel="prev" title="Running Without Docker" href="advanced/running-without-docker.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -80,17 +80,27 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="orientation.html">Orientation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Compiling Machine Images</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images-for-aws.html">Compiling Machine Images for AWS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Compiling Machine Images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compiling-machine-images-for-aws">Compiling Machine Images for AWS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#validate">Validate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build">Build</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#finding-new-base-aws-machine-images">Finding new base AWS Machine Images</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#compiling-machine-images-for-gce">Compiling Machine Images for GCE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Build</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="anatomy-of-a-deployment-configuration.html">Anatomy of a Deployment Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generating-site-certificates.html">Generating SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Your Own Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deploying-ssl-certificates.html">Deploying SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced/advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
@@ -159,6 +169,8 @@
             
   <div class="section" id="compiling-machine-images">
 <h1>Compiling Machine Images<a class="headerlink" href="#compiling-machine-images" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The OKD cluster (and its Bastion) are formed from hardware
 provided by your cloud provider. As the base image for each of our
 physical machines needs some pre-installed software it’s often
@@ -181,11 +193,169 @@ where you’ll find templates organised according to OKD release and
 cloud provider. For example, the OpenShift 3.11 AWS EC2 templates for the
 Bastion and OpenShift cluster nodes can be found in the <code class="docutils literal notranslate"><span class="pre">yacker/3.11/aws</span></code>
 directory.</p>
-<p>The following guides provide instructions for the cloud providers
-we support: -</p>
+</div>
+<div class="section" id="compiling-machine-images-for-aws">
+<h2>Compiling Machine Images for AWS<a class="headerlink" href="#compiling-machine-images-for-aws" title="Permalink to this headline">¶</a></h2>
+<p>Before you start, as Yacker will be creating a small EC2 compute instance
+upon which it will run the build, you will need suitable AWS API Keys
+and these need to be available in your provider environment script
+(e.g. <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code>).</p>
+<blockquote>
+<div>For some cloud providers, like AWS, you may need to build images for each
+<strong>region</strong> that you want to create an OpenShift cluster in.
+Yacker can build images for as many regions as you like. You simply need a
+<code class="docutils literal notranslate"><span class="pre">builders</span></code> section for each region in the template file. The template files
+in our example build images for the <strong>Frankfurt</strong> region.</div></blockquote>
+<div class="section" id="validate">
+<h3>Validate<a class="headerlink" href="#validate" title="Permalink to this headline">¶</a></h3>
+<p>To compile the OKD 3.11 machine images, set your environment variables and
+launch the orchestrator container. You will not need to define all the
+environment variables at this stage, only those required for compiling machine
+images.</p>
+<p>When you’re ready run the following to start and enter the container
+from the root of the project:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./okdo-start.sh
+</pre></div>
+</div>
+<p>It is important to realise that the <code class="docutils literal notranslate"><span class="pre">okdo-start.sh</span></code> script maps your
+orchestrator working directory to the container directory
+<code class="docutils literal notranslate"><span class="pre">$HOME/okd-orchestrator</span></code>, which is also the working directory when you
+enter the container.</p>
+<p>If this is the first time you’re running the orchestrator the container image
+will need to be downloaded from Docker. This might take a moment or two before
+you eventually enter the container.</p>
+<p>From the orchestrator container you can validate the OpensShift/OKD 3.11
+template files:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ yacker validate yacker/3.11/aws/bastion.yaml
+$ yacker validate yacker/3.11/aws/okd.yaml
+</pre></div>
+</div>
+</div>
+<div class="section" id="build">
+<h3>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h3>
+<p>Once validated, build each image:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ yacker build yacker/3.11/aws/bastion.yaml
+$ yacker build yacker/3.11/aws/okd.yaml
+</pre></div>
+</div>
+<p>The builds may take a minute or two. As long as you have not changed
+the image <code class="docutils literal notranslate"><span class="pre">ami_name</span></code> variable the machine images (AMIs) Yacker creates
+will be picked up automatically by the cluster orchestration.</p>
+<dl class="docutils">
+<dt>&gt;   You do not need to create the bastion image if your deployment’s <strong>Master</strong></dt>
+<dd>instance is also acting as the Bastion machine. The Bastion machine image
+is only required if you’re creating a dedicated Bastion in the cluster.</dd>
+</dl>
+<p>You can stay in the container image and follow the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a>
+guide to create your cluster.</p>
+</div>
+<div class="section" id="finding-new-base-aws-machine-images">
+<h3>Finding new base AWS Machine Images<a class="headerlink" href="#finding-new-base-aws-machine-images" title="Permalink to this headline">¶</a></h3>
+<p>The base image AMI that your Yacker template files use depends on the AWS
+region you wish to deploy your cluster to. The orchestrator images
+are based on an official CentOS Linux image. The example configuration uses
+the <em>FREE TIER</em> CentOS 7 image version <strong>1805_01</strong> that is available in
+Frankfurt called <strong>“CentOS 7 (x86_64) - with Updates HVM”</strong> (<code class="docutils literal notranslate"><span class="pre">ami-dd3c0f36</span></code>).</p>
+<p>When creating Yacker templates for other regions you will need a compatible
+CentOS 7 image.</p>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">aws</span></code> command-line utility in the orchestration
+container to find images on AWS. The command needs your API keys,
+passed to it during configuration:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ aws configure
+</pre></div>
+</div>
+<p>You only need to provide your access and secret keys. The default region
+and output format can be left at <strong>None</strong>.</p>
+<p>Once configured you can find the AMI for <strong>“Canada (Central)”</strong>
+(<code class="docutils literal notranslate"><span class="pre">ca-central-1</span></code>) with the following command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ aws --region ca-central-1 \
+    ec2 describe-images --owners aws-marketplace \
+    --filters Name=product-code,Values=aw0evgkw8e5c1q413zgy5pjce \
+    --filters Name=description,Values=&quot;CentOS Linux 7 x86_64 HVM EBS ENA 1805_01&quot; \
+    | jq -r &#39;.Images[0].ImageId&#39;
+ami-e802818c
+</pre></div>
+</div>
+<p>This value can be used on the command-line to execute a <strong>builder</strong>
+for an image in that region. For example, the following can be added to the
+yacker command to build images for the specific regions
+(valid February 2019) <a class="footnote-reference" href="#f1" id="id1">[1]</a>: -</p>
 <ul class="simple">
-<li><a class="reference internal" href="compiling-machine-images-for-aws.html"><span class="doc">Compiling Machine Images for AWS</span></a></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=us-east-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-9887c6e7'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=us-east-2'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-9c0638f9'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=us-west-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-4826c22b'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=us-west-2'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-3ecc8f46'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ap-south-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-1780a878'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ap-northeast-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-8e8847f1'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ap-northeast-2'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-bf9c36d1'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ap-southeast-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-8e0205f2'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ap-southeast-2'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-d8c21dba'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=ca-central-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-e802818c'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=eu-west-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-3548444c'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=eu-west-2'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-00846a67'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=eu-west-3'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-262e9f5b'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=eu-north-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-b133bccf'</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">-var</span> <span class="pre">'aws_region=sa-east-1'</span> <span class="pre">-var</span> <span class="pre">'aws_source_ami=ami-cb5803a7'</span></code></li>
 </ul>
+<p>As an example, to build the base OKD base image for Singapore
+(<code class="docutils literal notranslate"><span class="pre">ap-southeast-1</span></code>) you would run:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ yacker build \
+    -var &#39;aws_region=ap-southeast-1&#39; -var &#39;aws_source_ami=ami-8e0205f2&#39; \
+    yacker/3.11/aws/okd.yaml
+</pre></div>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Does not include Asia Pacific (Osaka-Local), China or GovCloud</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="compiling-machine-images-for-gce">
+<h2>Compiling Machine Images for GCE<a class="headerlink" href="#compiling-machine-images-for-gce" title="Permalink to this headline">¶</a></h2>
+<p>To compile the OKD 3.11 machine images, set your environment variables and
+launch the orchestrator container. You will not need to define all the
+environment variables at this stage, only those required for compiling machine
+images.</p>
+<p>When you’re ready run the following to start and enter the container
+from the root of the project:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./okdo-start.sh
+</pre></div>
+</div>
+<p>It is important to realise that the <code class="docutils literal notranslate"><span class="pre">okdo-start.sh</span></code> script maps your
+orchestrator working directory to the container directory
+<code class="docutils literal notranslate"><span class="pre">$HOME/okd-orchestrator</span></code>, which is also the working directory when you
+enter the container.</p>
+<p>If this is the first time you’re running the orchestrator the container image
+will need to be downloaded from Docker. This might take a moment or two before
+you eventually enter the container.</p>
+<p>From the orchestrator container you can validate the OpensShift/OKD 3.11
+template files:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ yacker validate yacker/3.11/gce/bastion.yaml
+$ yacker validate yacker/3.11/gce/okd.yaml
+</pre></div>
+</div>
+<div class="section" id="id2">
+<h3>Build<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Once validated, build each image:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ yacker build yacker/3.11/gce/bastion.yaml
+$ yacker build yacker/3.11/gce/okd.yaml
+</pre></div>
+</div>
+<p>The builds may take a minute or two. As long as you have not changed
+the image <code class="docutils literal notranslate"><span class="pre">ami_name</span></code> variable the machine images (AMIs) Yacker creates
+will be picked up automatically by the cluster orchestration.</p>
+<dl class="docutils">
+<dt>&gt;   You do not need to create the bastion image if your deployment’s <strong>Master</strong></dt>
+<dd>instance is also acting as the Bastion machine. The Bastion machine image
+is only required if you’re creating a dedicated Bastion in the cluster.</dd>
+</dl>
+<p>You can stay in the container image and follow the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a>
+guide to create your cluster.</p>
+</div>
+</div>
 </div>
 
 
@@ -196,10 +366,10 @@ we support: -</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="compiling-machine-images-for-aws.html" class="btn btn-neutral float-right" title="Compiling Machine Images for AWS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="anatomy-of-a-deployment-configuration.html" class="btn btn-neutral float-right" title="Anatomy of a Deployment Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="getting-started-aws.html" class="btn btn-neutral" title="Getting Started with AWS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="advanced/running-without-docker.html" class="btn btn-neutral" title="Running Without Docker" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

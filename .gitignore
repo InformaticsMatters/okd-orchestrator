@@ -1,11 +1,13 @@
 # Expected ssh private key-pair files
-okdo-keypair
-okdo-keypair.pub
+*okdo-keypair
+*okdo-keypair.pub
 
 # Protect the user's SSL certificates
+# and provider-specific root-files
 ca-bundle.crt
 cert.crt
 private.key
+gce-credentials.json
 
 # Translated (jinja2) material...
 okd/inventories/**/inventory.yaml
@@ -17,6 +19,9 @@ yacker/**/*.json
 
 # Provider Variables
 provider-env/setenv.sh
+provider-env/setenv-aws.sh
+provider-env/setenv-gce.sh
+provider-env/setenv-os.sh
 
 # Terraform material...
 terraform/aws/bastion.tf
@@ -31,6 +36,16 @@ terraform/aws/s3.tf
 terraform/aws/template.tf
 terraform/aws/variables.tf
 terraform/aws/vpc.tf
+
+terraform/gce/bastion.tf
+terraform/gce/infra.tf
+terraform/gce/master.tf
+terraform/gce/node.tf
+terraform/gce/output.tf
+terraform/gce/s3.tf
+terraform/gce/template.tf
+terraform/gce/variables.tf
+
 terraform/**/*.svg
 *.tfstate
 *.tfstate.backup
@@ -43,6 +58,7 @@ ansible/bastion/inventory.yaml
 ansible/bastion/bastion.sh
 ansible/post-okd/inventory.yaml
 ansible/post-destroy/aws/host_vars/localhost/vars.yaml
+ansible/post-destroy/gce/host_vars/localhost/vars.yaml
 ansible/pre-okd/inventory
 **/facts/
 **/*.retry

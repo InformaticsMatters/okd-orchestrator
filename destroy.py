@@ -59,10 +59,14 @@ def _main(cli_args, chosen_deployment_name):
 
     if not cli_args.now:
 
+        # Display the orchestration description
+        # (f there is one)
+        if deployment.description:
+            io.description(deployment.description)
+
         # User said "now" so don't ask for confirmation
-        print()
         print('CAUTION You are about to destroy the cluster.')
-        print('------- Are you sure you want to do this?')
+        print('======= Are you sure you want to do this?')
         print()
 
         confirmation_word = io.get_confirmation_word()
@@ -71,6 +75,17 @@ def _main(cli_args, chosen_deployment_name):
         if confirmation != confirmation_word:
             print('Phew! That was close!')
             return True
+
+    # ------
+    # Render
+    # ------
+    if not cli_args.skip_rendering:
+
+        cmd = './render.py {}'.format(chosen_deployment_name)
+        cwd = '.'
+        rv, _ = io.run(cmd, cwd, cli_args.quiet)
+        if not rv:
+            return False
 
     # ---------
     # Terraform
@@ -123,6 +138,10 @@ if __name__ == '__main__':
                         action='store_true')
 
     PARSER.add_argument('-n', '--now', help="Destroy without confirmation",
+                        action='store_true')
+
+    PARSER.add_argument('-sr', '--skip-rendering',
+                        help='Skip the Jinja2 rendering stage',
                         action='store_true')
 
     PARSER.add_argument('deployment', metavar='DEPLOYMENT',

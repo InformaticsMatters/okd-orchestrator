@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Anatomy of a Deployment Configuration &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Generating SSL Certificates" href="generating-site-certificates.html" />
+    <link rel="prev" title="Compiling Machine Images" href="compiling-machine-images.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> The OKD Orchestrator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="orientation.html">Orientation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Anatomy of a Deployment Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generating-site-certificates.html">Generating SSL Certificates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced/advanced-topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">The OKD Orchestrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Anatomy of a Deployment Configuration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/anatomy-of-a-deployment-configuration.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="anatomy-of-a-deployment-configuration">
+<h1>Anatomy of a Deployment Configuration<a class="headerlink" href="#anatomy-of-a-deployment-configuration" title="Permalink to this headline">¶</a></h1>
+<p><strong>Deployment Configurations</strong>, located in <code class="docutils literal notranslate"><span class="pre">configuration.yaml</span></code> files
+in sub-directories of the project’s <code class="docutils literal notranslate"><span class="pre">deployments</span></code> directory, provide
+a high-level abstraction that, in one file, allows you to describe your
+cluster hardware and the properties of your desired OKD software
+configuration at a relatively high level. The OKD orchestrator uses this
+as a template in order to provision the system for you.</p>
+<blockquote>
+<div>The trade-off by using <em>yet another file format</em> is one of simple verses
+advanced. You will no-doubt be able to fine-tune and configure your
+cluster and OKD software in a richer and more powerful environment if you
+manage the system and its underlying files yourself. But the
+<strong>OKD Orchestrator</strong> philosophy is about <em>simplicity</em> rather than
+<em>advanced</em> features. It’s about rapidly creating (and destroying) simple
+Virtual Environments (VEs) without having to understand your cloud
+provider’s provisioning complexities relating to networks, volumes,
+and machines or the myriad of complex parameters that can be setupo to
+form a rich and complex OKD platform.</div></blockquote>
+<ul class="simple">
+<li>The deployment file is a <strong>text file</strong>, a <a class="reference external" href="https://yaml.org">YAML</a> file that provides you
+with an environment where you can document your configuration as well as
+define it</li>
+<li>The file consists of three <em>sections</em>: -<ul>
+<li>A section used to define the VE hardware (the <code class="docutils literal notranslate"><span class="pre">cluster</span></code> section)</li>
+<li>A section used to define the OKD software (the <code class="docutils literal notranslate"><span class="pre">okd</span></code> section)</li>
+<li>An optional section used to define pre-allocated hardware when working
+with custom/bare-metal installations (the <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section) <a class="footnote-reference" href="#f1" id="id1">[1]</a></li>
+</ul>
+</li>
+</ul>
+<p>Rather than go into detail here, and risk breaking the <em>do not repeat yourself</em>
+rule, the documentation relating to the format and content of the deployment
+configuration can be found embedded in the built-in <code class="docutils literal notranslate"><span class="pre">compact-aws-frankfurt-3-11</span></code>
+configuration.</p>
+<p>For a detailed discussion of the configuration file format and the settable
+parameters please refer to
+<code class="docutils literal notranslate"><span class="pre">deployments/compact-aws-frankfurt-3-11/configuration.yaml</span></code>.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>If you are using the OKD Orchestrator to deploy the cloud hardware the
+<strong>my_machines</strong> section is not used</td></tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="generating-site-certificates.html" class="btn btn-neutral float-right" title="Generating SSL Certificates" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="compiling-machine-images.html" class="btn btn-neutral" title="Compiling Machine Images" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Informatics Matters
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

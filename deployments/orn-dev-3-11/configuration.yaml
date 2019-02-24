@@ -59,7 +59,7 @@ okd:
   certificates:
     generate_api_cert: yes
 
-  inventory_dir: simple-os-3-11
+  inventory_dir: standard-os-3-11
 
 # --- my_machines -------------------------------------------------------------
 

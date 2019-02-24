@@ -80,27 +80,52 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="orientation.html">Orientation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#git">Git</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#docker">Docker</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="deployment-configurations.html">Deployment Configurations (v1)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="building-the-docker-image.html">Building the Docker Image</a></li>
-<li class="toctree-l3"><a class="reference internal" href="running-without-docker.html">Running Without Docker</a></li>
-<li class="toctree-l3"><a class="reference internal" href="using-your-own-deployments.html">Using Your Own Deployments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#essential-parts">Essential parts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#git">Git</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#docker">Docker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="deployment-configurations.html">Deployment Configurations (v1)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="advanced/building-the-docker-image.html">Building the Docker Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="advanced/running-without-docker.html">Running Without Docker</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started-with-aws">Getting Started with AWS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#provider-environment-variables">Provider Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#account-preparation">Account Preparation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#account">Account</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#api-access-keys">API Access Keys</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ssh-key-pair">SSH Key Pair</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started-with-gce">Getting Started with GCE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Provider Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Account Preparation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id5">Account</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#credentials-file">Credentials File</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">SSH Key Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#considerations">Considerations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#building-your-cluster">Building your Cluster</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#project-and-credentials">Project and Credentials</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#public-ip-addresses">Public IP Addresses</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images-for-aws.html">Compiling Machine Images for AWS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anatomy-of-a-deployment-configuration.html">Anatomy of a Deployment Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generating-site-certificates.html">Generating SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Your Own Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deploying-ssl-certificates.html">Deploying SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced/advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
@@ -169,12 +194,18 @@
             
   <div class="section" id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="essential-parts">
+<h2>Essential parts<a class="headerlink" href="#essential-parts" title="Permalink to this headline">¶</a></h2>
 <p>The orchestrator is designed to simplify the construction of an OpenShift
 cluster on various cloud providers using <strong>deployments</strong> - high-level
 configuration files written in <a class="reference external" href="https://yaml.org">YAML</a>. The deployment configurations are
 described in the <a class="reference internal" href="deployment-configurations.html"><span class="doc">Deployment Configurations (v1)</span></a> section of the documentation.</p>
 <p>At the moment we have working solutions for Amazon <em>EC2</em>, <em>OpenStack</em> and
-<em>Scaleway</em> and a working example for <em>EC2</em> that we use as a tutorial.</p>
+<em>GCE</em> and a working example for <em>EC2</em> that we use as a tutorial.</p>
+<blockquote>
+<div>If this is your first time using the OKD Orchestrator make sure you’ve
+visited the <a class="reference internal" href="orientation.html"><span class="doc">Orientation</span></a> document, it guides you through the
+concepts of the orchestrator with a worked example on AWS.</div></blockquote>
 <p>The tools required by the orchestrator are packaged into a convenient
 Docker image that you can run on your laptop or desktop. The essential
 tools you <em>will</em> need are: -</p>
@@ -183,7 +214,7 @@ tools you <em>will</em> need are: -</p>
 <li><strong>Docker</strong></li>
 </ul>
 <div class="section" id="git">
-<h2>Git<a class="headerlink" href="#git" title="Permalink to this headline">¶</a></h2>
+<h3>Git<a class="headerlink" href="#git" title="Permalink to this headline">¶</a></h3>
 <p>In order to use the orchestrator, an open source software project, you will
 need the <a class="reference external" href="https://git-scm.com">Git</a> version control system installed. Using Git you should start
 with a clone of a <strong>fork</strong> of the orchestrator project. A fork is preferred
@@ -198,7 +229,7 @@ development host.</li>
 the root of your working copy.</p>
 </div>
 <div class="section" id="docker">
-<h2>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h2>
+<h3>Docker<a class="headerlink" href="#docker" title="Permalink to this headline">¶</a></h3>
 <p>We use <a class="reference external" href="https://www.docker.com">Docker</a> because it is a tool designed to make it easier to create,
 deploy, and run applications by using containers. Containers allow a developer
 to package up an application with all of the parts it needs, such as libraries
@@ -213,10 +244,166 @@ suitable.</p>
 <p class="caption"><span class="caption-text">See:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="deployment-configurations.html">Deployment Configurations (v1)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="building-the-docker-image.html">Building the Docker Image</a></li>
-<li class="toctree-l1"><a class="reference internal" href="running-without-docker.html">Running Without Docker</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using-your-own-deployments.html">Using Your Own Deployments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced/building-the-docker-image.html">Building the Docker Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced/running-without-docker.html">Running Without Docker</a></li>
 </ul>
+</div>
+</div>
+</div>
+<div class="section" id="getting-started-with-aws">
+<h2>Getting Started with AWS<a class="headerlink" href="#getting-started-with-aws" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="provider-environment-variables">
+<h3>Provider Environment Variables<a class="headerlink" href="#provider-environment-variables" title="Permalink to this headline">¶</a></h3>
+<p>A number of parameters are required by the orchestrator. These are
+defined in a cloud-provider-specific <em>template</em> file in the <code class="docutils literal notranslate"><span class="pre">provider-env</span></code>
+directory.</p>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">setenv-aws-template.sh</span></code> as <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code>. You’ll be using this file
+throughout this example.</p>
+</div>
+<div class="section" id="account-preparation">
+<h3>Account Preparation<a class="headerlink" href="#account-preparation" title="Permalink to this headline">¶</a></h3>
+<p>You use different types of security credentials depending on how you
+interact with AWS and, in order to use the orchestrator, you will need: -</p>
+<ul class="simple">
+<li>An <strong>AWS account</strong> that allows you to sign in to the AWS Management Console</li>
+<li><strong>API Access keys</strong> that allow the orchestrator to make programmatic calls to
+the AWS API on your behalf</li>
+<li>An <strong>SSH Key Pair</strong> that you and the OKD Orchestrator can use to create
+and access EC2 objects.</li>
+</ul>
+<div class="section" id="account">
+<h4>Account<a class="headerlink" href="#account" title="Permalink to this headline">¶</a></h4>
+<p>If you do not have an <strong>AWS Account</strong> visit <a class="reference external" href="https://aws.amazon.com">https://aws.amazon.com</a> where you can
+sign-up.</p>
+</div>
+<div class="section" id="api-access-keys">
+<h4>API Access Keys<a class="headerlink" href="#api-access-keys" title="Permalink to this headline">¶</a></h4>
+<p><strong>Access Keys</strong> and are described on the Amazon <a class="reference external" href="https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys">Access Keys</a>
+page. You will need environment AWS-compliant environment variables defined:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AWS_ACCESS_KEY</span>
+<span class="n">AWS_SECRET_KEY</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ssh-key-pair">
+<h4>SSH Key Pair<a class="headerlink" href="#ssh-key-pair" title="Permalink to this headline">¶</a></h4>
+<p>You can generate a key-pair that does not use a pass phrase for this example
+using the <code class="docutils literal notranslate"><span class="pre">ssh-keygen</span></code> tool:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ssh-keygen -f okdo-keypair -t rsa -b 2048 -N &#39;&#39; -C okdo-keypair
+</pre></div>
+</div>
+<p>The keypair should be present in the root of the orchestrator project,
+not in your <code class="docutils literal notranslate"><span class="pre">.ssh</span></code> directory.</p>
+<p>You should then upload the public (<code class="docutils literal notranslate"><span class="pre">.pub</span></code>) part to your AWS account.
+You will need to upload the key-pair to each <a class="reference external" href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html">region</a> that you intend to use.
+Our example assumes you’ll be deploying to <strong>Frankfurt</strong>.</p>
+<p>Place the name of the keypair in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code>. The value
+should replace the existing value for:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TF_VAR_keypair_name</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-started-with-gce">
+<h2>Getting Started with GCE<a class="headerlink" href="#getting-started-with-gce" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h3>Provider Environment Variables<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>A number of parameters are required by the orchestrator. These are
+defined in a cloud-provider-specific <em>template</em> file in the <code class="docutils literal notranslate"><span class="pre">provider-env</span></code>
+directory.</p>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">setenv-gce-template.sh</span></code> as <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code>. You’ll be using this file
+throughout this example.</p>
+</div>
+<div class="section" id="id4">
+<h3>Account Preparation<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>You should have a project in your GCE account that you want to use for the
+OKD installation. You will need to download the credentials as a JSON file,
+this is described in the
+<a class="reference external" href="https://www.packer.io/docs/builders/googlecompute.html">Packer documentation</a></p>
+<p>You use different types of security credentials depending on how you
+interact with GCE and, in order to use the orchestrator, you will need: -</p>
+<ul class="simple">
+<li>A <strong>GCE account</strong> for the Compute Engine</li>
+<li>A project-based <strong>credentials file</strong>, a JSON file provided by Google that
+allows the orchestrator to make programmatic calls to the GCE API
+on your behalf</li>
+<li>An <strong>SSH Key Pair</strong> that you and the OKD Orchestrator can use to create
+and access GCE objects.</li>
+</ul>
+<div class="section" id="id5">
+<h4>Account<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<p>If you do not have an <strong>GCE Account</strong> visit <a class="reference external" href="https://cloud.google.com">https://cloud.google.com</a> where
+you can sign-up.</p>
+</div>
+<div class="section" id="credentials-file">
+<h4>Credentials File<a class="headerlink" href="#credentials-file" title="Permalink to this headline">¶</a></h4>
+<p>You should place your credentials file in the root of the OKD Orchestrator
+project clone. Name your credentials file <code class="docutils literal notranslate"><span class="pre">gce-credentials.json</span></code> and save
+it in the root directory of the OKC Orchestrator clone (or fork). This file
+will be used to create machine images with <strong>Yacker</strong> and instantiate the
+cluster using <strong>Terraform</strong>.</p>
+</div>
+<div class="section" id="id6">
+<h4>SSH Key Pair<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<p>You can generate a key-pair that does not use a pass phrase for this example
+using the <code class="docutils literal notranslate"><span class="pre">ssh-keygen</span></code> tool:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ssh-keygen -f okdo-keypair -t rsa -b 2048 -N &#39;&#39; -C centos
+</pre></div>
+</div>
+<p>The keypairs (a private <code class="docutils literal notranslate"><span class="pre">okdo-keypair</span></code> and public <code class="docutils literal notranslate"><span class="pre">okdo-keypair.pub</span></code> file)
+should be present in the root of the orchestrator project, not in your
+<code class="docutils literal notranslate"><span class="pre">.ssh</span></code> directory.</p>
+<p>You should then upload the public (<code class="docutils literal notranslate"><span class="pre">.pub</span></code>) part to your GCE account
+under <code class="docutils literal notranslate"><span class="pre">Compute</span> <span class="pre">Engine</span> <span class="pre">-&gt;</span> <span class="pre">Metadata</span> <span class="pre">-&gt;</span> <span class="pre">SSH</span> <span class="pre">Keys</span></code> for the given project.</p>
+<p>Place the name of the keypair in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code>. The value
+should replace the existing value for:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TF_VAR_keypair_name</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="considerations">
+<h3>Considerations<a class="headerlink" href="#considerations" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Unlike the AWS deployment the GCE deployment does not use an internal
+subnet for OKD nodes. Consequently all physical nodes have a
+public-fading IP address.</li>
+<li>All instances are created in zone <strong>a</strong>.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="building-your-cluster">
+<h2>Building your Cluster<a class="headerlink" href="#building-your-cluster" title="Permalink to this headline">¶</a></h2>
+<p>To build your cluster you will need to compile the base images for AWS
+before create your cluster.</p>
+<ul class="simple">
+<li>When you’re ready, follow the instructions for AWS in the
+<a class="reference internal" href="compiling-machine-images.html"><span class="doc">Compiling Machine Images</span></a> guide</li>
+<li>With base images compiled, you’re ready to create the OKD cluster,
+all of which is covered in the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a> guide</li>
+</ul>
+<div class="section" id="project-and-credentials">
+<h3>Project and Credentials<a class="headerlink" href="#project-and-credentials" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="public-ip-addresses">
+<h2>Public IP Addresses<a class="headerlink" href="#public-ip-addresses" title="Permalink to this headline">¶</a></h2>
+<p>In all providers you will need static/fixed IP addresses that your domain
+can map to to provide access to the <em>console API</em> and <em>applications</em>.</p>
+<p>You will therefore need one or two pre-allocated <strong>External IP addresses</strong>
+in your desired region depending on whether you’re deploying a compact
+(combined master/infra node) or standard (separate master and infra nodes).</p>
+<p>The allocated IP address values become values for the following configuration
+items in your deployment. In GCE this is simply the allocated IP addresses,
+in AWS it’s the floating IP identity. Here’s the configuration setting
+for an example GCE setup:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span><span class="p">:</span>
+  <span class="n">master</span><span class="p">:</span>
+    <span class="n">fixed_ip_id</span><span class="p">:</span> <span class="mf">35.198</span><span class="o">.</span><span class="mf">72.215</span>
+  <span class="n">infra</span><span class="p">:</span>
+    <span class="n">fixed_ip_id</span><span class="p">:</span> <span class="mf">35.198</span><span class="o">.</span><span class="mf">131.227</span>
+</pre></div>
 </div>
 </div>
 </div>

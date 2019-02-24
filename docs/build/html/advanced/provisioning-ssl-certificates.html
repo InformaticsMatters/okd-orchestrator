@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Provisioning SSL Certificates &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Deploying to Bare Metal" href="deploying-to-your-own-cluster.html" />
+    <link rel="prev" title="Using Your Own Deployments" href="using-your-own-deployments.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> The OKD Orchestrator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../orientation.html">Orientation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compiling-machine-images.html">Compiling Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../anatomy-of-a-deployment-configuration.html">Anatomy of a Deployment Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generating-site-certificates.html">Generating SSL Certificates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../creating-your-cluster.html">Creating a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="creating-post-okd-playbooks.html">Creating Post-OKD Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploying-application-templates.html">Deploying Application Templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-your-own-deployments.html">Using Your Own Deployments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running-without-docker.html">Running Without Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building-the-docker-image.html">Building the Docker Image</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Provisioning SSL Certificates</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#automated-certbot-certificates">Automated (certbot) certificates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#user-pre-defined-certificates">User (pre-defined) certificates</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Bare Metal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sharing-cluster-state.html">Sharing Cluster State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="post-deployment-package-options.html">Post-Deployment Package Options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">The OKD Orchestrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="advanced-topics.html">Advanced Topics</a> &raquo;</li>
+        
+      <li>Provisioning SSL Certificates</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/advanced/provisioning-ssl-certificates.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="provisioning-ssl-certificates">
+<h1>Provisioning SSL Certificates<a class="headerlink" href="#provisioning-ssl-certificates" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="automated-certbot-certificates">
+<h2>Automated (certbot) certificates<a class="headerlink" href="#automated-certbot-certificates" title="Permalink to this headline">¶</a></h2>
+<p>If you have a <a class="reference external" href="https://certbot.eff.org">certbot</a> (Let’s Encrypt) account the OKD Orchestrator can
+automatically generate SSL certificates for your site. You just need
+to do the following before creating your cluster: -</p>
+<ol class="arabic simple">
+<li>Provide your account’s registered email in the
+<code class="docutils literal notranslate"><span class="pre">TF_VAR_master_certbot_email</span></code> variable in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> file</li>
+<li>Set the configuration file property <code class="docutils literal notranslate"><span class="pre">okd.certificates.generate_api_cert</span></code>
+to <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</li>
+</ol>
+<p>This is convenient and quick. Certbot certificates are nice, and self-signed
+but they often expire after a few months, needing to be renewed.</p>
+</div>
+<div class="section" id="user-pre-defined-certificates">
+<h2>User (pre-defined) certificates<a class="headerlink" href="#user-pre-defined-certificates" title="Permalink to this headline">¶</a></h2>
+<p>As an alternative you can provide your own certificates, and you may well
+have some that are pre-built for the domain you’ll be deploying OKD to.
+If you have your own certificates you can automatically deploy these
+with a few simple steps.</p>
+<p>In order to deploy your own certificates You should should have: -</p>
+<ul class="simple">
+<li>Three <strong>certificate files</strong>. <code class="docutils literal notranslate"><span class="pre">cert.crt</span></code>, <code class="docutils literal notranslate"><span class="pre">ca-bandle.crt</span></code> and
+<code class="docutils literal notranslate"><span class="pre">private.key</span></code></li>
+<li>The <strong>domain name</strong> for the master API/console</li>
+</ul>
+<p>As best practice, and to protect them, your certificate files must be encrypted
+using <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/vault.html">ansible vault</a> <a class="footnote-reference" href="#id3" id="id1">[3]</a>.</p>
+<p>To deploy your certificates, do the following before deploying your cluster: -</p>
+<ol class="arabic simple">
+<li>Place your encrypted certificate files into a directory called
+<code class="docutils literal notranslate"><span class="pre">certificates</span></code> in your deployment configuration directory. For example
+if your deployment configuration is <code class="docutils literal notranslate"><span class="pre">aws_demo</span></code> the files would
+go into <code class="docutils literal notranslate"><span class="pre">deployments/aws_demo/certificates</span></code></li>
+<li>Set the configuration file property <code class="docutils literal notranslate"><span class="pre">okd.certificates.generate_api_cert</span></code>
+to the SSL domain name for the master</li>
+<li>Create a <code class="docutils literal notranslate"><span class="pre">vault-pass.txt</span></code> file containing the vault password you
+used to encrypt your certificates and place this in your deployment
+directory (e.g. in <code class="docutils literal notranslate"><span class="pre">deployments/aws_demo</span></code>) <a class="footnote-reference" href="#id4" id="id2">[4]</a></li>
+</ol>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[3]</a></td><td>Ansible vault is available in the OKD Orchestrator’s container image.
+The files will be automatically decrypted as they are sent to the
+Bastion/Master for the OKD installation process.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[4]</a></td><td>You can commit your certificates to revision control as they are
+encrypted but the <code class="docutils literal notranslate"><span class="pre">vault-pass.txt</span></code> file is the one thing you
+do not commit. This remains a local file.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="deploying-to-your-own-cluster.html" class="btn btn-neutral float-right" title="Deploying to Bare Metal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="using-your-own-deployments.html" class="btn btn-neutral" title="Using Your Own Deployments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Informatics Matters
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

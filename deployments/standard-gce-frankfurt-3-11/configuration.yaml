@@ -1,0 +1,73 @@
+---
+
+version: 1
+
+name: Standard GCE Deployment (OKD 3.11) [Frankfurt]
+description: >
+  A simple deployment that forms separate Bastion, Master and Infra instances
+  along with 3 n1-highmem-2 compute nodes. This also includes certbot
+  certificate creation, Template Service Broker, Ansible Service Broker,
+  Metrics and Prometheus.
+
+# --- cluster -----------------------------------------------------------------
+
+cluster:
+
+  region: europe-west3
+  id: compact-frankfurt-311
+  image_prefix: openshift-okd-3-11-base-image
+  terraform_dir: gce
+
+  name_tag: vre-simple
+  public_hostname: gce.informaticsmatters.com
+  default_subdomain: apps.gce.informaticsmatters.com
+  api_port: 8443
+
+  bastion:
+    image_prefix: openshift-okd-bastion-image
+    type: n1-standard-1
+
+  master:
+    count: 1
+    type: n1-standard-8
+    fixed_ip_id: 35.198.72.215
+
+  infra:
+    count: 1
+    type: n1-highmem-2
+    fixed_ip_id: 35.198.131.227
+
+  node_groups:
+  - name: general
+    labels:
+    - general-node=true
+    is_compute_node: yes
+
+  nodes:
+  - name: general
+    count: 3
+    type: n1-highmem-2
+    node_group: general
+
+# --- okd ---------------------------------------------------------------------
+
+okd:
+
+  ansible_tag: openshift-ansible-3.11.83-1
+  ansible_version: 2.7.5
+  play:
+  - prerequisites
+  - deploy_cluster
+
+  post_okd:
+  - play: acme-controller
+
+  enable:
+  - metrics
+  - prometheus
+  - tsb
+
+  certificates:
+    generate_api_cert: yes
+
+  inventory_dir: standard-3-11

@@ -1,0 +1,44 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+  - name: Pause
+    pause:
+      seconds: 4
+
+  - name: Get available volumes
+    gcp_compute_disk_facts:
+      auth_kind: serviceaccount
+      service_account_file: ../../../gce-credentials.json
+      scopes:
+      - https://www.googleapis.com/auth/cloud-platform
+      project: "{{ lookup('env','TF_VAR_gce_project') }}"
+      zone: "{{ gce_zone }}"
+      filters:
+      - status=READY
+    register: vol_info
+
+  - debug:
+      msg: "{{ vol_info['items'] }}"
+      verbosity: 1
+
+  - name: Delete Kubernetes dynamic volumes
+    gcp_compute_disk:
+      auth_kind: serviceaccount
+      service_account_file: ../../../gce-credentials.json
+      scopes:
+        - https://www.googleapis.com/auth/cloud-platform
+      project: "{{ lookup('env','TF_VAR_gce_project') }}"
+      zone: "{{ gce_zone }}"
+      name: "{{ item.name }}"
+      state: absent
+    when:
+      - item.name is defined
+      - item.name is match("kubernetes-dynamic-pvc-.*")
+    with_items:
+      - "{{ vol_info['items'] }}"
+

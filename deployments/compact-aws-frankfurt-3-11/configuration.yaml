@@ -27,9 +27,9 @@ name: Compact AWS Deployment (OKD 3.11) [Frankfurt]
 # A more detailed description of the deployment.
 # This is used for reporting purposes only.
 description: >
-  A combined Bastion/Master/Infra/Compute deployment  where a single
-  cloud instance acts as a compute node and the bastion, master and
-  infrastructure node.
+  A combined Bastion/Master/Infra/Compute deployment where a single
+  compute instance acts as a compute node and plays the role of the bastion,
+  master and infrastructure node.
   This example also includes certbot certificate creation,
   metrics and prometheus.
 
@@ -117,7 +117,20 @@ cluster:
   master:
     count: 1
     # Provider-specific machine image type.
-    # i.e. t2.xlarge on AWS or START1-L on Scaleway.
+    # i.e. t2.xlarge on AWS
+    #      n1-standard-8 on GCE
+    #      START1-L on Scaleway.
+    #
+    # You must ensure that the type you pick satisfies
+    # the minimum requirements for OKD.
+    # For example a machine with at least 16GiB of free memory will
+    # be required on Master nodes, and avoid using any machines with less
+    # than 4 cores. Hardware requirements can be found on the OpenShift site: -
+    #
+    # https://docs.openshift.com/container-platform/3.11/install/prerequisites.html#hardware
+    #
+    # On GCE for example, your Master nodes cannot be smaller than
+    # a n1-standard-8 instance.
     type: t2.xlarge
     # If you have pre-allocated public IPs for the Master set the value here.
     # This is _not_ normally the IP address itself, it is the cloud-provider's
@@ -147,6 +160,8 @@ cluster:
     count: 0
     # Provider-specific machine image type.
     # Not required (and ignored) if the Master is acting as a Infrastructure.
+    # Refer to the master.type documentation for hardware requirements when
+    # choosing your type.
 #    type:
     # The (optional) pre-allocated public IP for the Infrastructure.
     # (See cluster.master.fixed_ip).
@@ -215,6 +230,9 @@ cluster:
   #   independent node groups.
   # - A provider-specific 'type' used to define the compute instance type
   #   for each node in the category. In AWS this might be 't2.medium'.
+  #   Refer to the master.type documentation for hardware requirements when
+  #   choosing your type. Nodes will typically need at least 15GiB available
+  #   disk space and at least 8GiB of free RAM.
   # - A 'node_group', used to identify the OKD node group the nodes of this
   #   category belong to. OKD provides built-in groups like 'compute'
   #   for general compute nodes but you can define your own groups
@@ -312,6 +330,9 @@ okd:
 
   # Certificate definitions,
   # currently just the Master API certificate.
+  #
+  # If you do not want to set any certificates during deployments
+  # comment this section out.
   certificates:
     # Set to automatically generate a Let's Encrypt/certbot certificate
     # for the master node when the cluster has been created but prior to
@@ -320,7 +341,7 @@ okd:
     # If generating certificates you *MUST* provide the certbot
     # email address for certification in your provider-env/setenv.sh,
     # typically in the 'TF_VAR_master_certbot_email' environment variable.
-    generate_api_cert: no
+    generate_api_cert: yes
     # Alternatively, if you have your own wildcard certificate
     # for your domain then you can place the certificate files
     # (which must consist of files named 'cert.crt', 'private.key'
@@ -349,7 +370,7 @@ okd:
   # The inventory directory contains template files for the Bastion
   # and OKD cluster. The templates for a given provider are often
   # shared between similar deployments.
-  inventory_dir: simple-aws-3-11
+  inventory_dir: standard-3-11
 
 # --- my_machines -------------------------------------------------------------
 

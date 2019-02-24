@@ -79,8 +79,6 @@ variables:
 
 builders:
 
-# OpenStack Builder
-
 - type: openstack
   domain_name: "{{user `os_domain_name`}}"
   tenant_id: "{{user `os_tenant_id`}}"

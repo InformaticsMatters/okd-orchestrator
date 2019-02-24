@@ -26,15 +26,11 @@ A project sponsored by `OpenRiskNet`_.
     orientation
     architecture
     getting-started
-    getting-started-aws
     compiling-machine-images
-    compiling-machine-images-for-aws
+    anatomy-of-a-deployment-configuration
     generating-site-certificates
     creating-your-cluster
     destroying-your-cluster
-    deploying-to-your-own-cluster
-    environment-variables
-    provisioning-ssl-certificates
     advanced/advanced-topics
     faq
 
@@ -46,7 +42,7 @@ a Bastion and OpenShift cluster based on those images.
     The reader should have some familiarity with cloud environments
     (like the AWS `EC2`_ platform) and the RedHat OpenShift Origin/OKD framework.
 
-    To run the *Simple AWS* example discussed in the :doc:`getting-started-aws`,
+    To run the *Simple AWS* example discussed in the :doc:`orientation`,
     the user is required to have an AWS EC2 account and credentials to allow
     API access.
 
@@ -58,11 +54,8 @@ what you expect to do, you may not need to understand everything that's going
 on here.
 
 *   If you're new to the OKD Orchestrator, start by familiarising yourself
-    with the :doc:`architecture` document. Then, before building your first
+    with the :doc:`orientation` document. Then, before building your first
     cluster follow the :doc:`getting-started` guide
-*   Once you're setup follow the guide for your chosen cloud provider
-
-    *   For Amazon's cloud service read :doc:`getting-started-aws`
 
 .. _okd: https://www.okd.io
 .. _ec2: https://aws.amazon.com/ec2/

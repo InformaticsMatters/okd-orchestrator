@@ -1,0 +1,13 @@
+# -------------------
+# Interactive Outputs
+# -------------------
+
+output "bastion_ip" {
+    # The Bastion instance
+    # (either a separate machine or the master)
+    {% if cluster.master.is_bastion %}
+    value = "{{ cluster.master.fixed_ip_id }}"
+    {% else %}
+    value = "${google_compute_instance.bastion.0.network_interface.0.access_config.0.nat_ip}"
+    {% endif %}
+}

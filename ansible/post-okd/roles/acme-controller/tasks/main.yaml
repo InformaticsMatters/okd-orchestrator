@@ -28,7 +28,7 @@
   register: cr_result
   changed_when: False
 
-- name: Crete Controller
+- name: Create Controller
   shell: oc create -f {{ origin }}/{{ path }}/{{ item }}.yaml
   loop:
   - clusterrole

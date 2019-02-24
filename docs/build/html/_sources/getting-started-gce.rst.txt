@@ -1,0 +1,69 @@
+########################
+Getting Started with GCE
+########################
+
+Provider Environment Variables
+==============================
+
+A number of parameters are required by the orchestrator. These are
+defined in a cloud-provider-specific *template* file in the ``provider-env``
+directory.
+
+Copy ``setenv-gce-template.sh`` as ``setenv.sh``. You'll be using this file
+throughout this example.
+
+Account Preparation
+===================
+
+You use different types of security credentials depending on how you
+interact with GCE and, in order to use the orchestrator, you will need: -
+
+-   A **GCE account** for the Compute Engine
+-   A project-based **credentials file**, a JSON file provided by Google that
+    allows the orchestrator to make programmatic calls to the GCE API
+    on your behalf
+-   An **SSH Key Pair** that you and the OKD Orchestrator can use to create
+    and access GCE objects.
+
+Account
+^^^^^^^
+
+If you do not have an **GCE Account** visit https://cloud.google.com where
+you can sign-up.
+
+Credentials File
+^^^^^^^^^^^^^^^^
+
+SSH Key Pair
+^^^^^^^^^^^^
+
+You can generate a key-pair that does not use a pass phrase for this example
+using the ``ssh-keygen`` tool::
+
+    $ ssh-keygen -f okdo-keypair -t rsa -b 2048 -N '' -C centos
+
+The keypairs (a private ``okdo-keypair`` and public ``okdo-keypair.pub`` file)
+should be present in the root of the orchestrator project, not in your
+``.ssh`` directory.
+
+You should then upload the public (``.pub``) part to your GCE account
+under ``Compute Engine -> Metadata -> SSH Keys`` for the given project.
+
+Place the name of the keypair in your ``setenv.sh``. The value
+should replace the existing value for::
+
+    TF_VAR_keypair_name
+
+
+Building your Cluster
+=====================
+
+To build your cluster you will need to compile the base images for GCE
+before create your cluster.
+
+-  When you're ready, follow the instructions for AWS in the
+   :doc:`compiling-machine-images` guide
+-  With base images compiled, you're ready to create the OKD cluster,
+   all of which is covered in the :doc:`creating-your-cluster` guide
+
+ONLY SUPPORT ZONE A ATM

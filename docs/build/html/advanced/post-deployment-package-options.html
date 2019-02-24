@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Post-Deployment Package Options &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Frequently Asked Questions" href="../faq.html" />
+    <link rel="prev" title="Sharing Cluster State" href="sharing-cluster-state.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> The OKD Orchestrator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../orientation.html">Orientation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compiling-machine-images.html">Compiling Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../anatomy-of-a-deployment-configuration.html">Anatomy of a Deployment Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generating-site-certificates.html">Generating SSL Certificates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../creating-your-cluster.html">Creating a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="creating-post-okd-playbooks.html">Creating Post-OKD Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploying-application-templates.html">Deploying Application Templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-your-own-deployments.html">Using Your Own Deployments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="running-without-docker.html">Running Without Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building-the-docker-image.html">Building the Docker Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="provisioning-ssl-certificates.html">Provisioning SSL Certificates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Bare Metal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sharing-cluster-state.html">Sharing Cluster State</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Post-Deployment Package Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#running-post-okd-playbooks">Running post-OKD playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-new-playbooks">Adding new playbooks</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pre-defined-variables">Pre-defined Variables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#adding-plays">Adding plays</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">The OKD Orchestrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="advanced-topics.html">Advanced Topics</a> &raquo;</li>
+        
+      <li>Post-Deployment Package Options</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/advanced/post-deployment-package-options.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="post-deployment-package-options">
+<h1>Post-Deployment Package Options<a class="headerlink" href="#post-deployment-package-options" title="Permalink to this headline">¶</a></h1>
+<p>When the OKD software has been deployed the orchestrator allows you
+to conveniently run additional <a class="reference external" href="https://www.ansible.com">Ansible</a> playbooks that are designed to
+install extra software.</p>
+<p>A built-in post-OKD playbook exists, called <code class="docutils literal notranslate"><span class="pre">acme-controller</span></code>. Ths
+creates an OKD project and installs a utility to automatically
+provision certificates using ACME protocol and manage their lifecycle.</p>
+<div class="section" id="running-post-okd-playbooks">
+<h2>Running post-OKD playbooks<a class="headerlink" href="#running-post-okd-playbooks" title="Permalink to this headline">¶</a></h2>
+<p>To execute a post-OKD installation playbook you simply need to name it in
+your configuration <a class="footnote-reference" href="#f1" id="id1">[1]</a>. Essentially, you just need to add the name of the
+playbook in the <code class="docutils literal notranslate"><span class="pre">post_okd</span></code> list:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">okd</span><span class="p">:</span>
+  <span class="n">post_okd</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">play</span><span class="p">:</span> <span class="n">acme</span><span class="o">-</span><span class="n">controller</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-new-playbooks">
+<h2>Adding new playbooks<a class="headerlink" href="#adding-new-playbooks" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pre-defined-variables">
+<h3>Pre-defined Variables<a class="headerlink" href="#pre-defined-variables" title="Permalink to this headline">¶</a></h3>
+<p>Special variables are passed to post-OKD playbooks, so adding your own
+OKD applications that can operate the master API after the OKD software is
+installed is easy. The playbooks are provided with the following variables by
+the <code class="docutils literal notranslate"><span class="pre">create</span></code> utility: -</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">okd_api_hostname</span></code>. Essentially the https location of the master’s API.</li>
+<li><code class="docutils literal notranslate"><span class="pre">okd_admin_password</span></code>. The OKD administration user password.
+(the user is <code class="docutils literal notranslate"><span class="pre">admin</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">okd_deployment</span></code>. The name of deployment.</li>
+</ul>
+<p>If a developer password has been supplied the following variable is defined: -</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">okd_developer_password</span></code>. The OKD developer user password
+(the user is <code class="docutils literal notranslate"><span class="pre">developer</span></code>)</li>
+</ul>
+<p>If a template project has been created you also get: -</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">template_namespace</span></code>. The project/namespace of the template project</li>
+</ul>
+</div>
+<div class="section" id="adding-plays">
+<h3>Adding plays<a class="headerlink" href="#adding-plays" title="Permalink to this headline">¶</a></h3>
+<p>To add an ansible playbook you need to: -</p>
+<ol class="arabic simple">
+<li>Create a directory for your playbook in the orchestrator’s
+<code class="docutils literal notranslate"><span class="pre">ansible/post-okd</span></code> directory</li>
+<li>Your playbook must have a <code class="docutils literal notranslate"><span class="pre">deploy.yaml</span></code>. It is this playbook that the
+<code class="docutils literal notranslate"><span class="pre">create</span></code> utility will call. The deploy playbook will be provided
+with the variables described above.</li>
+</ol>
+<p>If you’ve added a <code class="docutils literal notranslate"><span class="pre">my-play/deploy.yaml</span></code> playbook you can add it the the list
+of post-OKD plays that are run at the end of your deployment by adding it to
+the <code class="docutils literal notranslate"><span class="pre">post_okd</span></code> list in your configuration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">okd</span><span class="p">:</span>
+  <span class="n">post_okd</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">play</span><span class="p">:</span> <span class="n">acme</span><span class="o">-</span><span class="n">controller</span>
+  <span class="o">-</span> <span class="n">play</span><span class="p">:</span> <span class="n">my</span><span class="o">-</span><span class="n">play</span>
+</pre></div>
+</div>
+<p>You can organise your playbook into roles and add a directory to
+<code class="docutils literal notranslate"><span class="pre">ansible/post-okd/roles</span></code> if you wish, or just provide a playbook.
+Regardless, you have to define a <code class="docutils literal notranslate"><span class="pre">deploy.yaml</span></code> to act as the entry
+point of your playbook.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>For up-to-date instructions refer to the built-in
+<code class="docutils literal notranslate"><span class="pre">compact-aws-frankfurt-3-11</span></code> configuration, which contains
+significant embedded documentation</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../faq.html" class="btn btn-neutral float-right" title="Frequently Asked Questions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sharing-cluster-state.html" class="btn btn-neutral" title="Sharing Cluster State" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Informatics Matters
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

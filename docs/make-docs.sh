@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-sphinx-build -b html source build/html
+sphinx-build -Eab html source build/html

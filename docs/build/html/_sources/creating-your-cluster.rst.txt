@@ -9,11 +9,12 @@ Orchestration currently consists of two steps: orchestrating the
 All of this can be accomplished from within the orchestrator's Docker
 container.
 
-Creating the Cluster
-====================
+*************************
+Provisioning the hardware
+*************************
 
 If you have a pre-existing cluster you should follow the steps described in
-the :doc:`deploying-to-your-own-cluster` section.
+the advanced :doc:`advanced/deploying-to-your-own-cluster` section.
 
 If you haven't done so already you need to set the password that will be
 assigned to the OpenShift **admin** account the orchestrator creates. Choose
@@ -68,9 +69,9 @@ The address of the bastion is needed for the next step::
     +----------------------+
     bastion_ip = 18.185.149.91
 
-
-Installing OpenShift/OKD
-========================
+***********************
+Deploying OpenShift/OKD
+***********************
 
 The prior cluster creation step places a copy of key parts of your orchestrator
 project in the Bastion's home directory. Installation of OpenShift/OKD takes
@@ -131,8 +132,9 @@ using the password you supplied in your ``setenv.sh`` script.
 When you're finished with the cluster you can follow the
 :doc:`destroying-your-cluster` guide to delete it.
 
-Cluster State Files
-===================
+**************************
+A note about cluster state
+**************************
 
 The orchestrator state for each cluster is stored in files that are generated
 and managed by the execution of **Terraform**, a tool used to create the

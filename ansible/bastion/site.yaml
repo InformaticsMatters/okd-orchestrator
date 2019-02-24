@@ -79,6 +79,7 @@
     copy:
       src: files/requirements.txt
       dest: /tmp/
+    become: yes
 
   - name: Install SSH private key
     copy:
@@ -140,26 +141,18 @@
   # Create the deployment directory
   - name: Create deployments directory
     file:
-      path: "{{ deployments_directory }}"
+      path: "{{ ansible_env.HOME }}/okd-orchestrator/deployments"
       state: directory
       owner: centos
       group: centos
       mode: 0755
     become: yes
-    when: deployments_directory is defined
 
   # Copy the deployment (default or user)
-  - name: Copy deployment (from OKD Orchestrator)
-    copy:
-      src: "../../deployments/{{ deployment_name }}"
-      dest: "{{ ansible_env.HOME }}/okd-orchestrator/deployments/"
-    when: deployments_directory is not defined
-
-  - name: Copy deployment (from user)
+  - name: Copy deployment
     copy:
       src: "{{ deployments_directory }}/{{ deployment_name }}"
-      dest: "{{ deployments_directory }}/"
-    when: deployments_directory is defined
+      dest: "{{ ansible_env.HOME }}/okd-orchestrator/deployments/"
 
   # Now the executable parts of the Orchestrator
   - name: Copy orchestrator modules

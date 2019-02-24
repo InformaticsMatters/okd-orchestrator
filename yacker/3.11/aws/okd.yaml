@@ -81,9 +81,8 @@ variables:
 
 builders:
 
-# AWS 'eu-central-1' (Frankfurt)
-
-- access_key: '{{user `aws_access_key`}}'
+- type: amazon-ebs
+  access_key: '{{user `aws_access_key`}}'
   ami_description: '{{user `description`}}'
   ami_name: '{{user `base_ami_name`}}'
   instance_type: '{{user `aws_i_type`}}'
@@ -92,4 +91,3 @@ builders:
   secret_key: '{{user `aws_secret_key`}}'
   source_ami: '{{user `aws_source_ami`}}'
   ssh_username: '{{user `aws_user`}}'
-  type: amazon-ebs

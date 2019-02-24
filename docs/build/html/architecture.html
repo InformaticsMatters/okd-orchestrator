@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting Started" href="getting-started.html" />
-    <link rel="prev" title="The OKD Orchestrator" href="index.html" /> 
+    <link rel="prev" title="Orientation" href="orientation.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -80,31 +80,32 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="orientation.html">Orientation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#the-concept">The Concept</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-components">The Components</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#deployments">deployments</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#provider-variables">Provider Variables</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#yacker-templates">Yacker templates</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#terraform-templates">Terraform Templates</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#jinja2-rendering-process">Jinja2 Rendering Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#organisation">Organisation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ansible-playbooks">Ansible Playbooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deployment-configurations">Deployment configurations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#provider-variables">Provider Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#terraform-templates">Terraform Templates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yacker-scripts">Yacker scripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#credentials">Credentials</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tools">Tools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#the-create-utility">The Create Utility</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-destroy-utility">The Destroy Utility</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#jinja2-templating-process">Jinja2 Templating Process</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images-for-aws.html">Compiling Machine Images for AWS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anatomy-of-a-deployment-configuration.html">Anatomy of a Deployment Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generating-site-certificates.html">Generating SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="creating-your-cluster.html">Creating a Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Your Own Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deploying-ssl-certificates.html">Deploying SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced/advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
@@ -174,11 +175,11 @@
   <div class="section" id="architecture">
 <h1>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h1>
 <p>The orchestrator is a utility that is designed to simplify the creation
-(and removal) of an OpenShift cluster. It introduces a number of
+(and removal) of RedHat OKD clusters. It introduces a number of
 <em>concepts</em> and accomplishes it through the use of a number of <em>components</em>.</p>
 <p>The utility is in an early stage of development and is evolving rapidly.
 The goal is to provide a simple and rapid and automated means of instantiating
-an OpenShift Origin-based compute cluster with minimal effort.</p>
+a RedHat OKD-based compute cluster with minimal effort.</p>
 <div class="section" id="the-concept">
 <h2>The Concept<a class="headerlink" href="#the-concept" title="Permalink to this headline">¶</a></h2>
 <p>The orchestrator is designed to allow the deployment of <strong>Clusters</strong> and their
@@ -188,42 +189,92 @@ development laptop.</p>
 two Python command-line modules; <code class="docutils literal notranslate"><span class="pre">create.py</span></code> and <code class="docutils literal notranslate"><span class="pre">destroy.py</span></code>. The modules
 call upon a number of underlying processes (essentially carried out by
 <strong>Terraform</strong> and <strong>Ansible</strong>) in order to create and destroy your hardware.</p>
-<p>With a few utilities installed on your development host you should be able to
-create and manage clusters across a wide-variety of cloud providers using
-just these two modules.</p>
+<p>Using a convenient container image (or your own) you are able to
+create and manage clusters across a number of cloud providers using
+simple commands.</p>
 </div>
-<div class="section" id="the-components">
-<h2>The Components<a class="headerlink" href="#the-components" title="Permalink to this headline">¶</a></h2>
-<p>The orchestrator consists of: -</p>
+<div class="section" id="organisation">
+<h2>Organisation<a class="headerlink" href="#organisation" title="Permalink to this headline">¶</a></h2>
+<p>The orchestrator implementation is distributed over a number of directories,
+which we’ll explore later.</p>
+<img alt="_images/okd-orchestrator.011.png" src="_images/okd-orchestrator.011.png" />
+<p>It consists of the following components you’re encouraged
+to adopt and edit (illustrated in green above): -</p>
 <ul class="simple">
+<li><strong>Credentials</strong> and other sensitive variables</li>
 <li><strong>Deployment configuration</strong> files</li>
 <li><strong>Provider Variables</strong></li>
+</ul>
+<p>Additionally, the following <em>built-in</em> components are used to create
+machine images and instantiate hardware: -</p>
+<ul class="simple">
+<li>Ansible <strong>playbooks</strong></li>
 <li><strong>Yacker</strong> templates</li>
 <li><strong>Terraform</strong> templates</li>
 <li>A <strong>Jinja2</strong> rendering process</li>
-<li>Ansible <strong>playbooks</strong></li>
 <li>A <strong>create</strong> utility</li>
 <li>A <strong>destroy</strong> utility</li>
 </ul>
-<div class="section" id="deployments">
-<h3>deployments<a class="headerlink" href="#deployments" title="Permalink to this headline">¶</a></h3>
-<p>In <code class="docutils literal notranslate"><span class="pre">deployments/</span></code>.</p>
-<p>A <strong>Deployment</strong> <em>describes</em> your cluster; providing a high-level description
-of the cluster hardware and software requirements that includes the number and
-types of the compute instances used for your OpenShift nodes.</p>
-<p>The <strong>deployment</strong> is defined in a <a class="reference external" href="http://yaml.org">YAML</a> file.</p>
-<p>You can have more than one deployment file, each describing a separate
-OpenShift cluster.</p>
-<p>Deployment files are located in the <code class="docutils literal notranslate"><span class="pre">deployments</span></code> directory.</p>
+<p>We’ll briefly explore each component below.</p>
+<div class="section" id="ansible-playbooks">
+<h3>Ansible Playbooks<a class="headerlink" href="#ansible-playbooks" title="Permalink to this headline">¶</a></h3>
+<p>Located in the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> directory, a number of built-in playbooks,
+managed by the <code class="docutils literal notranslate"><span class="pre">create</span></code> and <code class="docutils literal notranslate"><span class="pre">destroy</span></code> utilities (described below),
+provide value-added facilities including the configuration of the bastion
+machine, and pre and post OKD playbooks used to manage SSL certificate
+generation and the installation of additional software like the ACME
+SSL controller.</p>
+</div>
+<div class="section" id="deployment-configurations">
+<h3>Deployment configurations<a class="headerlink" href="#deployment-configurations" title="Permalink to this headline">¶</a></h3>
+<p>Located in the <code class="docutils literal notranslate"><span class="pre">deployments</span></code> directory, a <strong>Deployment</strong> <em>describes</em> your
+cluster; providing a high-level description of the cluster
+hardware and software requirements that include the number and
+types of the compute instances used for your OKD nodes and the
+settings for the OKD software.</p>
+<p>The <strong>deployment</strong> is defined in a <a class="reference external" href="http://yaml.org">YAML</a> file called <code class="docutils literal notranslate"><span class="pre">configuration.yaml</span></code>.</p>
+<p>You can have more than one deployment configuration, each describing a separate
+OKD cluster.</p>
+<p>Deployment files are located in sub-directories of the <code class="docutils literal notranslate"><span class="pre">deployments</span></code>
+directory.</p>
+<p>Deployment directories are also used to house your own SSL certificates
+if you have them. You can, of course, use certbot/Let’s Encrypt to
+automatically create them for your site if you wish.</p>
+<p>Further details of the deployment configuration can be found in the document
+<a class="reference internal" href="anatomy-of-a-deployment-configuration.html"><span class="doc">Anatomy of a Deployment Configuration</span></a>.</p>
+<blockquote>
+<div>You can provide a path to your own (“out-of town”) deployment configuration
+by providing a path the parent of your own deployments directory in the
+<code class="docutils literal notranslate"><span class="pre">TF_VAR_deployments_directory</span></code> environment variable.</div></blockquote>
 </div>
 <div class="section" id="provider-variables">
 <h3>Provider Variables<a class="headerlink" href="#provider-variables" title="Permalink to this headline">¶</a></h3>
-<p>In <code class="docutils literal notranslate"><span class="pre">provider-env</span></code>.</p>
+<p>Located in the <code class="docutils literal notranslate"><span class="pre">provider-env</span></code> directory, a number of provider-specific
+shell-scripts act as templates for the environment variables you are required
+to provide for the OKD Orchestrator.</p>
+<p>You typically copy a template and name it <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> and then adjust the
+content as described. You should find built-in templates for Amazon and Google
+cloud providers.</p>
 </div>
-<div class="section" id="yacker-templates">
-<h3>Yacker templates<a class="headerlink" href="#yacker-templates" title="Permalink to this headline">¶</a></h3>
-<p>In <code class="docutils literal notranslate"><span class="pre">yacker/</span></code>.</p>
-<p><strong>Yacker</strong> is used to create base images for the compute instances.
+<div class="section" id="terraform-templates">
+<h3>Terraform Templates<a class="headerlink" href="#terraform-templates" title="Permalink to this headline">¶</a></h3>
+<p>In the <code class="docutils literal notranslate"><span class="pre">terraform</span></code> directory, these files, many of which are
+created automatically based on the content of your deployment configuration,
+provide provisioning instructions for the HashiCorp Terraform tool.</p>
+<p><a class="reference external" href="https://www.terraform.io">Terraform</a> is used to create and destroy the OKD cluster hardware.
+It is a form of IaC tool that automates the construction of cloud infrastructure
+including additional volumes, networks, subnets and security groups.</p>
+<p>It’s language is declarative, meaning that you simply need to describe what is
+connected to what and it manages the creation of objects and their connections.</p>
+<p>Once you’ve described your cluster you have access to Terraform commands like
+<strong>apply</strong> to build the cluster and <strong>destroy</strong> to delete it.</p>
+</div>
+<div class="section" id="yacker-scripts">
+<h3>Yacker scripts<a class="headerlink" href="#yacker-scripts" title="Permalink to this headline">¶</a></h3>
+<p>In the <code class="docutils literal notranslate"><span class="pre">yacker/3.11</span></code> directory, these files, typically of no particular
+interest to you, provides provisioning instructions for OKD-compliant base
+images for each cloud provider.</p>
+<p><a class="reference external" href="https://pypi.org/project/matildapeak-yacker/">Yacker</a> is used to create base images for the compute instances.
 It is a YAML wrapper around <strong>Packer</strong>. It is driven by YAML files that
 describe installation instructions that are executed on a base Operating System
 like CentOS in order to form an OS and utilities suitable for OKD.</p>
@@ -234,30 +285,55 @@ template for OKD 3.11 in <code class="docutils literal notranslate"><span class=
 The images produced are suitable for any cluster for the given OKD release on
 that cloud provider.</p>
 </div>
-<div class="section" id="terraform-templates">
-<h3>Terraform Templates<a class="headerlink" href="#terraform-templates" title="Permalink to this headline">¶</a></h3>
-<p>In <code class="docutils literal notranslate"><span class="pre">terraform/</span></code>.</p>
-<p><strong>Terraform</strong> is used to create and destroy the OKD cluster hardware.
-It is a form of IaC tool that automates the construction of cloud infrastructure
-including additional volumes, networks, subnets and security groups.</p>
-<p>It’s language is declarative, meaning that you simply need to describe what is
-connected to what and it manages the creation of objects and their connections.</p>
-<p>Once you’ve described your cluster you have access to Terraform commands like
-<strong>apply</strong> to build the cluster and <strong>destroy</strong> to delete it.</p>
+<div class="section" id="credentials">
+<h3>Credentials<a class="headerlink" href="#credentials" title="Permalink to this headline">¶</a></h3>
+<p>Finally, in the root of the project, there are a number of files you need
+to provide, depending on the cloud provider your’re deploying into.
+There’s always the public and private files for the SSH key that’s used to
+create and connect to physical machines. You may also be required to put
+other files in the project root. One example is the Google Compute Engine
+(GCE) credentials file if you’re deploying to GCE. This is a JSON file
+you douwnload form your Google account.</p>
+<p>None of these files are committed to revision control of course, you have
+to provide them and keep them local.</p>
 </div>
-<div class="section" id="jinja2-rendering-process">
-<h3>Jinja2 Rendering Process<a class="headerlink" href="#jinja2-rendering-process" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="ansible-playbooks">
-<h3>Ansible Playbooks<a class="headerlink" href="#ansible-playbooks" title="Permalink to this headline">¶</a></h3>
-<p>In <code class="docutils literal notranslate"><span class="pre">ansible/</span></code>.</p>
-</div>
+<div class="section" id="tools">
+<h2>Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="the-create-utility">
 <h3>The Create Utility<a class="headerlink" href="#the-create-utility" title="Permalink to this headline">¶</a></h3>
+<p>Located in the root of the OKD Orchestrator project, <code class="docutils literal notranslate"><span class="pre">create.py</span></code> is the
+simplified utility wrapper that acts as the creator of your cluster and
+interpreter of your deployment configuration.</p>
+<p>It provides a simplified interface that allows you to create a cluster (and
+then install the OKD software) with a command like:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./create.py --cluster
+</pre></div>
+</div>
 </div>
 <div class="section" id="the-destroy-utility">
 <h3>The Destroy Utility<a class="headerlink" href="#the-destroy-utility" title="Permalink to this headline">¶</a></h3>
+<p>A complement of <code class="docutils literal notranslate"><span class="pre">create.py</span></code>, <code class="docutils literal notranslate"><span class="pre">destroy.py</span></code>, found in the root of
+the OKD orchestrator project, is used to quickly and conveniently
+tear-down your OKD cluster once you no longer need it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">destroy</span></code> relies on cluster hardware state information that’s automatically
+generated by the Terraform process employed by the <code class="docutils literal notranslate"><span class="pre">create.py</span></code> utility.</p>
+<p>This state can be local (on your development machine) or locked and managed
+for team access as defined by your configuration using a combination of S3
+object storage and Dynamo database services that you setup and are provided
+by AWS.</p>
+<p>See <a class="reference internal" href="anatomy-of-a-deployment-configuration.html"><span class="doc">Anatomy of a Deployment Configuration</span></a> for further details.</p>
 </div>
+</div>
+<div class="section" id="jinja2-templating-process">
+<h2>Jinja2 Templating Process<a class="headerlink" href="#jinja2-templating-process" title="Permalink to this headline">¶</a></h2>
+<p>A file rendering process based on the <a class="reference external" href="http://jinja.pocoo.org/docs/2.10/">Jinja2</a> templating language
+is used by the <code class="docutils literal notranslate"><span class="pre">create</span></code> utility to dynamically render Terraform and
+Ansible inventory files based on the content of your
+<strong>deployment configuration</strong>.</p>
+<p>It is how your names and properties in your configuration get into your
+terraform and inventory files but it’s execution and design is beyond the
+scope of this documentation.</p>
 </div>
 </div>
 
@@ -272,7 +348,7 @@ connected to what and it manages the creation of objects and their connections.<
         <a href="getting-started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="The OKD Orchestrator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="orientation.html" class="btn btn-neutral" title="Orientation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

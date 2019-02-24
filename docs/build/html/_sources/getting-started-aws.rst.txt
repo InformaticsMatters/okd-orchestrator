@@ -2,35 +2,6 @@
 Getting Started with AWS
 ########################
 
-At this stage, although we'll be working with a built-in example,
-you may need to make some changes to the configuration files in order to
-create your own cluster from them. It's therefore essential that you
-work on a clone of your own **fork** of the OKD Orchestrator.
-You will then be able to commit the changes you make and start to craft
-your own deployment configurations without being disturbed by changes in this,
-the upstream project.
-
-Here we're going to deploy an example OKD 3.11 release on a small cluster at
-AWS. The deployment configuration is called ``compact-aws-frankfurt-3-11``,
-where a single compute instance is used as a _Bastion_ and for the
-OKD Master, Infrastructure and compute nodes.
-
-The orchestrator will be creating the the cluster network,
-the cluster and installing OpenShift/OKD, all from within a Docker container
-hosting the orchestrator's run-time tools.
-
-At the end we'll tear-down the cluster using the orchestrator.
-
-    Some familiarity with with the Amazon **Elastic Compute Cloud**,
-    commonly referred to as `EC2`_, is assumed here and costs will
-    be incurred when following this example.
-
-    If you are not familiar with EC2, Amazon's `What Is Amazon EC2`_ page
-    provides comprehensive documentation.
-
-Before you can create Amazon (AWS) resources you will need to prepare an
-**EC2 Account**.
-
 Provider Environment Variables
 ==============================
 
@@ -74,7 +45,7 @@ SSH Key Pair
 You can generate a key-pair that does not use a pass phrase for this example
 using the ``ssh-keygen`` tool::
 
-    $ ssh-keygen -f okdo-keypair -t rsa -b 2048 -N ''
+    $ ssh-keygen -f okdo-keypair -t rsa -b 2048 -N '' -C okdo-keypair
 
 The keypair should be present in the root of the orchestrator project,
 not in your ``.ssh`` directory.

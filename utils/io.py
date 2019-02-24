@@ -101,7 +101,7 @@ def get_deployment_config_name(deployment=None,
     # Deal with special cases...
     # 1. 'display deployments'
     if display_deployments:
-        for deployment in deployments:
+        for deployment in sorted(deployments):
             # Display the deployment (a directory name)
             print(deployment)
         sys.exit(0)
@@ -112,7 +112,7 @@ def get_deployment_config_name(deployment=None,
         if len(deployments) > 1:
             print('ERROR: You need to supply the name of a deployment.\n'
                   '       The following are available:')
-            for deployment in deployments:
+            for deployment in sorted(deployments):
                 # Display the deployment without the path
                 # and removing the '.yaml' suffix.
                 print(deployment)
@@ -164,6 +164,25 @@ def banner(heading, e_dir='', full_heading=False, quiet=False):
         print('+' + '-' * (heading_w + 2) + '+')
     else:
         print('> {}'.format(heading))
+
+
+def description(deployment_description):
+    """Renders the deployment description to the screen.
+    Usually used after the initial banner.
+
+    :param deployment_description: A description
+    """
+    leader = '| Description: '
+    rendered = ''
+    line = leader
+    for word in deployment_description.split():
+        if len(line) > 60:
+            rendered += line + '\n'
+            line = ' ' * len(leader)
+        line += word + ' '
+    if line:
+        rendered += line.rstrip()
+    print(rendered.strip() + '\n')
 
 
 def run(cmd, cwd, quiet=False):

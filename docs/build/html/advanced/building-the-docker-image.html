@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Building the Docker Image &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Running Without Docker" href="running-without-docker.html" />
+    <link rel="prev" title="Deployment Configurations (v1)" href="../deployment-configurations.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> The OKD Orchestrator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../orientation.html">Orientation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../getting-started.html">Getting Started</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../getting-started.html#essential-parts">Essential parts</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../getting-started.html#git">Git</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../getting-started.html#docker">Docker</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../deployment-configurations.html">Deployment Configurations (v1)</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Building the Docker Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="running-without-docker.html">Running Without Docker</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started.html#getting-started-with-aws">Getting Started with AWS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started.html#getting-started-with-gce">Getting Started with GCE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started.html#building-your-cluster">Building your Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting-started.html#public-ip-addresses">Public IP Addresses</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../compiling-machine-images.html">Compiling Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../anatomy-of-a-deployment-configuration.html">Anatomy of a Deployment Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generating-site-certificates.html">Generating SSL Certificates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../creating-your-cluster.html">Creating a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">The OKD Orchestrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../getting-started.html">Getting Started</a> &raquo;</li>
+        
+      <li>Building the Docker Image</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/advanced/building-the-docker-image.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="building-the-docker-image">
+<h1>Building the Docker Image<a class="headerlink" href="#building-the-docker-image" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="building-the-official-image">
+<h2>Building the official image<a class="headerlink" href="#building-the-official-image" title="Permalink to this headline">¶</a></h2>
+<p>The official image is built using docker-compose and documented in the
+<code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file. To build (and then push) the <code class="docutils literal notranslate"><span class="pre">latest</span></code> image
+run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ docker-compose build
+$ docker-compose push
+</pre></div>
+</div>
+<p>To build (and then push) the official <code class="docutils literal notranslate"><span class="pre">stable</span></code> image run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ IMAGE_TAG=stable docker-compose build
+$ IMAGE_TAG=stable docker-compose push
+</pre></div>
+</div>
+</div>
+<div class="section" id="building-your-own-image">
+<h2>Building your own image<a class="headerlink" href="#building-your-own-image" title="Permalink to this headline">¶</a></h2>
+<p>The official image used for the container to create your cluster is available
+on <a class="reference external" href="https://hub.docker.com/r/informaticsmatters/okd-orchestrator/">Docker Hub</a> and should work with MacOS and Unix.</p>
+<p>The container image runs as the built-in user <code class="docutils literal notranslate"><span class="pre">okdo</span></code> using <strong>User</strong> and
+<strong>Group</strong> IDs of <code class="docutils literal notranslate"><span class="pre">40000</span></code>.</p>
+<p>As the OKD Orchestrator working directory of your clone or fork of this
+project is expected to be mounted within the container as a <strong>volume</strong>
+you may have permission issues with some flavours of unix.</p>
+<p>To get around this you can build your own container image using the
+<code class="docutils literal notranslate"><span class="pre">docker4me.sh</span></code> script in the project root. This script builds
+the container image using the <code class="docutils literal notranslate"><span class="pre">okdo</span></code> user but with <strong>User</strong> and <strong>Group</strong>
+ids that match yours:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">docker4me</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>Once built you can then use the project’s <code class="docutils literal notranslate"><span class="pre">okdo-start.sh</span></code> script from the
+project root to use your personalised copy of the image.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="running-without-docker.html" class="btn btn-neutral float-right" title="Running Without Docker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../deployment-configurations.html" class="btn btn-neutral" title="Deployment Configurations (v1)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Informatics Matters
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

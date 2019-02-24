@@ -85,8 +85,6 @@ variables:
 
 builders:
 
-# AWS 'eu-central-1' (Frankfurt)
-
 - access_key: '{{user `aws_access_key`}}'
   ami_description: '{{user `description`}}'
   ami_name: '{{user `base_ami_name`}}'

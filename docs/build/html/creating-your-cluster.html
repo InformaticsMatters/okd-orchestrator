@@ -80,22 +80,19 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="orientation.html">Orientation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-aws.html">Getting Started with AWS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compiling-machine-images.html">Compiling Machine Images</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiling-machine-images-for-aws.html">Compiling Machine Images for AWS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="anatomy-of-a-deployment-configuration.html">Anatomy of a Deployment Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generating-site-certificates.html">Generating SSL Certificates</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Creating a Cluster</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#creating-the-cluster">Creating the Cluster</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-openshift-okd">Installing OpenShift/OKD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cluster-state-files">Cluster State Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#provisioning-the-hardware">Provisioning the hardware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deploying-openshift-okd">Deploying OpenShift/OKD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-note-about-cluster-state">A note about cluster state</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="destroying-your-cluster.html">Destroying a Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Your Own Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="environment-variables.html">Environment Variables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deploying-ssl-certificates.html">Deploying SSL Certificates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced/advanced-topics.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
 </ul>
@@ -168,10 +165,10 @@
 <strong>Cluster</strong> and then installing the OpenShift <strong>OKD software</strong>.
 All of this can be accomplished from within the orchestrator’s Docker
 container.</p>
-<div class="section" id="creating-the-cluster">
-<h2>Creating the Cluster<a class="headerlink" href="#creating-the-cluster" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="provisioning-the-hardware">
+<h2>Provisioning the hardware<a class="headerlink" href="#provisioning-the-hardware" title="Permalink to this headline">¶</a></h2>
 <p>If you have a pre-existing cluster you should follow the steps described in
-the <a class="reference internal" href="deploying-to-your-own-cluster.html"><span class="doc">Deploying to Your Own Cluster</span></a> section.</p>
+the advanced <a class="reference internal" href="advanced/deploying-to-your-own-cluster.html"><span class="doc">Deploying to Bare Metal</span></a> section.</p>
 <p>If you haven’t done so already you need to set the password that will be
 assigned to the OpenShift <strong>admin</strong> account the orchestrator creates. Choose
 a suitable value and set it in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> script, replacing
@@ -224,8 +221,8 @@ bastion_ip = 18.185.149.91
 </pre></div>
 </div>
 </div>
-<div class="section" id="installing-openshift-okd">
-<h2>Installing OpenShift/OKD<a class="headerlink" href="#installing-openshift-okd" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="deploying-openshift-okd">
+<h2>Deploying OpenShift/OKD<a class="headerlink" href="#deploying-openshift-okd" title="Permalink to this headline">¶</a></h2>
 <p>The prior cluster creation step places a copy of key parts of your orchestrator
 project in the Bastion’s home directory. Installation of OpenShift/OKD takes
 place from there.</p>
@@ -276,8 +273,8 @@ So feel free to <strong>stop</strong> the instance, but <strong>do not</strong> 
 <p>When you’re finished with the cluster you can follow the
 <a class="reference internal" href="destroying-your-cluster.html"><span class="doc">Destroying a Cluster</span></a> guide to delete it.</p>
 </div>
-<div class="section" id="cluster-state-files">
-<h2>Cluster State Files<a class="headerlink" href="#cluster-state-files" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="a-note-about-cluster-state">
+<h2>A note about cluster state<a class="headerlink" href="#a-note-about-cluster-state" title="Permalink to this headline">¶</a></h2>
 <p>The orchestrator state for each cluster is stored in files that are generated
 and managed by the execution of <strong>Terraform</strong>, a tool used to create the
 cluster objects. These files are located in the orchestrator’s <code class="docutils literal notranslate"><span class="pre">terraform</span></code>

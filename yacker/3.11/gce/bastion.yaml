@@ -1,0 +1,96 @@
+---
+
+# A 'yacker' file to build a Bastion image for OpenShift 3.11 deployments.
+# It is based on a CentOS 7 image and adds all we need for the Bastion
+# including material for the OKD Orchestrator.
+#
+# The GCE credentials are expected to be available
+# in the file: -
+#
+#   gce-credentials.json (in the project root)
+
+provisioners:
+
+- type: file
+  source: yacker/files/bastion.sh
+  destination: /tmp/bastion.sh
+
+- type: file
+  source: yacker/files/okd-requirements.txt
+  destination: /tmp/requirements.txt
+
+- type: shell
+  inline:
+
+  # On top of basic OKD requirements the 'control node'
+  # needs the following for Metrics installation:
+  #
+  #  httpd-tools
+  #  java-1.8.0-openjdk-headless
+
+  - sudo yum -y update
+  - sudo yum -y install wget git unzip net-tools yum-utils bind-utils
+      httpd-tools iptables-services ntp bridge-utils bash-completion
+      kexec-tools sos psacct pyOpenSSL etcd flannel java-1.8.0-openjdk-headless
+      docker-1.13.1
+
+  - sudo rpm -V docker-1.13.1
+
+  - sudo systemctl enable docker
+  - sudo systemctl start docker
+  - sudo yum -y install NetworkManager
+  - sudo systemctl enable NetworkManager
+  - sudo systemctl start NetworkManager
+
+  - sudo easy_install pip
+  - sudo pip install -r /tmp/requirements.txt
+
+  # OKD (default) PATH variables
+  # adding ~/bin and ~/bin/oc to the user PATH...
+
+  - sudo cp /tmp/bastion.sh /etc/profile.d
+
+  # Monit 5.25.2 from source
+
+  - sudo yum install -y gcc zlib-devel pam-devel openssl-devel
+  - sudo wget http://mmonit.com/monit/dist/monit-5.25.2.tar.gz
+  - sudo tar -zxvf monit-5.25.2.tar.gz
+  - cd monit-5.25.2
+  - sudo ./configure
+  - sudo make
+  - sudo make install
+  - sudo rm -rf monit-5.25.2
+
+  # Create a centos user (there's one in AWS)
+
+  - sudo adduser centos
+  - sudo usermod -g centos centos
+  - sudo usermod -aG wheel centos
+
+  # Fetch the OC CLI (to /home/centos/bin/oc)
+
+  - sudo mkdir -p /home/centos/bin/oc
+  - sudo wget --output-document=/tmp/oc.tar.gz
+    https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
+  - sudo tar -xf /tmp/oc.tar.gz -C /home/centos/bin/oc --strip-components=1
+  - sudo chown -R centos.centos /home/centos
+
+variables:
+
+  gce_zone: europe-west3-a
+  gce_source_image: centos-7-v20190213
+  gce_project: sincere-woods-232216
+  base_ami_name: okd-bastion-image-311-03
+  base_description: CentOS Linux 7 for Bastion
+  our_name: openshift-okd-bastion-image
+
+builders:
+
+- type: googlecompute
+  account_file: gce-credentials.json
+  project_id: '{{user `gce_project`}}'
+  source_image: '{{user `gce_source_image`}}'
+  image_description: '{{user `base_description`}}'
+  image_name: '{{user `our_name`}}'
+  ssh_username: packer
+  zone: '{{user `gce_zone`}}'

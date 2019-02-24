@@ -1,0 +1,44 @@
+# -----------------------------------------------------------------------------
+# Node instance definitions
+# -----------------------------------------------------------------------------
+
+{% for node in cluster.nodes -%}
+{% if node.count -%}
+
+resource "google_compute_instance" "node_{{ node.name }}" {
+
+  name = "${var.name_tag}-node-${format("%03d", count.index + 1)}-{{ node.name }}"
+  machine_type = "{{ node.type }}"
+  count = "{{ node.count }}"
+
+  # Following allows Terraform to stop the instance to update its properties.
+  # i.e. if you change the machine type etc.
+  allow_stopping_for_update = "true"
+
+  boot_disk {
+    initialize_params {
+      image = "${var.cluster_image_name_prefix}"
+      size = "20"
+      type = "pd-ssd"
+    }
+  }
+
+  network_interface {
+    network = "${google_compute_network.okd.name}"
+    access_config = {
+    }
+  }
+
+  metadata {
+    sshKeys = "centos:${file("../../${var.keypair_name}.pub")} centos"
+    ssh_user = "centos"
+  }
+
+  service_account {
+    email = "${var.gce_project_number}-compute@developer.gserviceaccount.com"
+    scopes = ["cloud-platform"]
+  }
+}
+
+{% endif -%}
+{% endfor -%}

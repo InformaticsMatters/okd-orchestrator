@@ -93,6 +93,7 @@ def find_template_files(deployment_config):
     :type deployment_config: ``dict``
     :return: A list of template files.
     """
+    a_root = './ansible'
     t_root = './terraform/'
     i_root = './okd/inventories/'
 
@@ -113,6 +114,13 @@ def find_template_files(deployment_config):
             if not terraform_dir or \
                     not root.startswith('{}{}'.format(t_root, terraform_dir)):
                 exclude = True
+        # Only process terraform-specific post-destroy files
+        if root.startswith(a_root):
+            if not terraform_dir or \
+                    not root.startswith('{}/post-destroy/{}'.
+                                        format(a_root, terraform_dir)):
+                exclude = True
+        # Only process the right inventory files.
         if not exclude and root.startswith(i_root):
             if not root.startswith('{}{}'.format(i_root, inventory_dir)):
                 exclude = True

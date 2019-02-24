@@ -1,0 +1,70 @@
+---
+
+version: 1
+
+name: Standard AWS Deployment (OKD 3.11) [Frankfurt]
+description: >
+  A simple deployment that forms separate Bastion, Master and Infra instances
+  along with 3 t2.large compute nodes. This also includes certbot certificate
+  creation, Template Service Broker, Ansible Service Broker, Metrics
+  and Prometheus.
+
+cluster:
+
+  region: eu-central-1
+  id: simple-frankfurt-311
+  image_prefix: okd-machine-image-311-
+  terraform_dir: aws
+
+  name_tag: vre-simple
+  public_hostname: vre.informaticsmatters.com
+  default_subdomain: apps.vre.informaticsmatters.com
+  api_port: 8443
+
+  bastion:
+    image_prefix: okd-bastion-image-311-
+    type: t2.small
+
+  master:
+    count: 1
+    type: t2.xlarge
+    fixed_ip_id: eipalloc-010cfe12a8b8c7fa2
+
+  infra:
+    count: 1
+    type: t2.xlarge
+    fixed_ip_id: eipalloc-037f7a1943abe1174
+
+  node_groups:
+  - name: general
+    labels:
+    - general-node=true
+    is_compute_node: yes
+
+  nodes:
+  - name: general
+    count: 3
+    type: t2.large
+    node_group: general
+
+okd:
+
+  ansible_tag: openshift-ansible-3.11.83-1
+  ansible_version: 2.7.5
+  play:
+  - prerequisites
+  - deploy_cluster
+
+  post_okd:
+  - play: acme-controller
+
+  enable:
+  - metrics
+  - prometheus
+  - tsb
+  - asb
+
+  certificates:
+    generate_api_cert: yes
+
+  inventory_dir: standard-3-11

@@ -27,4 +27,4 @@ attribution is required.
 [github pages]: https://docs.informaticsmatters.com/build/html/index.html
 [image]: https://pixabay.com/en/vintage-retro-silhouette-black-1318361/
 [pixaby]: https://pixabay.com
-[sphnx]: http://www.sphinx-doc.org/en/master/
+[sphinx]: http://www.sphinx-doc.org/en/master/

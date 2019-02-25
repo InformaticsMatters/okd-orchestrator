@@ -6,7 +6,7 @@ Here we introduce you to the OKD orchestrator, guide you through its use and
 walk through one of the built-in *standard* AWS-based tutorial files. [#f0]_
 
 Introduction
-^^^^^^^^^^^^
+============
 
 The OKD Orchestrator is a utility designed to simplify simple [#f1]_
 RedHat `OKD`_ platform installations.
@@ -132,7 +132,7 @@ next step is to clone the OKD Orchestrator to our desktop using Git::
 
 This will provide us with the *create* (and *destroy*) utility and
 the example deployments including the *standard* AWS deployment we're
-illustrating here and the container we'll run wil provide us with all the
+illustrating here and the container we'll run will provide us with all the
 additional tools including a Python environment.
 
 ..  image:: ../images/okd-orchestrator.001.png
@@ -145,29 +145,40 @@ Step 1 - DEFINE a deployment
 
 ..  image:: ../images/okd-orchestrator.007.png
 
-Deployments are defined in a `YAML`_ file in the OKD Orchestrator's
-``deployments`` directory and variables required to interact with your
-cloud provider setup in a ``setenv.sh`` file.
+Here we define the installation (topology) and provide some key (secret)
+material that consists of: -
 
-The deployment file (``configuration.yaml``) resides
-in a sub-directory and allows you to define the physical and software
-topology of the OKD cluster.
+-   A **deployment configuration**
+-   A set of **environment variables** in an environment file
+-   An **SSH key-pair**
 
-The environment file (``setenv.sh``) lives in the ``provider-env``
-directory, where you wil find templates of required variables for the
-supported cloud providers.
+..  image:: ../images/okd-orchestrator.002.png
 
-    A discussion of the directories and layout of the OKD Orchestrator
-    can be found in the accompanying :doc:`architecture` document.
+-   **Deployments** are defined in a `YAML`_ file in the OKD Orchestrator's
+    ``deployments`` directory and variables required to interact with your
+    cloud provider setup in a ``setenv.sh`` file.
+    The deployment file (``configuration.yaml``) resides
+    in a sub-directory and allows you to define the physical and software
+    topology of the OKD cluster.
+
+-   The **environment file** (a shell-script called ``setenv.sh``) lives in the
+    ``provider-env`` directory, where you will find templates of required
+    variables for the supported cloud providers.
+
+-   The **SSH keypair** (kept in the root of the project) allows the
+    orchestrator to securely communicate with the physical instances it will
+    be creating.
+
+A discussion of the directories and layout of the OKD Orchestrator
+can be found in the accompanying :doc:`architecture` document.
 
 Before we orchestrate the built-in example we can spend some time exploring the
 anatomy of the **deployment configuration**, the YAML file that describes
 the cluster hardware you desire and the OKD software that will be installed.
-
-..  image:: ../images/okd-orchestrator.002.png
-
-A discussion of the deployment configuration can be found in the
-:doc:`anatomy-of-a-deployment-configuration` document.
+You can find a discussion of the deployment configuration in the
+:doc:`anatomy-of-a-deployment-configuration` document, or you can inspect
+the built-in ``compact-aws-frankfurt-3-11`` configuration that has
+comprehensive in-line documentation.
 
 Step 2 - COMPILE a Machine Image
 ================================

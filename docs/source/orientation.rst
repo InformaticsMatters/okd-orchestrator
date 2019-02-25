@@ -282,8 +282,8 @@ something like this: -
 
 ..  image:: ../images/okd-orchestrator.012.png
 
-Step 4 - DEPLOY OpensShift OKD
-==============================
+Step 4 - DEPLOY OpenShift OKD
+=============================
 
 ..  image:: ../images/okd-orchestrator.010.png
 

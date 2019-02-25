@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Orientation &mdash; The OKD Orchestrator 1.0.0 documentation</title>
+  <title>Orientation &mdash; The OKD Orchestrator 1.5.0 documentation</title>
   
 
   
@@ -83,11 +83,14 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Orientation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#why-do-i-need-the-okd-orchestrator">Why do I need the OKD Orchestrator?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#how-do-i-use-it">How do I use it?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-1-define-a-deployment">Step 1 - DEFINE a deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#so-how-do-i-use-the-orchestrator">So, how do I use the orchestrator?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-define-a-deployment">Step 1 - DEFINE a deployment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#anatomy-of-a-deployment-configuration">Anatomy of a deployment configuration</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#step-2-compile-a-machine-image">Step 2 - COMPILE a Machine Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#step-3-provision-the-hardware">Step 3 - PROVISION the hardware</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#step-4-deploy-okd">Step 4 - DEPLOY OKD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-deploy-opensshift-okd">Step 4 - DEPLOY OpensShift OKD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#deleting-your-cluster">Deleting your cluster</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#further-reading">Further reading</a></li>
 </ul>
@@ -207,19 +210,18 @@ should provide you with all the necessary instructions.</p>
 </div>
 <div class="section" id="why-do-i-need-the-okd-orchestrator">
 <h2>Why do I need the OKD Orchestrator?<a class="headerlink" href="#why-do-i-need-the-okd-orchestrator" title="Permalink to this headline">¶</a></h2>
-<p>You don’t. You could create your own compute instances and install OKD
-yourself.</p>
+<p>You don’t.</p>
+<p>You just need an OpenShift OKD inventory file and some hardware.</p>
+<p><strong>Create an inventory file…</strong></p>
 <p>The configuration of OKD is, understandably, complex. There are lots of parts
 to OKD and a myriad of configuration parameters spread over pages of
 some quite extensive documentation. OKD is no different
 if you don’t understand it then configuring it will be difficult as one
-depends on the other:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Genius is making complex ideas simple, not making simple ideas complex.&quot;</span>
-<span class="o">--</span> <span class="n">Albert</span> <span class="n">Einstein</span>
-</pre></div>
-</div>
-<p>Once you’ve created your OKD definition (an <em>inventory file</em> in an extended-ini
-or YAML format) you now have to create your compute instances.</p>
+depends on the other.</p>
+<p>Anyway, you’re through the documentation and you’ve created your
+OKD <em>inventory file</em> (in an extended-ini or YAML format) knowing what you need
+to do to create your compute instances…</p>
+<p><strong>Create your hardware…</strong></p>
 <p>If you’ve used a cloud provider’s built-in tools you’ll appreciate that
 creating precisely what you need for the network topology can be challenging.</p>
 <p>Each provider uses their own terms for the network components
@@ -229,7 +231,15 @@ firewalls connect to a networks in GCE).</p>
 <p>The good news is that if you’re tied to one provider for business reasons
 then at least your task is reduced somewhat - there’s just one learning curve
 to climb.</p>
-<p>The <strong>OKD Orchestrator</strong> tries compress these complexities by: -</p>
+<p><strong>Run the installer…</strong></p>
+<ul class="simple">
+<li>Clone the OpenShift repo on the cloud machine</li>
+<li>Switch the a tagged release</li>
+<li>Install Ansible</li>
+<li>Run the installer</li>
+</ul>
+<p><strong>But…</strong></p>
+<p>The <strong>OKD Orchestrator</strong> tries eliminate these complexities by: -</p>
 <ul class="simple">
 <li>Consolidating both cluster and OKD configuration definitions
 into one <strong>human-readable configuration file</strong></li>
@@ -241,20 +251,25 @@ Terraform orchestration for key providers</li>
 <p>The OKD Orchestrator also supports advanced features like customer-specific
 (on-premise) or bare-metal installations and post-OKD playbooks for the
 installation of additional applications (like the <a class="reference external" href="https://github.com/tnozicka/openshift-acme">ACME Controller</a>
-certificate provisioner)</p>
+certificate provisioner):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Genius is making complex ideas simple, not making simple ideas complex.&quot;</span>
+<span class="o">--</span> <span class="n">Albert</span> <span class="n">Einstein</span>
+</pre></div>
 </div>
-<div class="section" id="how-do-i-use-it">
-<h2>How do I use it?<a class="headerlink" href="#how-do-i-use-it" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="so-how-do-i-use-the-orchestrator">
+<h2>So, how do I use the orchestrator?<a class="headerlink" href="#so-how-do-i-use-the-orchestrator" title="Permalink to this headline">¶</a></h2>
 <p>The orchestrator is normally executed using a Docker container launched
 from within the project root of a clone (or fork) of the orchestrator
-GitHub repository.</p>
+GitHub repository. The Docker container is essentially a
+<em>batteries included</em> approach - where all the tools are built-in.</p>
 <blockquote>
 <div>If you are comfortable working with your own copies of the underlying tools
 (i.e. Packer and Terraform) and Python virtual environments, you can
 run the orchestrator directly from the command-line <a class="footnote-reference" href="#f2" id="id4">[4]</a>.</div></blockquote>
 <p>We’ll explore the basics of the orchestrator by reproducing the built-in
 configuration for a small AWS-based installing called
-<code class="docutils literal notranslate"><span class="pre">standard-aws-frankfurt-3-11</span></code> using the container image distribution of
+<a class="reference external" href="https://raw.githubusercontent.com/InformaticsMatters/okd-orchestrator/master/deployments/standard-aws-frankfurt-3-11/configuration.yaml">standard-aws-frankfurt-3-11</a> using the container image distribution of
 the OKD orchestrator, which contains all the tools you need.</p>
 <p>Once you have cloned (or forked) the OKD Orchestrator 4 distinct steps
 are required to install OKD on a new cloud environment: -</p>
@@ -278,6 +293,8 @@ additional tools including a Python environment.</p>
 <img alt="_images/okd-orchestrator.001.png" src="_images/okd-orchestrator.001.png" />
 <p>As well as this high-level orientation there is a more detailed discussion
 of the orchestrator that starts with the <a class="reference internal" href="getting-started.html"><span class="doc">Getting Started</span></a> document.</p>
+<p>A discussion of the directories and layout of the OKD Orchestrator
+can be found in the accompanying <a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a> document.</p>
 </div>
 <div class="section" id="step-1-define-a-deployment">
 <h2>Step 1 - DEFINE a deployment<a class="headerlink" href="#step-1-define-a-deployment" title="Permalink to this headline">¶</a></h2>
@@ -299,20 +316,23 @@ in a sub-directory and allows you to define the physical and software
 topology of the OKD cluster.</li>
 <li>The <strong>environment file</strong> (a shell-script called <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code>) lives in the
 <code class="docutils literal notranslate"><span class="pre">provider-env</span></code> directory, where you will find templates of required
-variables for the supported cloud providers.</li>
+variables for the supported cloud providers. The <a class="reference external" href="https://raw.githubusercontent.com/InformaticsMatters/okd-orchestrator/master/provider-env/setenv-aws-template.sh">setenv-aws-template</a>
+is a good example of what might be expected in terms of environment
+variables.</li>
 <li>The <strong>SSH keypair</strong> (kept in the root of the project) allows the
 orchestrator to securely communicate with the physical instances it will
 be creating.</li>
 </ul>
-<p>A discussion of the directories and layout of the OKD Orchestrator
-can be found in the accompanying <a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a> document.</p>
+<div class="section" id="anatomy-of-a-deployment-configuration">
+<h3>Anatomy of a deployment configuration<a class="headerlink" href="#anatomy-of-a-deployment-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Before we orchestrate the built-in example we can spend some time exploring the
-anatomy of the <strong>deployment configuration</strong>, the YAML file that describes
-the cluster hardware you desire and the OKD software that will be installed.
-You can find a discussion of the deployment configuration in the
+anatomy of the deployment configuration, the YAML file that describes
+the cluster hardware you desire and the OKD software that will be installed.</p>
+<p>You can find a discussion of the deployment configuration in the
 <a class="reference internal" href="anatomy-of-a-deployment-configuration.html"><span class="doc">Anatomy of a Deployment Configuration</span></a> document, or you can inspect
-the built-in <code class="docutils literal notranslate"><span class="pre">compact-aws-frankfurt-3-11</span></code> configuration that has
+the built-in <a class="reference external" href="https://raw.githubusercontent.com/InformaticsMatters/okd-orchestrator/master/deployments/compact-aws-frankfurt-3-11/configuration.yaml">compact-aws-frankfurt-3-11</a> configuration that has
 comprehensive in-line documentation.</p>
+</div>
 </div>
 <div class="section" id="step-2-compile-a-machine-image">
 <h2>Step 2 - COMPILE a Machine Image<a class="headerlink" href="#step-2-compile-a-machine-image" title="Permalink to this headline">¶</a></h2>
@@ -372,8 +392,8 @@ components (networks, firewalls, machines and volumes).</p>
 something like this: -</p>
 <img alt="_images/okd-orchestrator.012.png" src="_images/okd-orchestrator.012.png" />
 </div>
-<div class="section" id="step-4-deploy-okd">
-<h2>Step 4 - DEPLOY OKD<a class="headerlink" href="#step-4-deploy-okd" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="step-4-deploy-opensshift-okd">
+<h2>Step 4 - DEPLOY OpensShift OKD<a class="headerlink" href="#step-4-deploy-opensshift-okd" title="Permalink to this headline">¶</a></h2>
 <img alt="_images/okd-orchestrator.010.png" src="_images/okd-orchestrator.010.png" />
 <p>With the cluster created the final step, installing the OKD platform
 software, takes place on the <strong>Bastion</strong> machine (or Master if the Master is
@@ -472,7 +492,7 @@ operating system - some stuff needs to be added (typically to CentOS)</td></tr>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Informatics Matters
+        &copy; Copyright 2018, OpenRiskNet
 
     </p>
   </div>

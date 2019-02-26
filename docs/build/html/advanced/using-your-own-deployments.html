@@ -181,11 +181,19 @@ command-line.</p>
 <p>To use deployments from your own project you just need to set the
 <code class="docutils literal notranslate"><span class="pre">TF_VAR_deployments_directory</span></code> environment variable to match the path
 to your own deployments directory before entering the container <a class="footnote-reference" href="#f1" id="id1">[1]</a>.</p>
+<p>Normally you do not need to run <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">provider-env/setenv.sh</span></code> as the
+container takes care of this for you. But, if you manage your own
+deployments directory you must either run <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">provider-env/setenv.sh</span></code>
+<em>before</em> running <code class="docutils literal notranslate"><span class="pre">./okdo-start.sh</span></code> or set <code class="docutils literal notranslate"><span class="pre">TF_VAR_deployments_directory</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source provider-env/setenv.sh
+$ ./okdo-start.sh
+</pre></div>
+</div>
 <p class="rubric">Footnotes</p>
 <table class="docutils footnote" frame="void" id="f1" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>If the variable is set the <code class="docutils literal notranslate"><span class="pre">okdo-start.sh</span></code> script that starts the
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>If the variable is set, the <code class="docutils literal notranslate"><span class="pre">okdo-start.sh</span></code> script that starts the
 Docker container will automatically mount your deployments directory
 as a <em>volume</em> so the path is equally valid inside the container as it
 is outside</td></tr>

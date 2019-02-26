@@ -350,6 +350,14 @@ okd:
     #
     # Here you *MUST NOT* define an email address for certification.
     # i.e. 'TF_VAR_master_certbot_email' must not be set.
+    #
+    # When providing your own certificates you must use ansible-vault
+    # to encrypt the certificate files. The OKD Orchestrator will expect to
+    # find a file called `vault-pass.txt` in the root of your deployment
+    # directory (alongside your deployment configuration file).
+    #
+    # See the ansible documentation for further details:
+    # https://docs.ansible.com/ansible/latest/user_guide/playbooks_vault.html
     #wildcard_cert: yes
     # If you have a certificate that you want to use to provision
     # as a master API certificate then place the certificate files
@@ -360,6 +368,9 @@ okd:
     #
     # Here you *MUST NOT* define an email address for certification.
     # i.e. 'TF_VAR_master_certbot_email' must not be set.
+    #
+    # See the note about using vault-encrypted files in the 'wildcard_cert'
+    # section above.
     #master_api_cert: master.hostname.com
     # For the above, refer to the following OpenShift documentation:
     # https://docs.openshift.com/container-platform/3.11/

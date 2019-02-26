@@ -99,8 +99,15 @@
   - name: Install setenv.sh (as okd.sh)
     copy:
       src: "{{ setenv_file }}"
-      dest: "/etc/profile.d/okd.sh"
+      dest: /etc/profile.d/okd.sh
       mode: 0644
+    become: yes
+
+  - name: Remove TF_VAR_deployments_directory from okd.sh
+    lineinfile:
+      path: /etc/profile.d/okd.sh
+      regexp: '^export TF_VAR_deployments_directory=.*$'
+      state: absent
     become: yes
 
   - name: Uninstall any existing Ansible
@@ -193,6 +200,7 @@
     stat:
       path: "{{ vault_password_file }}"
     register: vault_password
+    delegate_to: localhost
     when: user_cert.stat.exists
 
   - name: Assert vault password file (vault-pass.txt)

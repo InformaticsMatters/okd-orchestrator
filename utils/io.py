@@ -82,10 +82,17 @@ def get_deployment_config_name(deployment=None,
     :rtype: ``str``
     """
 
-    possible_deployments = os.listdir(get_deployments_directory())
+    possible_deployments = []
+    deployment_dir = get_deployments_directory()
+    if not os.path.isdir(deployment_dir):
+        print('Ooops - your deployments directory does not exist (%s)'
+              % deployment_dir)
+        sys.exit(1)
+
     # An entry is only of use if it's a directory
     # and contains a 'configuration.yaml'.
     deployments = []
+    possible_deployments += os.listdir(deployment_dir)
     for possible_deployment in possible_deployments:
         deployment_dir = os.path.join(get_deployments_directory(),
                                       possible_deployment)

@@ -221,7 +221,9 @@ def _main(cli_args, chosen_deployment_name):
                         format(certbot_email)
                     extra_env += ' -e public_hostname="{}"'. \
                         format(deployment.cluster.public_hostname)
-                else:
+
+                elif (deployment.okd.certificates.wildcard_cert or
+                      deployment.okd.certificates.master_api_cert):
 
                     # User-supplied certificates -
                     # expect a vault password file

@@ -150,8 +150,8 @@
     file:
       path: "{{ ansible_env.HOME }}/okd-orchestrator/deployments"
       state: directory
-      owner: centos
-      group: centos
+      owner: "{{ cluster_ssh_user }}"
+      group: "{{ cluster_ssh_user }}"
       mode: 0755
     become: yes
 

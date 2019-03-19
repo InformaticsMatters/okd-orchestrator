@@ -23,6 +23,8 @@ OKD_KEYPAIR_NAME_ENV = 'TF_VAR_keypair_name'
 OKD_CERTBOT_EMAIL_ENV = 'TF_VAR_master_certbot_email'
 OKD_DEPLOYMENTS_DIRECTORY = io.get_deployments_directory()
 
+OKD_DEFAULT_CLUSTER_SSH_USER = 'centos'
+
 # The list of supported deployment configuration file versions.
 # The config file contains a version number, we only handle
 # those that are in this list.
@@ -77,6 +79,13 @@ def _main(cli_args, chosen_deployment_name):
               ' but it was not there.'.format(inventory_dir))
         print('Every deployment must have an "inventories" directory')
         return False
+
+    # If the cluster SSH user is not defined,
+    # insert it.
+    if 'ssh_user' not in deployment.cluster:
+        print('Setting default SSH user "{}"'.
+              format(OKD_DEFAULT_CLUSTER_SSH_USER))
+        deployment.cluster.ssh_user = OKD_DEFAULT_CLUSTER_SSH_USER
 
     # -----
     # Hello
@@ -133,7 +142,9 @@ def _main(cli_args, chosen_deployment_name):
 
         if not cli_args.skip_rendering:
 
-            cmd = './render.py {}'.format(chosen_deployment_name)
+            cmd = './render.py {} --ssh-user {}'.\
+                format(chosen_deployment_name,
+                       deployment.cluster.ssh_user)
             cwd = '.'
             rv, _ = io.run(cmd, cwd, cli_args.quiet)
             if not rv:
@@ -248,9 +259,11 @@ def _main(cli_args, chosen_deployment_name):
                   ' {}' \
                   ' -e keypair_name={}' \
                   ' -e inventory_dir={}' \
+                  ' -e cluster_ssh_user={}' \
                   ' -e deployment_name={}'.format(extra_env,
                                                   keypair_name,
                                                   deployment.okd.inventory_dir,
+                                                  deployment.cluster.ssh_user,
                                                   chosen_deployment_name)
             cwd = 'ansible/bastion'
             rv, _ = io.run(cmd, cwd, cli_args.quiet)

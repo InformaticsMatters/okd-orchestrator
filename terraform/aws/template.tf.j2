@@ -101,6 +101,7 @@ data "template_file" "post_okd_inventory" {
   vars {
     cli_node = "${aws_instance.master.0.private_dns}"
     admin_password = "${var.okd_admin_password}"
+    ssh_user = "${var.ssh_user}"
   }
 }
 
@@ -135,6 +136,8 @@ data "template_file" "bastion-inventory" {
     {% else %}
     cli_node = "${aws_eip.master.public_ip}"
     {% endif %}
+
+    ssh_user = "${var.ssh_user}"
   }
 }
 

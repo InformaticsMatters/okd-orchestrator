@@ -6,3 +6,6 @@ passlib == 1.7.1
 
 # For the orchestrator...
 munch == 2.3.2
+
+# For built-ins
+future == 0.17.1

@@ -65,6 +65,6 @@ okd:
   - asb
 
   certificates:
-    generate_api_cert: no
+    generate_api_cert: yes
 
   inventory_dir: standard-3-11

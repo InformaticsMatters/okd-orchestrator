@@ -343,7 +343,7 @@ okd:
     # If generating certificates you *MUST* provide the certbot
     # email address for certification in your provider-env/setenv.sh,
     # typically in the 'TF_VAR_master_certbot_email' environment variable.
-    generate_api_cert: no
+    generate_api_cert: yes
     # Alternatively, if you have your own wildcard certificate
     # for your domain then you can place the certificate files
     # (which must consist of files named 'cert.crt', 'private.key'

@@ -166,8 +166,13 @@ if __name__ == '__main__':
 
     parser.add_argument('deployment',
                         help='The deployment configuration to apply')
+    parser.add_argument('--ssh-user', help='The SSH User',
+                        type=str, default='centos')
     args = parser.parse_args()
 
+    # Load the deployment from file and inject the SSH user
     deployment_config = load_deployment_configuration(args.deployment)
+    deployment_config['cluster']['ssh_user'] = args.ssh_user
+
     template_files = find_template_files(deployment_config)
     translate_template_files(template_files, deployment_config)

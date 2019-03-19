@@ -89,7 +89,9 @@ def _main(cli_args, chosen_deployment_name):
     # ------
     if not cli_args.skip_rendering:
 
-        cmd = './render.py {}'.format(chosen_deployment_name)
+        cmd = './render.py {} --ssh-user {}'.\
+            format(chosen_deployment_name,
+                   deployment.cluster.ssh_user)
         cwd = '.'
         rv, _ = io.run(cmd, cwd, cli_args.quiet)
         if not rv:

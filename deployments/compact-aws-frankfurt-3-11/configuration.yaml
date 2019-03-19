@@ -260,7 +260,7 @@ okd:
 
   # The version tag for OpenShift Origin/OKD ansible playbooks.
   # This must be a valid tag in the OpenShift git repository.
-  ansible_tag: openshift-ansible-3.11.83-1
+  ansible_tag: openshift-ansible-3.11.97-1
   # The version of Ansible required to deploy the cluster.
   # The orchestrator will ensure that the correct version of
   # ansible is installed. v2.7.5 is likely to be suitable for

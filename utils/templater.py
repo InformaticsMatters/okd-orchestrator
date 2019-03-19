@@ -45,10 +45,12 @@ def render(deployment,
 
     # The template substitution map will basically consist of
     # a few items from the deployment (e.g. public_hostname)
-    # and the 'my-machines' section...
+    # and the 'my-machines' section that may be expected in
+    # the template file to be rendered...
     template_map = {'public_hostname': deployment.cluster.public_hostname,
                     'default_subdomain': deployment.cluster.default_subdomain,
-                    'admin_password': admin_password}
+                    'admin_password': admin_password,
+                    'ssh_user': deployment.cluster.ssh_user}
     template_map.update(deployment.my_machines)
 
     # Read and render the input file...

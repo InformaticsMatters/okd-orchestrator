@@ -44,6 +44,8 @@ cluster:
   # The provider 'region' used for cluster instances.
   # The value is provider-specific.
   region: eu-central-1
+  # The SSH 'user' that belongs to the ssh-keypair.
+  ssh_user: centos
   # A unique name for your cluster.
   # All your clusters must have a different ID.
   id: compact-frankfurt-311
@@ -341,7 +343,7 @@ okd:
     # If generating certificates you *MUST* provide the certbot
     # email address for certification in your provider-env/setenv.sh,
     # typically in the 'TF_VAR_master_certbot_email' environment variable.
-    generate_api_cert: yes
+    generate_api_cert: no
     # Alternatively, if you have your own wildcard certificate
     # for your domain then you can place the certificate files
     # (which must consist of files named 'cert.crt', 'private.key'

@@ -19,6 +19,8 @@ from utils import io
 # The deployments directory.
 OKD_DEPLOYMENTS_DIRECTORY = io.get_deployments_directory()
 
+OKD_DEFAULT_CLUSTER_SSH_USER = 'centos'
+
 
 def _main(cli_args, chosen_deployment_name):
     """Destruction entry point.
@@ -51,6 +53,12 @@ def _main(cli_args, chosen_deployment_name):
               format(chosen_deployment_name))
         print('Every deployment must have a matching "inventories" directory')
         return False
+
+    # If the cluster SSH user is not defined,
+    # insert it.
+    if not deployment.cluster.ssh_user:
+        print('Setting default SSH user "{}"'.format(OKD_DEFAULT_CLUSTER_SSH_USER))
+        deployment.cluster.ssh_user = OKD_DEFAULT_CLUSTER_SSH_USER
 
     # -----
     # Hello

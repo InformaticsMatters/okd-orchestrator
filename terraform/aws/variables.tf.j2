@@ -34,6 +34,11 @@ variable "okd_developer_password" {
   default = ""
 }
 
+variable "ssh_user" {
+  description = "The SSH user in the cluster"
+  default = "{{ cluster.ssh_user }}"
+}
+
 variable "deployments_directory" {
   description = "An alternative (optional) deployment directory."
   default = ""

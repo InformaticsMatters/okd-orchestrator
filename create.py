@@ -83,7 +83,8 @@ def _main(cli_args, chosen_deployment_name):
     # If the cluster SSH user is not defined,
     # insert it.
     if 'ssh_user' not in deployment.cluster:
-        print('Setting default SSH user "{}"'.format(OKD_DEFAULT_CLUSTER_SSH_USER))
+        print('Setting default SSH user "{}"'.
+              format(OKD_DEFAULT_CLUSTER_SSH_USER))
         deployment.cluster.ssh_user = OKD_DEFAULT_CLUSTER_SSH_USER
 
     # -----

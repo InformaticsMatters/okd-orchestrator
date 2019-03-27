@@ -147,12 +147,12 @@ all:
         openshift_metrics_hawkular_hostname: metrics.${public_hostname}
         openshift_hosted_metrics_image_version: v3.11
         openshift_metrics_cassandra_storage_type: dynamic
-        openshift_metrics_cassandra_pvc_size: 5Gi
-        openshift_metrics_cassandra_limits_memory: 2Gi
+        openshift_metrics_cassandra_pvc_size: 10Gi
+        openshift_metrics_cassandra_limits_memory: 4Gi
         openshift_metrics_duration: 4
-        openshift_metrics_resolution: 15s
+        openshift_metrics_resolution: 30s
 
-        # Logging
+        # Logging
         # -------
 {% if okd.enable and 'logging' in okd.enable %}
         openshift_logging_install_logging: true

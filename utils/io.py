@@ -208,6 +208,7 @@ def run(cmd, cwd, quiet=False):
     """
     expanded_cmd = os.path.expanduser(cmd)
     banner(expanded_cmd, cwd, quiet)
+    print('| %s' % expanded_cmd)
     stdout_type = subprocess.PIPE if quiet else None
     process = subprocess.Popen(expanded_cmd.split(),
                                cwd=os.path.expanduser(cwd),

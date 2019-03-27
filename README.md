@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/InformaticsMatters/okd-orchestrator.svg?branch=master)](https://travis-ci.org/InformaticsMatters/okd-orchestrator)
 
-A project sponsored by OpenRiskNet.
+A project sponsored by OpenRiskNet and hosted on [GitHub].
 
 >   OpenRiskNet: Open e-Infrastructure to Support Data Sharing,
     Knowledge Integration and in silico Analysis and Modelling in Risk Assessment
@@ -24,6 +24,7 @@ attribution is required.
 ---
 
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/deed.en
+[github]: https://github.com/InformaticsMatters/okd-orchestrator
 [github pages]: https://docs.informaticsmatters.com/build/html/index.html
 [image]: https://pixabay.com/en/vintage-retro-silhouette-black-1318361/
 [pixaby]: https://pixabay.com

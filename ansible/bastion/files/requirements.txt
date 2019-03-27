@@ -9,3 +9,6 @@ munch == 2.3.2
 
 # For built-ins
 future == 0.17.1
+
+# For CertBot
+pyOpenSSL == 19.0.0

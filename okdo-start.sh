@@ -9,11 +9,13 @@ then
     # No user-specific deployments directory
     docker run -it \
         -v `pwd`:/home/okdo/okd-orchestrator:Z \
+        --network host \
         --rm informaticsmatters/okd-orchestrator:stable /bin/bash
 else
     # A user-specific deployments directory
     docker run -it \
         -v ${TF_VAR_deployments_directory}:${TF_VAR_deployments_directory}:Z \
         -v `pwd`:/home/okdo/okd-orchestrator:Z \
+        --network host \
         --rm informaticsmatters/okd-orchestrator:stable /bin/bash
 fi

@@ -26,7 +26,7 @@ ARG gid=40000
 # Install required system tools
 COPY requirements.txt /tmp/
 RUN apt-get -y update && \
-    apt-get install -y jq unzip graphviz vim less && \
+    apt-get install -y apache2-utils jq unzip graphviz vim less && \
     pip install -r /tmp/requirements.txt
 
 # Install Terraform

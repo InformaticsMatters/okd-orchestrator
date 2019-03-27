@@ -23,10 +23,13 @@ ARG packer_version=1.3.3
 ARG uid=40000
 ARG gid=40000
 
-# Install required system tools
+# Install required system tools.
+# - apache2-utils is required for 'htpasswd', used during OKD metrics installation
+# - openjdk-8-jdk is required for 'keytool', used during OKD metrics installation
 COPY requirements.txt /tmp/
 RUN apt-get -y update && \
-    apt-get install -y apache2-utils jq unzip graphviz vim less && \
+    apt-get install -y jq unzip graphviz vim less \
+        apache2-utils openjdk-8-jdk && \
     pip install -r /tmp/requirements.txt
 
 # Install Terraform

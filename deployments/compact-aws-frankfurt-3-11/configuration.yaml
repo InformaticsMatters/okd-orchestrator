@@ -269,6 +269,13 @@ okd:
   # The names of the playbooks to play in order to deploy the OKD software.
   # This, for 3.11, is typically 'prerequisites' followed by
   # 'deploy_cluster'. You're unlikely to need to change these.
+  #
+  # Any playbook cna be put in here.
+  # For example to run 'playbooks/openshift-glusterfs/uninstall.yml'
+  # just add 'openshift-glusterfs/uninstall' or to uninstall
+  # 3.11 you could replace this with 'adhoc/uninstall' and
+  # run the orchestrator with with -spr and -spo options
+  # to skip pre and post playbooks.
   play:
   - prerequisites
   - deploy_cluster

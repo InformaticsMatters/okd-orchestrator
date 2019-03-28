@@ -150,7 +150,9 @@ all:
         openshift_storage_glusterfs_storageclass: true
         openshift_storage_glusterfs_storageclass_default: true
         openshift_storage_glusterfs_block_deploy: true
-        openshift_storage_glusterfs_block_host_vol_size: 10
+        openshift_storage_glusterfs_block_host_vol_size: 100
+        openshift_storage_glusterfs_wipe: true
+        openshift_storage_glusterfs_storageclass_default: true
 
 {%- endif %}
 

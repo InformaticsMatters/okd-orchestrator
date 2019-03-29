@@ -277,6 +277,9 @@ okd:
   # run the orchestrator with with -spr and -spo options
   # to skip pre and post playbooks.
   play:
+  # This pair will destroy a GlusterFS deployment...
+  #- openshift-glusterfs/uninstall
+  #- adhoc/uninstall
   - prerequisites
   - deploy_cluster
 

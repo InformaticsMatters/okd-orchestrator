@@ -11,7 +11,7 @@ jinja2 == 2.10
 matildapeak-yacker == 2019.1
 munch == 2.3.2
 passlib == 1.7.1
-pyOpenSSL == 18.0.0
+pyOpenSSL == 19.0.0
 pyyaml == 3.13
 requests == 2.21.0
 

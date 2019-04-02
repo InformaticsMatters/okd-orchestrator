@@ -98,6 +98,7 @@ all:
 {%- endif %}
         openshift_metrics_hawkular_hostname: metrics.${default_subdomain}
         openshift_hosted_metrics_image_version: v3.11
+        openshift_metrics_cassandra_storage_type: dynamic
         openshift_metrics_cassandra_pvc_size: 10Gi
         openshift_metrics_cassandra_limits_memory: 4Gi
         openshift_metrics_duration: 4

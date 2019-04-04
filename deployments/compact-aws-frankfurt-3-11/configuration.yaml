@@ -293,6 +293,7 @@ okd:
   # with the following: -
   #
   # - acme-controller
+  # - kube-ops-view
   #
   # For each 'play' a corresponding
   # 'ansible/post-okd/playbooks/<play>/deploy.yaml' must exist.

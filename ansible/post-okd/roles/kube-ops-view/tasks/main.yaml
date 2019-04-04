@@ -1,0 +1,25 @@
+---
+
+# Login (as admin), check and create the ACME Controller project...
+
+- name: Login (admin)
+  shell: oc login {{ okd_api_hostname }} -u {{ okd_admin }} -p {{ okd_admin_password }}
+  changed_when: False
+
+- name: Check the Controller Project
+  shell: oc get projects
+  register: projects_result
+  changed_when: False
+
+- name: Create the Kube Operational View Project
+  shell: "{{ item }}"
+  loop:
+  - oc new-project {{ kube_ops_project }}
+  - oc create sa kube-ops-view
+  - oc adm policy add-scc-to-user anyuid -z kube-ops-view
+  - oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:{{ kube_ops_project }}:kube-ops-view
+  - oc apply -f https://raw.githubusercontent.com/raffaelespazzoli/kube-ops-view/ocp/deploy-openshift/kube-ops-view.yaml
+  - oc expose svc kube-ops-view
+  when: >
+    not projects_result.stdout
+    | regex_search('^%s\s' % kube_ops_project, multiline=True)

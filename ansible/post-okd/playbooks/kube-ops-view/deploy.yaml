@@ -1,0 +1,16 @@
+---
+
+# Install the Kube Operational View Application.
+# See https://blog.openshift.com/full-cluster-capacity-management-monitoring-openshift/.
+#
+# The playbook can be assured that the following variables will have
+# been provided by the OKD Orchestrator: -
+#
+# - okd_api_hostname
+# - okd_admin
+# - okd_admin_password
+
+- hosts: cli-node
+
+  roles:
+  - kube-ops-view

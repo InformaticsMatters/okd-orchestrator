@@ -48,7 +48,7 @@ cluster:
 okd:
 
   ansible_tag: openshift-ansible-3.11.102-1
-  ansible_version: 2.7.9
+  ansible_version: 2.7.10
   play:
 #  - openshift-glusterfs/uninstall
 #  - adhoc/uninstall

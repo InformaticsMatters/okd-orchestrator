@@ -1,15 +1,16 @@
 ---
 
 # A 'yacker' file to build a Node image for OpenShift/OKD 3.11 deployments.
-# It is based on a CentOS 7 image (CentOS Linux 7 x86_64 HVM EBS)
-# and adds all we need for the Bastion including material for the
-# OKD Orchestrator.
+# It is based on a CentOS 7 image and adds all we need for the Bastion
+# including material for the OKD Orchestrator.
 #
-# The AWS access and secret keys are expected to be available
-# in two environment variables: -
+# Your keystone OpenStack variables that are expected to be available
+# are: -
 #
-#   TF_VAR_aws_access_key
-#   TF_VAR_aws_secret_key
+#   OS_USER_DOMAIN_NAME
+#   OS_PROJECT_ID
+#   TF_VAR_os_base_image_id
+#   TF_VAR_os_network_id
 
 provisioners:
 
@@ -72,8 +73,8 @@ variables:
   os_domain_name: "{{env `OS_USER_DOMAIN_NAME`}}"
   os_tenant_id: "{{env `OS_PROJECT_ID`}}"
   os_packer_flavour_name: ssc.medium
-  os_source_image_id: 408790fb-cbd0-49f5-bd43-61d2321065c3
-  os_network: 3fd902bb-1d62-4b9a-bba7-4442d7c07cb3
+  os_source_image_id: "{{env `TF_VAR_os_base_image_id`}}"
+  os_network: "{{env `TF_VAR_os_network_id`}}"
   ssh_username: centos
   our_name: okd-machine-image-311-02
 

@@ -32,6 +32,14 @@ export TF_VAR_keypair_name=okdo-keypair
 # If you set the deployment's
 export TF_VAR_master_certbot_email=SetMe
 
+# The OpenStack base image ID for use by the Yacker process
+# to build base images.
+export TF_VAR_os_base_image_id=SetMe
+
+# The OpenStack Network for use by the Yacker process
+# to build base images.
+export TF_VAR_os_network_id=SetMe
+
 # -----------------------------------------------------------------------------
 # The following variables are required to interact with OpenShift/OKD
 # -----------------------------------------------------------------------------

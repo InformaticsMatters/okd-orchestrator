@@ -12,6 +12,22 @@ export AWS_ACCESS_KEY=SetMe
 export AWS_SECRET_KEY=SetMe
 
 # -----------------------------------------------------------------------------
+# The following variables are required to use the OpenStack server.
+# -----------------------------------------------------------------------------
+
+export OS_USERNAME=SetMe
+export OS_PASSWORD=SetMe
+
+export OS_AUTH_URL=SetMe
+export OS_PROJECT_ID=SetMe
+export OS_PROJECT_NAME=SetMe
+export OS_USER_DOMAIN_NAME=SetMe
+export OS_REGION_NAME=SetMe
+
+export OS_INTERFACE=public
+export OS_IDENTITY_API_VERSION=3
+
+# -----------------------------------------------------------------------------
 # The following variables are required to orchestrate the cluster
 # -----------------------------------------------------------------------------
 

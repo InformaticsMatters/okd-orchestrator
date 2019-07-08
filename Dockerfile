@@ -16,10 +16,10 @@
 # Refer to the project's documention for a detailed discussion of
 # the orchestrator.
 
-FROM python:3.7.2
+FROM python:3.7.3
 
-ARG terraform_version=0.11.11
-ARG packer_version=1.3.3
+ARG terraform_version=0.11.14
+ARG packer_version=1.4.2
 ARG uid=40000
 ARG gid=40000
 

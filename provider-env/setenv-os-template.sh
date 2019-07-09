@@ -56,6 +56,10 @@ export TF_VAR_os_base_image_id=SetMe
 # to build base images.
 export TF_VAR_os_network_id=SetMe
 
+# A floating IP and network to assign to the instance
+# for the initial yacker-formation stage.
+export TF_VAR_os_floating_ip=SetMe
+
 # -----------------------------------------------------------------------------
 # The following variables are required to interact with OpenShift/OKD
 # -----------------------------------------------------------------------------

@@ -75,6 +75,7 @@ variables:
   os_packer_flavour_name: ssc.medium
   os_source_image_id: "{{env `TF_VAR_os_base_image_id`}}"
   os_network: "{{env `TF_VAR_os_network_id`}}"
+  os_floating_ip: "{{env `TF_VAR_os_floating_ip`}}"
   ssh_username: centos
   our_name: okd-machine-image-311-02
 
@@ -88,3 +89,4 @@ builders:
   image_name: "{{user `our_name`}}"
   source_image: "{{user `os_source_image_id`}}"
   networks: "{{ user `os_network` }}"
+  floating_ip: "{{ user `os_floating_ip` }}"

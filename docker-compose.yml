@@ -10,12 +10,14 @@
 #   IMAGE_TAG=stable docker-compose build
 #   IMAGE_TAG=stable docker-compose push
 
-version: '3.3'
+version: '3.4'
 
 services:
 
   okd-orchestrator:
     build:
       context: .
+      network: host
     image: "informaticsmatters/okd-orchestrator:${IMAGE_TAG:-latest}"
     container_name: okd-orchestrator
+    network_mode: host

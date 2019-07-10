@@ -34,13 +34,17 @@ RUN apt-get -y update && \
 
 # Install Terraform
 RUN curl https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_amd64.zip \
-        --output /tmp/terraform.zip && \
+        --output /tmp/terraform.zip \
+        --conect-timeoput 60 \
+        --max-time 300 && \
     unzip /tmp/terraform.zip -d /usr/local/bin && \
     chmod 0755 /usr/local/bin/terraform
 
 # Install Packer
 RUN curl https://releases.hashicorp.com/packer/${packer_version}/packer_${packer_version}_linux_amd64.zip \
-        --output /tmp/packer.zip && \
+        --output /tmp/packer.zip \
+        --conect-timeoput 60 \
+        --max-time 300 && \
     unzip /tmp/packer.zip -d /usr/local/bin && \
     chmod 0755 /usr/local/bin/packer
 

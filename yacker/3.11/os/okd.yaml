@@ -25,7 +25,7 @@ provisioners:
 - type: shell
   inline:
 
-  # On top of basic ODK requirements the 'control node'
+  # On top of basic OKD requirements the 'control node'
   # needs the following for Metrics installation:
   #
   #  httpd-tools
@@ -89,4 +89,3 @@ builders:
   image_name: "{{user `our_name`}}"
   source_image: "{{user `os_source_image_id`}}"
   networks: "{{ user `os_network` }}"
-  floating_ip: "{{ user `os_floating_ip` }}"

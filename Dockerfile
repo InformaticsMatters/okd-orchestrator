@@ -30,7 +30,7 @@ COPY requirements.txt /tmp/
 RUN apt-get -y update && \
     apt-get install -y jq unzip graphviz vim less \
         apache2-utils openjdk-8-jdk && \
-    pip install -r /tmp/requirements.txt
+    pip install -r /tmp/requirements.txt --default-timeout=60
 
 # Install Terraform
 RUN curl https://releases.hashicorp.com/terraform/${terraform_version}/terraform_${terraform_version}_linux_amd64.zip \

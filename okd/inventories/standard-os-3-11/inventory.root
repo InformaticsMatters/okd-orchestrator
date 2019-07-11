@@ -119,7 +119,9 @@ all:
 {% if okd.enable and 'prometheus' in okd.enable %}
         openshift_cluster_monitoring_operator_install: true
         openshift_cluster_monitoring_operator_prometheus_storage_enabled: true
+        openshift_cluster_monitoring_operator_prometheus_storage_capacity: 10Gi
         openshift_cluster_monitoring_operator_alertmanager_storage_enabled: true
+        openshift_cluster_monitoring_operator_alertmanager_storage_capacity: 2Gi
 {%- else %}
         openshift_cluster_monitoring_operator_install: false
         openshift_cluster_monitoring_operator_prometheus_storage_enabled: false

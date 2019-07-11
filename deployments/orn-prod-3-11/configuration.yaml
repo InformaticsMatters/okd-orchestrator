@@ -46,6 +46,8 @@ okd:
   ansible_tag: openshift-ansible-3.11.129-1
   ansible_version: 2.7.12
   play:
+  #  - openshift-glusterfs/uninstall
+  #  - adhoc/uninstall
   - prerequisites
   - deploy_cluster
 
@@ -66,24 +68,24 @@ okd:
 
 my_machines:
 
-  cli_node: 10.0.0.11
+  cli_node: prod-master.openstacklocal
   bastion: 130.238.28.49
 
-  master1: 10.0.0.11
+  master1: prod-master.openstacklocal
 
-  infra1: 10.0.0.25
+  infra1: prod-infra.openstacklocal
 
-  node001: 10.0.0.14
-  node002: 10.0.0.29
-  node003: 10.0.0.6
-  node004: 10.0.0.26
-  node005: 10.0.0.27
+  node001: prod-node-001.openstacklocal
+  node002: prod-node-002.openstacklocal
+  node003: prod-node-003.openstacklocal
+  node004: prod-node-004.openstacklocal
+  node005: prod-node-005.openstacklocal
 
-  glusterfs1: 10.0.0.35
-  glusterfs2: 10.0.0.5
-  glusterfs3: 10.0.0.18
-  glusterfs4: 10.0.0.39
-  glusterfs5: 10.0.0.7
+  glusterfs1: prod-gluster-001.openstacklocal
+  glusterfs2: prod-gluster-002.openstacklocal
+  glusterfs3: prod-gluster-003.openstacklocal
+  glusterfs4: prod-gluster-004.openstacklocal
+  glusterfs5: prod-gluster-005.openstacklocal
 
   glusterfs1_device1: /dev/vdb
   glusterfs2_device1: /dev/vdb

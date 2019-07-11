@@ -35,15 +35,15 @@ cluster:
     is_compute_node: no
 
   nodes:
-  - count: 8
+  - count: 5
     node_group: compute
 
   glusterfs:
-    count: 3
+    count: 5
 
 okd:
 
-  ansible_tag: openshift-ansible-3.11.128-1
+  ansible_tag: openshift-ansible-3.11.129-1
   ansible_version: 2.7.12
   play:
   - prerequisites
@@ -55,6 +55,7 @@ okd:
   enable:
   - tsb
   - metrics
+  - prometheus
 
   certificates:
     generate_api_cert: yes
@@ -65,28 +66,29 @@ okd:
 
 my_machines:
 
-  cli_node: 130.238.28.?
-  bastion: 130.238.28.?
+  cli_node: 10.0.0.11
+  bastion: 130.238.28.49
 
-  master1: 10.0.0.?
+  master1: 10.0.0.11
 
-  infra1: 10.0.0.?
+  infra1: 10.0.0.25
 
-  node001: 10.0.0.?
-  node002: 10.0.0.?
-  node003: 10.0.0.?
-  node004: 10.0.0.?
-  node005: 10.0.0.?
-  node006: 10.0.0.?
-  node007: 10.0.0.?
-  node008: 10.0.0.?
+  node001: 10.0.0.14
+  node002: 10.0.0.29
+  node003: 10.0.0.6
+  node004: 10.0.0.26
+  node005: 10.0.0.27
 
-  glusterfs1: 10.0.0.?
-  glusterfs2: 10.0.0.?
-  glusterfs3: 10.0.0.?
+  glusterfs1: 10.0.0.35
+  glusterfs2: 10.0.0.5
+  glusterfs3: 10.0.0.18
+  glusterfs4: 10.0.0.39
+  glusterfs5: 10.0.0.7
 
   glusterfs1_device1: /dev/vdb
   glusterfs2_device1: /dev/vdb
   glusterfs3_device1: /dev/vdb
+  glusterfs4_device1: /dev/vdb
+  glusterfs5_device1: /dev/vdb
 
 # -----------------------------------------------------------------------------

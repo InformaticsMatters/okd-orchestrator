@@ -20,8 +20,8 @@ cluster:
   id: orn-prod-311
 
   name_tag: orn
-  public_hostname: 130.238.28.?.nip.io
-  default_subdomain: 130.238.28.?.nip.io
+  public_hostname: 130.238.28.112.nip.io
+  default_subdomain: 130.238.28.144.nip.io
   api_port: 443
 
   master:
@@ -58,7 +58,7 @@ okd:
   - prometheus
 
   certificates:
-    generate_api_cert: yes
+    generate_api_cert: no
 
   inventory_dir: standard-os-3-11
 

@@ -201,6 +201,8 @@ all:
 {%- endblock %}
             { 'name': 'node-config-compute',
               'labels': ['node-role.kubernetes.io/compute=true'] },
+            { 'name': 'node-config-compute-storage',
+              'labels': ['node-role.kubernetes.io/compute-storage=true'] },
             { 'name': 'node-config-master',
               'labels': ['node-role.kubernetes.io/master=true'] },
             { 'name': 'node-config-master-compute',

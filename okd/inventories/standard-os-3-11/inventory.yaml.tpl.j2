@@ -67,7 +67,7 @@
 {%- if cluster.glusterfs and cluster.glusterfs.count %}
 {%- for item in range(cluster.glusterfs.count) %}
             ${glusterfs{{ '%d'|format(item + 1) }}}:
-              openshift_node_group_name: 'node-config-infra-compute'
+              openshift_node_group_name: 'node-config-compute-storage'
 {%- endfor %}
 {%- endif %}
 {% endblock %}

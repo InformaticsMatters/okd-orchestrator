@@ -35,6 +35,8 @@ all:
         openshift_image_tag: v3.11.0
         openshift_pkg_version: -3.11.0
 
+        openshift_master_dynamic_provisioning_enabled: true
+
         # A fix for 3.11 to avoid problems with missing Centos repos
         # (not fixed by the prerequisites playbook)...
         openshift_additional_repos: [
@@ -151,12 +153,31 @@ all:
 {%- if cluster.glusterfs %}
 
         openshift_storage_glusterfs_storageclass: true
-        openshift_storage_glusterfs_storageclass_default: true
+        openshift_storage_glusterfs_storageclass_default: false
         openshift_storage_glusterfs_block_deploy: true
         openshift_storage_glusterfs_block_host_vol_size: 100
         openshift_storage_glusterfs_wipe: true
 
 {%- endif %}
+
+        # OpenStack Cloud Provider
+        # ------------------------
+
+        openshift_cloudprovider_kind: openstack
+{% raw %}
+        openshift_cloudprovider_openstack_auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}"
+        openshift_cloudprovider_openstack_username: "{{ lookup('env', 'OS_USERNAME') }}"
+        openshift_cloudprovider_openstack_password: "{{ lookup('env', 'OS_PASSWORD') }}"
+        openshift_cloudprovider_openstack_region: "{{ lookup('env', 'OS_REGION_NAME') }}"
+        openshift_cloudprovider_openstack_domain_name: "{{ lookup('env', 'OS_USER_DOMAIN_NAME') }}"
+        openshift_cloudprovider_openstack_tenant_id: "{{ lookup('env', 'OS_PROJECT_ID') }}"
+{%- endraw %}
+
+        # Use Cinder volume for Openshift registry:
+        openshift_hosted_registry_storage_kind: openstack
+        openshift_hosted_registry_storage_access_modes: ['ReadWriteOnce']
+        openshift_hosted_registry_storage_openstack_filesystem: xfs
+        openshift_hosted_registry_storage_volume_size: 100Gi
 
         # Node Groups
         # -----------

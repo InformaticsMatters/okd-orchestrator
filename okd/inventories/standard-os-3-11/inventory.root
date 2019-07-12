@@ -173,7 +173,7 @@ all:
         openshift_cloudprovider_openstack_tenant_id: "{{ lookup('env', 'OS_PROJECT_ID') }}"
 {%- endraw %}
 
-        # Use Cinder volume for Openshift registry:
+        # Use Cinder volume for OpenShift registry:
         openshift_hosted_registry_storage_kind: openstack
         openshift_hosted_registry_storage_access_modes: ['ReadWriteOnce']
         openshift_hosted_registry_storage_openstack_filesystem: xfs

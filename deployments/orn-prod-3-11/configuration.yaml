@@ -38,9 +38,6 @@ cluster:
   - count: 5
     node_group: compute
 
-  glusterfs:
-    count: 0
-
 okd:
 
   ansible_tag: openshift-ansible-3.11.129-1

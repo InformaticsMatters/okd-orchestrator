@@ -172,16 +172,19 @@
   # in the user's deployment directory. The following (vault-encrypted) files
   # must exist:
   #
-  # - private.key
+  # - ca-bundle.crt
   # - cert.crt
-  # - caBundle.crt
+  # - private.key
   #
-  # If there's a cert.crt file then we'll assume all the files exist.
+  # If there's a `cert.crt` file then we'll assume all the files exist.
   #
   # Note: If the user is providing their own SSL certificates they must be
   #       encrypted using ansible vault and the encryption  password must be
   #       present in the root of the user's deployment directory in the file
-  #       'vault-pass.txt'
+  #       'vault-pass.txt'. For example, if their deployment is
+  #       in `deployment/aws-demo` certificates are expected in
+  #       `deployment/aws-demo/certificates` and the decryption password in
+  #       `deployment/aws-demo/vault-pass.txt`
 
   - name: Get status of user certificates (cert.crt)
     stat:

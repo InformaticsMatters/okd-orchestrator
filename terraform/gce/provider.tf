@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 terraform {
-  required_version = "0.11.11"
+  required_version = "0.11.14"
 }
 
 provider "google" {
@@ -11,13 +11,13 @@ provider "google" {
   credentials = "${file("../../gce-credentials.json")}"
   region = "${var.gce_region}"
   zone = "${var.gce_region}-a"
-  version = "1.20.0"
+  version = "2.10.0"
 }
 
 provider "local" {
-  version = "1.1.0"
+  version = "1.3.0"
 }
 
 provider "template" {
-  version = "1.0.0"
+  version = "2.1.2"
 }

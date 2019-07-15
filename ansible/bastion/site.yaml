@@ -83,14 +83,14 @@
 
   - name: Install SSH private key
     copy:
-      src: "../../{{ keypair_name }}"
+      src: ../../{{ keypair_name }}
       dest: "{{ ansible_env.HOME }}/.ssh/id_rsa"
       mode: 0600
 
   # Create ~/.ssh/config
   - name: Create SSH config
     copy:
-      src: "files/ssh-config"
+      src: files/ssh-config
       dest: "{{ ansible_env.HOME }}/.ssh/config"
       mode: 0400
 
@@ -110,18 +110,11 @@
       state: absent
     become: yes
 
-  - name: Uninstall any existing Ansible
-    pip:
-      name: ansible
-      state: absent
-    become: yes
-
   - name: Install Python Modules
     pip:
       requirements: /tmp/requirements.txt
       state: forcereinstall
       extra_args: --user
-    become: yes
 
   # ---------------------
   # Copy the Orchestrator
@@ -132,19 +125,19 @@
   # when `create.py` is run so we just copy common directories here.
   - name: Copy orchestrator directories
     copy:
-      src: "../../{{ item }}/"
+      src: ../../{{ item }}/
       dest: "{{ ansible_env.HOME }}/okd-orchestrator/{{ item }}"
     loop:
-      - ansible
-      - utils
+    - ansible
+    - utils
 
   - name: Copy orchestrator files
     copy:
-      src: "../../{{ item }}"
+      src: ../../{{ item }}
       dest: "{{ ansible_env.HOME }}/okd-orchestrator/{{ item }}"
     loop:
-      - okd/ansible.cfg
-      - okd/inventories/{{ inventory_dir }}/inventory.yaml
+    - okd/ansible.cfg
+    - okd/inventories/{{ inventory_dir }}/inventory.yaml
 
   # Create the deployment directory
   - name: Create deployments directory
@@ -165,7 +158,7 @@
   # Now the executable parts of the Orchestrator
   - name: Copy orchestrator modules
     copy:
-      src: "../../{{ item }}"
+      src: ../../{{ item }}
       dest: "{{ ansible_env.HOME }}/okd-orchestrator/{{ item }}"
       mode: 0755
     loop:
@@ -179,16 +172,19 @@
   # in the user's deployment directory. The following (vault-encrypted) files
   # must exist:
   #
-  # - private.key
+  # - ca-bundle.crt
   # - cert.crt
-  # - caBundle.crt
+  # - private.key
   #
-  # If there's a cert.crt file then we'll assume all the files exist.
+  # If there's a `cert.crt` file then we'll assume all the files exist.
   #
   # Note: If the user is providing their own SSL certificates they must be
   #       encrypted using ansible vault and the encryption  password must be
   #       present in the root of the user's deployment directory in the file
-  #       'vault-pass.txt'
+  #       'vault-pass.txt'. For example, if their deployment is
+  #       in `deployment/aws-demo` certificates are expected in
+  #       `deployment/aws-demo/certificates` and the decryption password in
+  #       `deployment/aws-demo/vault-pass.txt`
 
   - name: Get status of user certificates (cert.crt)
     stat:
@@ -240,13 +236,11 @@
       delay: 5
     vars:
       ansible_connection: local
-    when:
-      - master_cert_email is defined
+    when: master_cert_email is defined
 
   - name: Gathering facts
     setup:
-    when:
-      - master_cert_email is defined
+    when: master_cert_email is defined
 
   # ---------------------------
   # Generate an SSL certificate
@@ -264,19 +258,17 @@
       name: "{{ item }}"
       state: present
     loop:
-      - epel-release
-      - certbot
+    - epel-release
+    - certbot
     become: yes
-    when:
-      - master_cert_email is defined
+    when: master_cert_email is defined
 
   - name: Look for exisiting certificate directory
     stat:
       path: /etc/letsencrypt/live/{{ public_hostname }}
     register: cert_result
     become: yes
-    when:
-      - master_cert_email is defined
+    when: master_cert_email is defined
 
   - name: Generate master SSL certificate
     shell: >
@@ -284,5 +276,5 @@
       --agree-tos -n -m {{ master_cert_email }}
     become: yes
     when:
-      - master_cert_email is defined
-      - cert_result.stat.exists == false
+    - master_cert_email is defined
+    - cert_result.stat.exists == false

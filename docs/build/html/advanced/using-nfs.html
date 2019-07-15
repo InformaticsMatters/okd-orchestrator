@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Using NFS &mdash; The OKD Orchestrator 1.5.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Provisioning SSL Certificates" href="provisioning-ssl-certificates.html" />
+    <link rel="prev" title="Using Your Own Deployments" href="using-your-own-deployments.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> The OKD Orchestrator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../orientation.html">Orientation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compiling-machine-images.html">Compiling Machine Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../anatomy-of-a-deployment-configuration.html">Anatomy of a Deployment Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../generating-site-certificates.html">Generating SSL Certificates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../creating-your-cluster.html">Creating a Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../destroying-your-cluster.html">Destroying a Cluster</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="advanced-topics.html">Advanced Topics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="creating-post-okd-playbooks.html">Creating Post-OKD Playbooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploying-application-templates.html">Deploying Application Templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using-your-own-deployments.html">Using Your Own Deployments</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Using NFS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#start-the-nfs-server">Start the NFS server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-a-storage-volume">Create a storage volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-your-exports">Define your exports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#open-nfs-ports">Open NFS ports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-persistentvolumes-and-claims">Create PersistentVolumes and Claims</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="running-without-docker.html">Running Without Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building-the-docker-image.html">Building the Docker Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="provisioning-ssl-certificates.html">Provisioning SSL Certificates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deploying-to-your-own-cluster.html">Deploying to Bare Metal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sharing-cluster-state.html">Sharing Cluster State</a></li>
+<li class="toctree-l2"><a class="reference internal" href="post-deployment-package-options.html">Post-Deployment Package Options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">The OKD Orchestrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="advanced-topics.html">Advanced Topics</a> &raquo;</li>
+        
+      <li>Using NFS</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/advanced/using-nfs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="using-nfs">
+<h1>Using NFS<a class="headerlink" href="#using-nfs" title="Permalink to this headline">¶</a></h1>
+<p>If you need to use NFS as a storage option in your cluster you can follow
+this simple recipe. One advantage of NFS is that it is simple and provides you
+with volumes that can be mounted <strong>ReadWriteMany</strong>.</p>
+<p>You will need to provide a suitably formatted volume (attached to a designated
+server instance), define your exports, open some ports and create suitable
+<strong>Persistent Volumes</strong>.</p>
+<p>We’ve documented a summary here but, for reference, you can refer to some
+handy documentation on <a class="reference external" href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html">AWS</a> about making volumes available for use on Linux
+as well as the official OpenShift <a class="reference external" href="https://docs.openshift.com/container-platform/3.11/install_config/persistent_storage/persistent_storage_nfs.html#nfs-export-settings">NFS</a> documentation on the topic.</p>
+<div class="section" id="start-the-nfs-server">
+<h2>Start the NFS server<a class="headerlink" href="#start-the-nfs-server" title="Permalink to this headline">¶</a></h2>
+<p>You should find that the <code class="docutils literal notranslate"><span class="pre">nfs-server</span></code> package is installed and running on
+your designated NFS server (i.e. an infrastructure node in your cluster).
+If not install it using your favorite package manager and start it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">nfs</span><span class="o">-</span><span class="n">server</span>
+<span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">start</span> <span class="n">nfs</span><span class="o">-</span><span class="n">server</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-a-storage-volume">
+<h2>Create a storage volume<a class="headerlink" href="#create-a-storage-volume" title="Permalink to this headline">¶</a></h2>
+<p>Create and attach a storage volume to your designated server. The volume
+needs to be formatted (i.e. as <code class="docutils literal notranslate"><span class="pre">ext4</span></code>) and mounted. For a volume available
+where the device (i.e. <code class="docutils literal notranslate"><span class="pre">vdk</span></code>) is <code class="docutils literal notranslate"><span class="pre">DEVICE</span></code>, and you want to mount
+it at <code class="docutils literal notranslate"><span class="pre">/nfs-gp</span></code> on your server you’d typically run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo mkfs -t ext4 /dev/${DEVICE}
+sudo mkdir /nfs-gp
+sudo mount /dev/${DEVICE} /nfs-gp
+</pre></div>
+</div>
+</div>
+<div class="section" id="define-your-exports">
+<h2>Define your exports<a class="headerlink" href="#define-your-exports" title="Permalink to this headline">¶</a></h2>
+<p>Create directories on your NFS mount for each <strong>PersistentVolume</strong> you
+plan to create and set permissions and ownership. A good pattern is to
+clearly name the directories so they’re obvious that they belong to
+a <strong>PersistentVolume</strong> by prefixing each with <code class="docutils literal notranslate"><span class="pre">pv-</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">mkdir</span> <span class="o">/</span><span class="n">nfs</span><span class="o">-</span><span class="n">gp</span><span class="o">/</span><span class="n">pv</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="nb">dir</span>
+<span class="n">sudo</span> <span class="n">chmod</span> <span class="o">-</span><span class="n">R</span> <span class="mi">777</span> <span class="o">/</span><span class="n">nfs</span><span class="o">-</span><span class="n">gp</span><span class="o">/</span><span class="n">pv</span><span class="o">-*</span>
+<span class="n">sudo</span> <span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="n">nfsnobody</span><span class="o">.</span><span class="n">nfsnobody</span> <span class="o">/</span><span class="n">nfs</span><span class="o">-</span><span class="n">gp</span><span class="o">/</span><span class="n">pv</span><span class="o">-*</span>
+</pre></div>
+</div>
+<p>Create an export file (i.e. <code class="docutils literal notranslate"><span class="pre">my.exports</span></code>), typically in <code class="docutils literal notranslate"><span class="pre">/etc/exports.d</span></code>,
+containing an export line for each directory you’ve created:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">nfs</span><span class="o">-</span><span class="n">gp</span><span class="o">/</span><span class="n">pv</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="nb">dir</span> <span class="o">*</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">root_squash</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, bounce the NFS server and check the exports:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">nfs</span><span class="o">-</span><span class="n">server</span>
+<span class="n">showmount</span> <span class="o">-</span><span class="n">e</span> <span class="n">localhost</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="open-nfs-ports">
+<h2>Open NFS ports<a class="headerlink" href="#open-nfs-ports" title="Permalink to this headline">¶</a></h2>
+<p>Depending on your NFS version you’ll need to open suitable ports, OpenShift
+does nto do this for you automatically. For <strong>NFS v4.x</strong> you need to open
+<code class="docutils literal notranslate"><span class="pre">2049</span></code> and <code class="docutils literal notranslate"><span class="pre">111</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">iptables</span> <span class="o">-</span><span class="n">I</span> <span class="n">INPUT</span> <span class="mi">1</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">2049</span> <span class="o">-</span><span class="n">j</span> <span class="n">ACCEPT</span>
+<span class="n">sudo</span> <span class="n">iptables</span> <span class="o">-</span><span class="n">I</span> <span class="n">INPUT</span> <span class="mi">1</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">111</span> <span class="o">-</span><span class="n">j</span> <span class="n">ACCEPT</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>Go to another server in your cluster and test that you can mount the
+exported volume to a locally-created directory. So, on another server,
+where <code class="docutils literal notranslate"><span class="pre">SERVER</span></code> is the server hosting the NFS volume, if the following is
+successful you’re ready to use NFS:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo mkdir /blob
+sudo mount -t nfs ${SERVER}:/nfs-gp/pv-data-dir /blob
+</pre></div>
+</div>
+<p>Then un-mount and remove the test directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">umount</span> <span class="o">/</span><span class="n">blob</span>
+<span class="n">sudo</span> <span class="n">rmdir</span> <span class="o">/</span><span class="n">blob</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-persistentvolumes-and-claims">
+<h2>Create PersistentVolumes and Claims<a class="headerlink" href="#create-persistentvolumes-and-claims" title="Permalink to this headline">¶</a></h2>
+<p>OpenShift applications will need a <strong>PersistentVolume</strong> for each NFS directory.
+Application developers will also need to provide a suitable matching
+<strong>PersistentVolumeClaim</strong>.</p>
+<p>Typically, from the master instance (or any server with compatible OpenShift
+OC command-line tools), define and create a <strong>PersistentVolume</strong>
+for each volume you’ve exported in a YAML file.</p>
+<p>For the above example a <strong>PV</strong> YAML file that permits storage of 10Gi on the
+server <code class="docutils literal notranslate"><span class="pre">prod-infra</span></code> for use by <em>any</em> application might look something like
+this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv-data-dir
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Recycle
+  nfs:
+    server: prod-infra
+    path: /nfs-gp/pv-squonk-work-dir
+claimRef:
+  name: squonk-work-dir-pvc
+  namespace: ${APP_NAMESPACE}
+</pre></div>
+</div>
+<p>And installed and made available to OpenShift applications with the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">oc</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">my</span><span class="o">-</span><span class="n">pv</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>The corresponding application’s <strong>PersistentVolumeClaim</strong> might look
+something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kind</span><span class="p">:</span> <span class="n">PersistentVolumeClaim</span>
+<span class="n">apiVersion</span><span class="p">:</span> <span class="n">v1</span>
+<span class="n">metadata</span><span class="p">:</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">django</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="nb">dir</span><span class="o">-</span><span class="n">pvc</span>
+  <span class="n">namespace</span><span class="p">:</span> <span class="n">django</span><span class="o">-</span><span class="n">app</span>
+<span class="n">spec</span><span class="p">:</span>
+  <span class="n">volumeName</span><span class="p">:</span> <span class="n">pv</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="nb">dir</span>
+  <span class="n">accessModes</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">ReadWriteMany</span>
+  <span class="n">resources</span><span class="p">:</span>
+    <span class="n">requests</span><span class="p">:</span>
+      <span class="n">storage</span><span class="p">:</span> <span class="mi">10</span><span class="n">Gi</span>
+</pre></div>
+</div>
+<p>For more details about <strong>PersistentVolumes</strong> and <strong>Claims</strong>
+you should refer to the OpenShift documentation on <a class="reference external" href="https://docs.okd.io/3.11/install_config/storage_examples/binding_pv_by_label.html#binding-pv-by-label-pv-with-labels">binding</a>
+persistent volumes by labels.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="provisioning-ssl-certificates.html" class="btn btn-neutral float-right" title="Provisioning SSL Certificates" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="using-your-own-deployments.html" class="btn btn-neutral" title="Using Your Own Deployments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, OpenRiskNet
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

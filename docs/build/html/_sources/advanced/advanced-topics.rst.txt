@@ -17,6 +17,7 @@ operation.
     creating-post-okd-playbooks
     deploying-application-templates
     using-your-own-deployments
+    using-nfs
     running-without-docker
     building-the-docker-image
     provisioning-ssl-certificates

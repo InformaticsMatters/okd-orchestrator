@@ -212,3 +212,44 @@ will be picked up automatically by the cluster orchestration.
 
 You can stay in the container image and follow the :doc:`creating-your-cluster`
 guide to create your cluster.
+
+**************************************
+Compiling Machine Images for OpenStack
+**************************************
+
+To compile the OKD 3.11 machine images, set your OpenStack environment
+variables using the _keystone_ file you've been provided with.
+You will not need to define all the environment variables at this stage,
+only those required for compiling machine images.
+
+When you're ready run the following to start and enter the container
+from the root of the project::
+
+    $ ./okdo-start.sh
+
+It is important to realise that the ``okdo-start.sh`` script maps your
+orchestrator working directory to the container directory
+``$HOME/okd-orchestrator``, which is also the working directory when you
+enter the container.
+
+If this is the first time you're running the orchestrator the container image
+will need to be downloaded from Docker. This might take a moment or two before
+you eventually enter the container.
+
+From the orchestrator container you can validate the OpensShift/OKD 3.11
+template files::
+
+    $ yacker validate yacker/3.11/os/okd.yaml
+
+Build
+=====
+
+Once validated, build the OpenShift base image::
+
+    $ yacker build yacker/3.11/os/okd.yaml
+
+The builds may take a minute or two.
+
+You can stay in the container image and follow the :doc:`creating-your-cluster`
+guide to create your cluster.
+

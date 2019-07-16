@@ -185,29 +185,49 @@ with volumes that can be mounted <strong>ReadWriteMany</strong>.</p>
 server instance), define your exports, open some ports and create suitable
 <strong>Persistent Volumes</strong>.</p>
 <p>We’ve documented a summary here but, for reference, you can refer to some
-handy documentation on <a class="reference external" href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html">AWS</a> about making volumes available for use on Linux
-as well as the official OpenShift <a class="reference external" href="https://docs.openshift.com/container-platform/3.11/install_config/persistent_storage/persistent_storage_nfs.html#nfs-export-settings">NFS</a> documentation on the topic.</p>
+handy documentation: -</p>
+<ul class="simple">
+<li>On <a class="reference external" href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html">AWS</a> relating to making volumes available for use on Linux</li>
+<li>The official OpenShift <a class="reference external" href="https://docs.openshift.com/container-platform/3.11/install_config/persistent_storage/persistent_storage_nfs.html#nfs-export-settings">NFS</a> documentation</li>
+</ul>
 <div class="section" id="start-the-nfs-server">
 <h2>Start the NFS server<a class="headerlink" href="#start-the-nfs-server" title="Permalink to this headline">¶</a></h2>
 <p>You should find that the <code class="docutils literal notranslate"><span class="pre">nfs-server</span></code> package is installed and running on
 your designated NFS server (i.e. an infrastructure node in your cluster).
 If not install it using your favorite package manager and start it:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">nfs</span><span class="o">-</span><span class="n">server</span>
-<span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">start</span> <span class="n">nfs</span><span class="o">-</span><span class="n">server</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo yum install -y nfs-server
+$ sudo systemctl start nfs-server
 </pre></div>
 </div>
 </div>
 <div class="section" id="create-a-storage-volume">
 <h2>Create a storage volume<a class="headerlink" href="#create-a-storage-volume" title="Permalink to this headline">¶</a></h2>
 <p>Create and attach a storage volume to your designated server. The volume
-needs to be formatted (i.e. as <code class="docutils literal notranslate"><span class="pre">ext4</span></code>) and mounted. For a volume available
-where the device (i.e. <code class="docutils literal notranslate"><span class="pre">vdk</span></code>) is <code class="docutils literal notranslate"><span class="pre">DEVICE</span></code>, and you want to mount
-it at <code class="docutils literal notranslate"><span class="pre">/nfs-gp</span></code> on your server you’d typically run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo mkfs -t ext4 /dev/${DEVICE}
-sudo mkdir /nfs-gp
-sudo mount /dev/${DEVICE} /nfs-gp
+needs to be formatted (i.e. as <code class="docutils literal notranslate"><span class="pre">ext4</span></code>) and mounted.</p>
+<p>Check volumes with <code class="docutils literal notranslate"><span class="pre">lsblk</span></code> and use <code class="docutils literal notranslate"><span class="pre">file</span></code> to make sure it needs formatting
+(as it’ll report as <em>data</em>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+vda    253:0    0  160G  0 disk
+└─vda1 253:1    0  160G  0 part /
+vdb    253:16   0  150G  0 disk
+vdi    253:128  0  100G  0 disk /nfs-gp
+
+$ sudo file -s /dev/vdb
+/dev/vdb: data
 </pre></div>
 </div>
+<p>For a volume available where the device (i.e. <code class="docutils literal notranslate"><span class="pre">vdb</span></code>) is <code class="docutils literal notranslate"><span class="pre">DEVICE</span></code> to be
+mounted at <code class="docutils literal notranslate"><span class="pre">/nfs-gp</span></code> on your server you’d typically run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo mkfs -t ext4 /dev/${DEVICE}
+$ sudo mkdir /nfs-gp
+$ sudo mount /dev/${DEVICE} /nfs-gp
+</pre></div>
+</div>
+<p>Add your drive to <code class="docutils literal notranslate"><span class="pre">fstab</span></code> to ensure they’re re-attached and available after
+a server reboot by referring to the
+<strong>Automatically Mount an Attached Volume After Reboot</strong> section of the
+handy <a class="reference external" href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html">AWS</a> documentation.</p>
 </div>
 <div class="section" id="define-your-exports">
 <h2>Define your exports<a class="headerlink" href="#define-your-exports" title="Permalink to this headline">¶</a></h2>
@@ -215,9 +235,9 @@ sudo mount /dev/${DEVICE} /nfs-gp
 plan to create and set permissions and ownership. A good pattern is to
 clearly name the directories so they’re obvious that they belong to
 a <strong>PersistentVolume</strong> by prefixing each with <code class="docutils literal notranslate"><span class="pre">pv-</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">mkdir</span> <span class="o">/</span><span class="n">nfs</span><span class="o">-</span><span class="n">gp</span><span class="o">/</span><span class="n">pv</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="nb">dir</span>
-<span class="n">sudo</span> <span class="n">chmod</span> <span class="o">-</span><span class="n">R</span> <span class="mi">777</span> <span class="o">/</span><span class="n">nfs</span><span class="o">-</span><span class="n">gp</span><span class="o">/</span><span class="n">pv</span><span class="o">-*</span>
-<span class="n">sudo</span> <span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="n">nfsnobody</span><span class="o">.</span><span class="n">nfsnobody</span> <span class="o">/</span><span class="n">nfs</span><span class="o">-</span><span class="n">gp</span><span class="o">/</span><span class="n">pv</span><span class="o">-*</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo mkdir /nfs-gp/pv-data-dir
+$ sudo chmod -R 777 /nfs-gp/pv-*
+$ sudo chown -R nfsnobody.nfsnobody /nfs-gp/pv-*
 </pre></div>
 </div>
 <p>Create an export file (i.e. <code class="docutils literal notranslate"><span class="pre">my.exports</span></code>), typically in <code class="docutils literal notranslate"><span class="pre">/etc/exports.d</span></code>,
@@ -226,8 +246,8 @@ containing an export line for each directory you’ve created:</p>
 </pre></div>
 </div>
 <p>Then, bounce the NFS server and check the exports:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">nfs</span><span class="o">-</span><span class="n">server</span>
-<span class="n">showmount</span> <span class="o">-</span><span class="n">e</span> <span class="n">localhost</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo systemctl restart nfs-server
+$ showmount -e localhost
 </pre></div>
 </div>
 </div>
@@ -236,8 +256,8 @@ containing an export line for each directory you’ve created:</p>
 <p>Depending on your NFS version you’ll need to open suitable ports, OpenShift
 does nto do this for you automatically. For <strong>NFS v4.x</strong> you need to open
 <code class="docutils literal notranslate"><span class="pre">2049</span></code> and <code class="docutils literal notranslate"><span class="pre">111</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">iptables</span> <span class="o">-</span><span class="n">I</span> <span class="n">INPUT</span> <span class="mi">1</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">2049</span> <span class="o">-</span><span class="n">j</span> <span class="n">ACCEPT</span>
-<span class="n">sudo</span> <span class="n">iptables</span> <span class="o">-</span><span class="n">I</span> <span class="n">INPUT</span> <span class="mi">1</span> <span class="o">-</span><span class="n">p</span> <span class="n">tcp</span> <span class="o">--</span><span class="n">dport</span> <span class="mi">111</span> <span class="o">-</span><span class="n">j</span> <span class="n">ACCEPT</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo iptables -I INPUT 1 -p tcp --dport 2049 -j ACCEPT
+$ sudo iptables -I INPUT 1 -p tcp --dport 111 -j ACCEPT
 </pre></div>
 </div>
 </div>
@@ -247,13 +267,13 @@ does nto do this for you automatically. For <strong>NFS v4.x</strong> you need t
 exported volume to a locally-created directory. So, on another server,
 where <code class="docutils literal notranslate"><span class="pre">SERVER</span></code> is the server hosting the NFS volume, if the following is
 successful you’re ready to use NFS:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>sudo mkdir /blob
-sudo mount -t nfs ${SERVER}:/nfs-gp/pv-data-dir /blob
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo mkdir /blob
+$ sudo mount -t nfs ${SERVER}:/nfs-gp/pv-data-dir /blob
 </pre></div>
 </div>
 <p>Then un-mount and remove the test directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">umount</span> <span class="o">/</span><span class="n">blob</span>
-<span class="n">sudo</span> <span class="n">rmdir</span> <span class="o">/</span><span class="n">blob</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo umount /blob
+$ sudo rmdir /blob
 </pre></div>
 </div>
 </div>
@@ -287,7 +307,7 @@ claimRef:
 </pre></div>
 </div>
 <p>And installed and made available to OpenShift applications with the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">oc</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">my</span><span class="o">-</span><span class="n">pv</span><span class="o">.</span><span class="n">yaml</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ oc create -f my-pv.yaml
 </pre></div>
 </div>
 <p>The corresponding application’s <strong>PersistentVolumeClaim</strong> might look

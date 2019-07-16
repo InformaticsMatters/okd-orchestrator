@@ -11,8 +11,10 @@ server instance), define your exports, open some ports and create suitable
 **Persistent Volumes**.
 
 We've documented a summary here but, for reference, you can refer to some
-handy documentation on `AWS`_ about making volumes available for use on Linux
-as well as the official OpenShift `NFS`_ documentation on the topic.
+handy documentation: -
+
+*   On `AWS`_ relating to making volumes available for use on Linux
+*   The official OpenShift `NFS`_ documentation
 
 .. _aws: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html
 .. _nfs: https://docs.openshift.com/container-platform/3.11/install_config/persistent_storage/persistent_storage_nfs.html#nfs-export-settings
@@ -23,19 +25,38 @@ You should find that the ``nfs-server`` package is installed and running on
 your designated NFS server (i.e. an infrastructure node in your cluster).
 If not install it using your favorite package manager and start it::
 
-    sudo yum install -y nfs-server
-    sudo systemctl start nfs-server
+    $ sudo yum install -y nfs-server
+    $ sudo systemctl start nfs-server
 
 Create a storage volume
 =======================
 Create and attach a storage volume to your designated server. The volume
-needs to be formatted (i.e. as ``ext4``) and mounted. For a volume available
-where the device (i.e. ``vdk``) is ``DEVICE``, and you want to mount
-it at ``/nfs-gp`` on your server you'd typically run::
+needs to be formatted (i.e. as ``ext4``) and mounted.
 
-    sudo mkfs -t ext4 /dev/${DEVICE}
-    sudo mkdir /nfs-gp
-    sudo mount /dev/${DEVICE} /nfs-gp
+Check volumes with ``lsblk`` and use ``file`` to make sure it needs formatting
+(as it'll report as *data*)::
+
+    $ lsblk
+    NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+    vda    253:0    0  160G  0 disk
+    └─vda1 253:1    0  160G  0 part /
+    vdb    253:16   0  150G  0 disk
+    vdi    253:128  0  100G  0 disk /nfs-gp
+
+    $ sudo file -s /dev/vdb
+    /dev/vdb: data
+
+For a volume available where the device (i.e. ``vdb``) is ``DEVICE`` to be
+mounted at ``/nfs-gp`` on your server you'd typically run::
+
+    $ sudo mkfs -t ext4 /dev/${DEVICE}
+    $ sudo mkdir /nfs-gp
+    $ sudo mount /dev/${DEVICE} /nfs-gp
+
+Add your drive to ``fstab`` to ensure they're re-attached and available after
+a server reboot by referring to the
+**Automatically Mount an Attached Volume After Reboot** section of the
+handy `AWS`_ documentation.
 
 Define your exports
 ===================
@@ -44,9 +65,9 @@ plan to create and set permissions and ownership. A good pattern is to
 clearly name the directories so they're obvious that they belong to
 a **PersistentVolume** by prefixing each with ``pv-``::
 
-    sudo mkdir /nfs-gp/pv-data-dir
-    sudo chmod -R 777 /nfs-gp/pv-*
-    sudo chown -R nfsnobody.nfsnobody /nfs-gp/pv-*
+    $ sudo mkdir /nfs-gp/pv-data-dir
+    $ sudo chmod -R 777 /nfs-gp/pv-*
+    $ sudo chown -R nfsnobody.nfsnobody /nfs-gp/pv-*
 
 Create an export file (i.e. ``my.exports``), typically in ``/etc/exports.d``,
 containing an export line for each directory you've created::
@@ -55,8 +76,8 @@ containing an export line for each directory you've created::
 
 Then, bounce the NFS server and check the exports::
 
-    sudo systemctl restart nfs-server
-    showmount -e localhost
+    $ sudo systemctl restart nfs-server
+    $ showmount -e localhost
 
 Open NFS ports
 ==============
@@ -64,8 +85,8 @@ Depending on your NFS version you'll need to open suitable ports, OpenShift
 does nto do this for you automatically. For **NFS v4.x** you need to open
 ``2049`` and ``111``::
 
-    sudo iptables -I INPUT 1 -p tcp --dport 2049 -j ACCEPT
-    sudo iptables -I INPUT 1 -p tcp --dport 111 -j ACCEPT
+    $ sudo iptables -I INPUT 1 -p tcp --dport 2049 -j ACCEPT
+    $ sudo iptables -I INPUT 1 -p tcp --dport 111 -j ACCEPT
 
 Testing
 =======
@@ -74,13 +95,13 @@ exported volume to a locally-created directory. So, on another server,
 where ``SERVER`` is the server hosting the NFS volume, if the following is
 successful you're ready to use NFS::
 
-    sudo mkdir /blob
-    sudo mount -t nfs ${SERVER}:/nfs-gp/pv-data-dir /blob
+    $ sudo mkdir /blob
+    $ sudo mount -t nfs ${SERVER}:/nfs-gp/pv-data-dir /blob
 
 Then un-mount and remove the test directory::
 
-    sudo umount /blob
-    sudo rmdir /blob
+    $ sudo umount /blob
+    $ sudo rmdir /blob
 
 Create PersistentVolumes and Claims
 ===================================
@@ -116,7 +137,7 @@ this::
 
 And installed and made available to OpenShift applications with the command::
 
-    oc create -f my-pv.yaml
+    $ oc create -f my-pv.yaml
 
 The corresponding application's **PersistentVolumeClaim** might look
 something like this::

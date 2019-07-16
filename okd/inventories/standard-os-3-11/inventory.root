@@ -79,16 +79,14 @@ all:
         openshift_master_console_port: {{ cluster.api_port }}
 
 {% if okd.certificates and okd.certificates.generate_api_cert %}
-{% raw %}
         # Certificate definitions.
         # At the moment they are created by bastion and pre-okd playbooks
         # using certbot if the user has set generate_api_cert
         openshift_master_named_certificates: [
-            { 'certfile': "{{ lookup('env','HOME') }}/fullchain.pem",
-              'keyfile': "{{ lookup('env','HOME') }}/privkey.pem" }
+            { 'certfile': "/home/centos/fullchain.pem",
+              'keyfile': "/home/centos/privkey.pem" }
         ]
         openshift_master_overwrite_named_certificates: true
-{%- endraw %}
 {%- endif %}
 
         # Metrics

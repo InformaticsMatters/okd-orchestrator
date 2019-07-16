@@ -28,6 +28,15 @@ If not install it using your favorite package manager and start it::
     $ sudo yum install -y nfs-server
     $ sudo systemctl start nfs-server
 
+Open NFS ports
+==============
+Depending on your NFS version you'll need to open suitable ports, OpenShift
+does nto do this for you automatically. For **NFS v4.x** you need to open
+``2049`` and ``111``::
+
+    $ sudo iptables -I INPUT 1 -p tcp --dport 2049 -j ACCEPT
+    $ sudo iptables -I INPUT 1 -p tcp --dport 111 -j ACCEPT
+
 Create a storage volume
 =======================
 Create and attach a storage volume to your designated server. The volume
@@ -65,9 +74,10 @@ plan to create and set permissions and ownership. A good pattern is to
 clearly name the directories so they're obvious that they belong to
 a **PersistentVolume** by prefixing each with ``pv-``::
 
-    $ sudo mkdir /nfs-gp/pv-data-dir
-    $ sudo chmod -R 777 /nfs-gp/pv-*
-    $ sudo chown -R nfsnobody.nfsnobody /nfs-gp/pv-*
+    $ sudo cd /nfs-gp
+    $ sudo mkdir pv-data-dir
+    $ sudo chmod -R 777 pv-*
+    $ sudo chown -R nfsnobody.nfsnobody pv-*
 
 Create an export file (i.e. ``my.exports``), typically in ``/etc/exports.d``,
 containing an export line for each directory you've created::
@@ -78,15 +88,6 @@ Then, bounce the NFS server and check the exports::
 
     $ sudo systemctl restart nfs-server
     $ showmount -e localhost
-
-Open NFS ports
-==============
-Depending on your NFS version you'll need to open suitable ports, OpenShift
-does nto do this for you automatically. For **NFS v4.x** you need to open
-``2049`` and ``111``::
-
-    $ sudo iptables -I INPUT 1 -p tcp --dport 2049 -j ACCEPT
-    $ sudo iptables -I INPUT 1 -p tcp --dport 111 -j ACCEPT
 
 Testing
 =======

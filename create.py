@@ -120,7 +120,7 @@ def _main(cli_args, chosen_deployment_name):
     # -------
     # Install the ansible version name in the deployment file
 
-    cmd = 'pip install --upgrade pip --user'
+    cmd = 'pip install --upgrade pip setuptools --user'
     rv, _ = io.run(cmd, '.', cli_args.quiet)
     if not rv:
         return False

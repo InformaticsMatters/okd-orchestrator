@@ -71,6 +71,9 @@
     loop:
     - libselinux-python
     - python-passlib
+    - git
+    - epel-release
+    - python-pip
     become: yes
 
   # Add files...

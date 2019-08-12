@@ -1,7 +1,7 @@
 # An okd-orchestrator File.
 # Python 2 requirements for the Bastion image.
 
-ansible == 2.7.10
+ansible == 2.7.12
 future == 0.17.1
 jinja2 == 2.10.1
 passlib == 1.7.1

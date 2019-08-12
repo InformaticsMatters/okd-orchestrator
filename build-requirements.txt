@@ -2,6 +2,6 @@
 # i.e. non-runtime stuff like document generation and unit test modules.
 
 flake8 == 3.7.8
-sphinx == 1.8.5
+Sphinx == 2.1.2
 sphinx_rtd_theme == 0.4.3
 yamllint == 1.16.0

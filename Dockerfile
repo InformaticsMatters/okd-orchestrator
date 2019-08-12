@@ -25,11 +25,11 @@ ARG gid=40000
 
 # Install required system tools.
 # - apache2-utils is required for 'htpasswd', used during OKD metrics installation
-# - openjdk-8-jdk is required for 'keytool', used during OKD metrics installation
+# - default-jdk is required for 'keytool', used during OKD metrics installation
 COPY requirements.txt /tmp/
 RUN apt-get -y update && \
     apt-get install -y jq unzip graphviz vim less \
-        apache2-utils openjdk-8-jdk && \
+        apache2-utils default-jdk && \
     pip install -r /tmp/requirements.txt --default-timeout=60
 
 # Install Terraform

@@ -189,13 +189,13 @@ must satisfy the <strong>system and environment requirements</strong> defined in
 official OKD documentation. For v3.11 this can be found <a class="reference external" href="https://docs.okd.io/3.11/install/prerequisites.html">here</a>.</p>
 <p>Additionally, in case it’s not obvious…</p>
 <ul class="simple">
-<li>Your cluster must have access to the <em>outside world</em> so that additional
-packages can be downloaded</li>
-<li>You must be able to SSH to the designated Bastion from your development
+<li><p>Your cluster must have access to the <em>outside world</em> so that additional
+packages can be downloaded</p></li>
+<li><p>You must be able to SSH to the designated Bastion from your development
 machine (i.e. where you have a copy of the orchestrator) using the keypair
-available to the Orchestrator (i.e. the keypair you</li>
-<li>You need to have installed <code class="docutils literal notranslate"><span class="pre">git</span></code> so that this repository can be
-cloned to the designated <em>control machine</em> in your cluster.</li>
+available to the Orchestrator (i.e. the keypair you</p></li>
+<li><p>You need to have installed <code class="docutils literal notranslate"><span class="pre">git</span></code> so that this repository can be
+cloned to the designated <em>control machine</em> in your cluster.</p></li>
 </ul>
 </div>
 <div class="section" id="populating-my-machines">
@@ -216,16 +216,16 @@ the annotated <code class="docutils literal notranslate"><span class="pre">my_ma
 <p>With a <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section populated, the cluster setup is like any
 other…</p>
 <ul class="simple">
-<li>Craft a suitable <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code></li>
-<li>Start and enter the OKD container with <code class="docutils literal notranslate"><span class="pre">./okdo-start.sh</span></code></li>
-<li>Run <code class="docutils literal notranslate"><span class="pre">./create.py</span> <span class="pre">--cluster</span></code>. You will need to add the name of the
-relevant deployment if the orchestrator has more than one.</li>
-<li>When this is complete, hop onto the <em>Bastion</em>, move to the
+<li><p>Craft a suitable <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code></p></li>
+<li><p>Start and enter the OKD container with <code class="docutils literal notranslate"><span class="pre">./okdo-start.sh</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">./create.py</span> <span class="pre">--cluster</span></code>. You will need to add the name of the
+relevant deployment if the orchestrator has more than one.</p></li>
+<li><p>When this is complete, hop onto the <em>Bastion</em>, move to the
 <code class="docutils literal notranslate"><span class="pre">okd-orchestrator</span></code> directory that will have been created and run
-<code class="docutils literal notranslate"><span class="pre">./create.py</span> <span class="pre">--okd</span></code></li>
+<code class="docutils literal notranslate"><span class="pre">./create.py</span> <span class="pre">--okd</span></code></p></li>
 </ul>
 <blockquote class="epigraph">
-<div>If you have your own bastion you might want to use the OKD Orchestrator in
+<div><p>If you have your own bastion you might want to use the OKD Orchestrator in
 <em>just plan</em> mode so that you can render the OKD inventory file
 based on your <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> definition without resorting to configuring
 the Bastion. If so you will need to copy the generated <code class="docutils literal notranslate"><span class="pre">inventory.yaml</span></code>
@@ -233,7 +233,8 @@ file to the Bastion for subsequent manual deployment of the OK platform.
 You can run <em>just plan</em> by adding <code class="docutils literal notranslate"><span class="pre">--just-plan</span></code> to <code class="docutils literal notranslate"><span class="pre">create.py</span></code>:
 <code class="docutils literal notranslate"><span class="pre">./create.py</span> <span class="pre">--cluster</span> <span class="pre">--just-plan</span> <span class="pre">&lt;deployment-name&gt;</span></code>. Copy the generated
 template file (which may be <cite>okd/inventories/standard-os-3-11</cite>) to your
-bastion (in a similar location).</div></blockquote>
+bastion (in a similar location).</p>
+</div></blockquote>
 </div>
 </div>
 

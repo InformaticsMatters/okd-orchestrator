@@ -166,28 +166,28 @@
 <p>It would be normal when deploying a certificate to have satisfied the following
 before orchestrating your cluster:</p>
 <ul class="simple">
-<li>Pre-allocate public IPs for the Master and Infrastructure (Router) nodes</li>
-<li>A domain (like <em>mydomain.com</em>) routed to the Master’s public IP for
-access to the OpenShift/OKD’s web console</li>
+<li><p>Pre-allocate public IPs for the Master and Infrastructure (Router) nodes</p></li>
+<li><p>A domain (like <em>mydomain.com</em>) routed to the Master’s public IP for
+access to the OpenShift/OKD’s web console</p></li>
 </ul>
 <p>The above information need to be placed in your deployment configuration prior
 to orchestration.</p>
 <ol class="arabic simple">
-<li>Place the identity of the Master Node’s fixed IP into the value for
+<li><p>Place the identity of the Master Node’s fixed IP into the value for
 <code class="docutils literal notranslate"><span class="pre">cluster.master.fixed_ip_id</span></code>. This is normally the provider’s identity
 of the allocated IP <em>not</em> the IP itself. In the case of AWS this
-would be the the Elastic IP identity (the value starting <code class="docutils literal notranslate"><span class="pre">eipalloc-</span></code>)</li>
-<li>Similarly place the identity of the Infrastructure/Router Node’s fixed
-IP into the value for <code class="docutils literal notranslate"><span class="pre">cluster.infra.fixed_ip_id</span></code></li>
-<li>Place the domain name routed to the master (for the OpenShift console)
-into the value for <code class="docutils literal notranslate"><span class="pre">cluster.public_hostname</span></code></li>
-<li>Place the domain name that is routed to the Infrastructure/Router
-into the value for <code class="docutils literal notranslate"><span class="pre">cluster.default_subdomain</span></code></li>
-<li>To instruct the orchestrator to automatically generate
+would be the the Elastic IP identity (the value starting <code class="docutils literal notranslate"><span class="pre">eipalloc-</span></code>)</p></li>
+<li><p>Similarly place the identity of the Infrastructure/Router Node’s fixed
+IP into the value for <code class="docutils literal notranslate"><span class="pre">cluster.infra.fixed_ip_id</span></code></p></li>
+<li><p>Place the domain name routed to the master (for the OpenShift console)
+into the value for <code class="docutils literal notranslate"><span class="pre">cluster.public_hostname</span></code></p></li>
+<li><p>Place the domain name that is routed to the Infrastructure/Router
+into the value for <code class="docutils literal notranslate"><span class="pre">cluster.default_subdomain</span></code></p></li>
+<li><p>To instruct the orchestrator to automatically generate
 certificates set the <code class="docutils literal notranslate"><span class="pre">cluster.certificates.generate_api_cert</span></code> value
-to <code class="docutils literal notranslate"><span class="pre">Yes</span></code></li>
-<li>Finally, you need to set the <code class="docutils literal notranslate"><span class="pre">TF_VAR_master_certbot_email</span></code> variable in
-your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> file to the email address registered with Let’s Encrypt.</li>
+to <code class="docutils literal notranslate"><span class="pre">Yes</span></code></p></li>
+<li><p>Finally, you need to set the <code class="docutils literal notranslate"><span class="pre">TF_VAR_master_certbot_email</span></code> variable in
+your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> file to the email address registered with Let’s Encrypt.</p></li>
 </ol>
 <p>You should now be ready to follow the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a> guide.</p>
 <div class="section" id="using-automatically-allocated-public-ips">

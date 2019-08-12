@@ -189,7 +189,7 @@ provision certificates using ACME protocol and manage their lifecycle.</p>
 <div class="section" id="running-post-okd-playbooks">
 <h2>Running post-OKD playbooks<a class="headerlink" href="#running-post-okd-playbooks" title="Permalink to this headline">¶</a></h2>
 <p>To execute a post-OKD installation playbook you simply need to name it in
-your configuration <a class="footnote-reference" href="#f1" id="id1">[1]</a>. Essentially, you just need to add the name of the
+your configuration <a class="footnote-reference brackets" href="#f1" id="id1">1</a>. Essentially, you just need to add the name of the
 playbook in the <code class="docutils literal notranslate"><span class="pre">post_okd</span></code> list:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">okd</span><span class="p">:</span>
   <span class="n">post_okd</span><span class="p">:</span>
@@ -206,30 +206,30 @@ OKD applications that can operate the master API after the OKD software is
 installed is easy. The playbooks are provided with the following variables by
 the <code class="docutils literal notranslate"><span class="pre">create</span></code> utility: -</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">okd_api_hostname</span></code>. Essentially the https location of the master’s API.</li>
-<li><code class="docutils literal notranslate"><span class="pre">okd_admin_password</span></code>. The OKD administration user password.
-(the user is <code class="docutils literal notranslate"><span class="pre">admin</span></code>)</li>
-<li><code class="docutils literal notranslate"><span class="pre">okd_deployment</span></code>. The name of deployment.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">okd_api_hostname</span></code>. Essentially the https location of the master’s API.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">okd_admin_password</span></code>. The OKD administration user password.
+(the user is <code class="docutils literal notranslate"><span class="pre">admin</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">okd_deployment</span></code>. The name of deployment.</p></li>
 </ul>
 <p>If a developer password has been supplied the following variable is defined: -</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">okd_developer_password</span></code>. The OKD developer user password
-(the user is <code class="docutils literal notranslate"><span class="pre">developer</span></code>)</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">okd_developer_password</span></code>. The OKD developer user password
+(the user is <code class="docutils literal notranslate"><span class="pre">developer</span></code>)</p></li>
 </ul>
 <p>If a template project has been created you also get: -</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">template_namespace</span></code>. The project/namespace of the template project</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">template_namespace</span></code>. The project/namespace of the template project</p></li>
 </ul>
 </div>
 <div class="section" id="adding-plays">
 <h3>Adding plays<a class="headerlink" href="#adding-plays" title="Permalink to this headline">¶</a></h3>
 <p>To add an ansible playbook you need to: -</p>
 <ol class="arabic simple">
-<li>Create a directory for your playbook in the orchestrator’s
-<code class="docutils literal notranslate"><span class="pre">ansible/post-okd</span></code> directory</li>
-<li>Your playbook must have a <code class="docutils literal notranslate"><span class="pre">deploy.yaml</span></code>. It is this playbook that the
+<li><p>Create a directory for your playbook in the orchestrator’s
+<code class="docutils literal notranslate"><span class="pre">ansible/post-okd</span></code> directory</p></li>
+<li><p>Your playbook must have a <code class="docutils literal notranslate"><span class="pre">deploy.yaml</span></code>. It is this playbook that the
 <code class="docutils literal notranslate"><span class="pre">create</span></code> utility will call. The deploy playbook will be provided
-with the variables described above.</li>
+with the variables described above.</p></li>
 </ol>
 <p>If you’ve added a <code class="docutils literal notranslate"><span class="pre">my-play/deploy.yaml</span></code> playbook you can add it the the list
 of post-OKD plays that are run at the end of your deployment by adding it to
@@ -245,14 +245,13 @@ the <code class="docutils literal notranslate"><span class="pre">post_okd</span>
 Regardless, you have to define a <code class="docutils literal notranslate"><span class="pre">deploy.yaml</span></code> to act as the entry
 point of your playbook.</p>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="f1" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>For up-to-date instructions refer to the built-in
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>For up-to-date instructions refer to the built-in
 <code class="docutils literal notranslate"><span class="pre">compact-aws-frankfurt-3-11</span></code> configuration, which contains
-significant embedded documentation</td></tr>
-</tbody>
-</table>
+significant embedded documentation</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>

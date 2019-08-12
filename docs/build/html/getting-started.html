@@ -205,15 +205,16 @@ described in the <a class="reference internal" href="deployment-configurations.h
 <p>At the moment we have working solutions for Amazon <em>EC2</em>, <em>OpenStack</em> and
 <em>GCE</em> and a working example for <em>EC2</em> that we use as a tutorial.</p>
 <blockquote>
-<div>If this is your first time using the OKD Orchestrator make sure you’ve
+<div><p>If this is your first time using the OKD Orchestrator make sure you’ve
 visited the <a class="reference internal" href="orientation.html"><span class="doc">Orientation</span></a> document, it guides you through the
-concepts of the orchestrator with a worked example on AWS.</div></blockquote>
+concepts of the orchestrator with a worked example on AWS.</p>
+</div></blockquote>
 <p>The tools required by the orchestrator are packaged into a convenient
 Docker image that you can run on your laptop or desktop. The essential
 tools you <em>will</em> need are: -</p>
 <ul class="simple">
-<li><strong>Git</strong> (and a fork of the OKD Orchestrator repository)</li>
-<li><strong>Docker</strong></li>
+<li><p><strong>Git</strong> (and a fork of the OKD Orchestrator repository)</p></li>
+<li><p><strong>Docker</strong></p></li>
 </ul>
 <div class="section" id="git">
 <h3>Git<a class="headerlink" href="#git" title="Permalink to this headline">¶</a></h3>
@@ -223,9 +224,9 @@ with a clone of a <strong>fork</strong> of the orchestrator project. A fork is p
 because you may need to make changes to the configuration files or
 create your own configurations.</p>
 <ol class="arabic simple">
-<li>Install Git</li>
-<li>Visit the <a class="reference external" href="https://github.com/InformaticsMatters/okd-orchestrator">orchestrator repository</a>. Fork it and clone it to your
-development host.</li>
+<li><p>Install Git</p></li>
+<li><p>Visit the <a class="reference external" href="https://github.com/InformaticsMatters/okd-orchestrator">orchestrator repository</a>. Fork it and clone it to your
+development host.</p></li>
 </ol>
 <p>You will be working from the clone of this project so start by navigating to
 the root of your working copy.</p>
@@ -237,8 +238,8 @@ deploy, and run applications by using containers. Containers allow a developer
 to package up an application with all of the parts it needs, such as libraries
 and other dependencies, and ship it all out as one package.</p>
 <ol class="arabic simple">
-<li>Install Docker. You can refer to Docker’s installation guide,
-which includes guides for various platforms.</li>
+<li><p>Install Docker. You can refer to Docker’s installation guide,
+which includes guides for various platforms.</p></li>
 </ol>
 <p>We have been using Docker <strong>18.09.0</strong> but any recent version should be
 suitable.</p>
@@ -267,11 +268,11 @@ throughout this example.</p>
 <p>You use different types of security credentials depending on how you
 interact with AWS and, in order to use the orchestrator, you will need: -</p>
 <ul class="simple">
-<li>An <strong>AWS account</strong> that allows you to sign in to the AWS Management Console</li>
-<li><strong>API Access keys</strong> that allow the orchestrator to make programmatic calls to
-the AWS API on your behalf</li>
-<li>An <strong>SSH Key Pair</strong> that you and the OKD Orchestrator can use to create
-and access EC2 objects.</li>
+<li><p>An <strong>AWS account</strong> that allows you to sign in to the AWS Management Console</p></li>
+<li><p><strong>API Access keys</strong> that allow the orchestrator to make programmatic calls to
+the AWS API on your behalf</p></li>
+<li><p>An <strong>SSH Key Pair</strong> that you and the OKD Orchestrator can use to create
+and access EC2 objects.</p></li>
 </ul>
 <div class="section" id="account">
 <h4>Account<a class="headerlink" href="#account" title="Permalink to this headline">¶</a></h4>
@@ -326,12 +327,12 @@ this is described in the
 <p>You use different types of security credentials depending on how you
 interact with GCE and, in order to use the orchestrator, you will need: -</p>
 <ul class="simple">
-<li>A <strong>GCE account</strong> for the Compute Engine</li>
-<li>A project-based <strong>credentials file</strong>, a JSON file provided by Google that
+<li><p>A <strong>GCE account</strong> for the Compute Engine</p></li>
+<li><p>A project-based <strong>credentials file</strong>, a JSON file provided by Google that
 allows the orchestrator to make programmatic calls to the GCE API
-on your behalf</li>
-<li>An <strong>SSH Key Pair</strong> that you and the OKD Orchestrator can use to create
-and access GCE objects.</li>
+on your behalf</p></li>
+<li><p>An <strong>SSH Key Pair</strong> that you and the OKD Orchestrator can use to create
+and access GCE objects.</p></li>
 </ul>
 <div class="section" id="id5">
 <h4>Account<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
@@ -368,10 +369,10 @@ should replace the existing value for:</p>
 <div class="section" id="considerations">
 <h3>Considerations<a class="headerlink" href="#considerations" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Unlike the AWS deployment the GCE deployment does not use an internal
+<li><p>Unlike the AWS deployment the GCE deployment does not use an internal
 subnet for OKD nodes. Consequently all physical nodes have a
-public-fading IP address.</li>
-<li>All instances are created in zone <strong>a</strong>.</li>
+public-fading IP address.</p></li>
+<li><p>All instances are created in zone <strong>a</strong>.</p></li>
 </ul>
 </div>
 </div>
@@ -380,10 +381,10 @@ public-fading IP address.</li>
 <p>To build your cluster you will need to compile the base images for AWS
 before create your cluster.</p>
 <ul class="simple">
-<li>When you’re ready, follow the instructions for AWS in the
-<a class="reference internal" href="compiling-machine-images.html"><span class="doc">Compiling Machine Images</span></a> guide</li>
-<li>With base images compiled, you’re ready to create the OKD cluster,
-all of which is covered in the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a> guide</li>
+<li><p>When you’re ready, follow the instructions for AWS in the
+<a class="reference internal" href="compiling-machine-images.html"><span class="doc">Compiling Machine Images</span></a> guide</p></li>
+<li><p>With base images compiled, you’re ready to create the OKD cluster,
+all of which is covered in the <a class="reference internal" href="creating-your-cluster.html"><span class="doc">Creating a Cluster</span></a> guide</p></li>
 </ul>
 <div class="section" id="project-and-credentials">
 <h3>Project and Credentials<a class="headerlink" href="#project-and-credentials" title="Permalink to this headline">¶</a></h3>

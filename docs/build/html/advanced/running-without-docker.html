@@ -178,32 +178,31 @@
 <h1>Running Without Docker<a class="headerlink" href="#running-without-docker" title="Permalink to this headline">¶</a></h1>
 <p>Although the orchestrator is designed to run from inside a convenient Docker
 container you don’t have to. The orchestration code is written in Python
-and relies on a Unix-like operating system <a class="footnote-reference" href="#f1" id="id1">[1]</a> so you can run the it
+and relies on a Unix-like operating system <a class="footnote-reference brackets" href="#f1" id="id1">1</a> so you can run the it
 directly from the root of a clone (or fork) of this repository. You simply
 need to ensure that your environment is similar to the container’s. That is: -</p>
 <ol class="arabic simple">
-<li><strong>Python 3</strong> (ideally 3.6 or 3.7). Optionally installed via a
-<a class="reference external" href="https://docs.python.org/3/tutorial/venv.html">virtual environment</a> or with <a class="reference external" href="https://conda.io/docs/">Conda</a>.</li>
-<li>The <strong>requirements</strong> from <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> from the root of this
-project</li>
-<li>If you want to build documentation and run the travis-like tests you
-will also need the <strong>requirements</strong> from <code class="docutils literal notranslate"><span class="pre">build-requirements.txt</span></code></li>
-<li><strong>Packer</strong> (we currently use v1.3.3), and available on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code></li>
-<li><strong>Terraform</strong> available on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. Check any <code class="docutils literal notranslate"><span class="pre">provider.tf</span></code>
+<li><p><strong>Python 3</strong> (ideally 3.6 or 3.7). Optionally installed via a
+<a class="reference external" href="https://docs.python.org/3/tutorial/venv.html">virtual environment</a> or with <a class="reference external" href="https://conda.io/docs/">Conda</a>.</p></li>
+<li><p>The <strong>requirements</strong> from <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> from the root of this
+project</p></li>
+<li><p>If you want to build documentation and run the travis-like tests you
+will also need the <strong>requirements</strong> from <code class="docutils literal notranslate"><span class="pre">build-requirements.txt</span></code></p></li>
+<li><p><strong>Packer</strong> (we currently use v1.3.3), and available on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code></p></li>
+<li><p><strong>Terraform</strong> available on your <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. Check any <code class="docutils literal notranslate"><span class="pre">provider.tf</span></code>
 file in the <code class="docutils literal notranslate"><span class="pre">terraform</span></code> director as it specifies the
-<code class="docutils literal notranslate"><span class="pre">required_version</span></code>. The same version is used by all providers.</li>
-<li>You will need some <em>standard</em> tools such as <code class="docutils literal notranslate"><span class="pre">ssh</span></code> and <code class="docutils literal notranslate"><span class="pre">ssh-keygen</span></code></li>
+<code class="docutils literal notranslate"><span class="pre">required_version</span></code>. The same version is used by all providers.</p></li>
+<li><p>You will need some <em>standard</em> tools such as <code class="docutils literal notranslate"><span class="pre">ssh</span></code> and <code class="docutils literal notranslate"><span class="pre">ssh-keygen</span></code></p></li>
 </ol>
 <p>Once the tools are installed you should be able to run <code class="docutils literal notranslate"><span class="pre">create.py</span></code>
 and <code class="docutils literal notranslate"><span class="pre">destroy.py</span></code> from the root of the project.</p>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="f1" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Sadly running without Docker requires a Unix-like operating system
-and so Windows is not currently supported</td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Sadly running without Docker requires a Unix-like operating system
+and so Windows is not currently supported</p>
+</dd>
+</dl>
 </div>
 
 

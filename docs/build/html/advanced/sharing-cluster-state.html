@@ -206,7 +206,7 @@ documentation.</p>
 <div class="section" id="on-aws">
 <h3>On AWS<a class="headerlink" href="#on-aws" title="Permalink to this headline">¶</a></h3>
 <p>the OKD Orchestrator exposes the ability to store Terraform state in an AWS
-S3 bucket <a class="footnote-reference" href="#f1" id="id1">[1]</a>. You do this by defining the <code class="docutils literal notranslate"><span class="pre">terraform_shared_state</span></code>
+S3 bucket <a class="footnote-reference brackets" href="#f1" id="id1">1</a>. You do this by defining the <code class="docutils literal notranslate"><span class="pre">terraform_shared_state</span></code>
 properties in your deployment configuration.</p>
 <p>Before you can use shared state storage you will need to create a bucket
 on S3 and a related DynamoDB table, which provides
@@ -215,18 +215,17 @@ state locking (preventing concurrent cluster modifications).</p>
 configuration. The properties are documented in the example
 <code class="docutils literal notranslate"><span class="pre">compact-aws-frankfurt-3-11</span></code> configuration</p>
 <ul class="simple">
-<li>An S3 bucket (which is a unique name in AWS)</li>
-<li>A key in the bucket (a name in your bucket)</li>
-<li>A dynamo DB table with a <em>primary key</em> string called <cite>LockID</cite>.
-The table name and the database region goes into your configuration.</li>
+<li><p>An S3 bucket (which is a unique name in AWS)</p></li>
+<li><p>A key in the bucket (a name in your bucket)</p></li>
+<li><p>A dynamo DB table with a <em>primary key</em> string called <cite>LockID</cite>.
+The table name and the database region goes into your configuration.</p></li>
 </ul>
 <p class="rubric">Footnotes</p>
-<table class="docutils footnote" frame="void" id="f1" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Other backend types may be supported in future releases.</td></tr>
-</tbody>
-</table>
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Other backend types may be supported in future releases.</p>
+</dd>
+</dl>
 </div>
 </div>
 </div>

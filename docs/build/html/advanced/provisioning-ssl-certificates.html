@@ -182,10 +182,10 @@
 automatically generate SSL certificates for your site. You just need
 to do the following before creating your cluster: -</p>
 <ol class="arabic simple">
-<li>Provide your account’s registered email in the
-<code class="docutils literal notranslate"><span class="pre">TF_VAR_master_certbot_email</span></code> variable in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> file</li>
-<li>Set the configuration file property <code class="docutils literal notranslate"><span class="pre">okd.certificates.generate_api_cert</span></code>
-to <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</li>
+<li><p>Provide your account’s registered email in the
+<code class="docutils literal notranslate"><span class="pre">TF_VAR_master_certbot_email</span></code> variable in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> file</p></li>
+<li><p>Set the configuration file property <code class="docutils literal notranslate"><span class="pre">okd.certificates.generate_api_cert</span></code>
+to <code class="docutils literal notranslate"><span class="pre">yes</span></code>.</p></li>
 </ol>
 <p>This is convenient and quick. Certbot certificates are nice, and self-signed
 but they often expire after a few months, needing to be renewed.</p>
@@ -198,40 +198,36 @@ If you have your own certificates you can automatically deploy these
 with a few simple steps.</p>
 <p>In order to deploy your own certificates You should should have: -</p>
 <ul class="simple">
-<li>Three <strong>certificate files</strong>. <code class="docutils literal notranslate"><span class="pre">cert.crt</span></code>, <code class="docutils literal notranslate"><span class="pre">ca-bandle.crt</span></code> and
-<code class="docutils literal notranslate"><span class="pre">private.key</span></code></li>
-<li>The <strong>domain name</strong> for the master API/console</li>
+<li><p>Three <strong>certificate files</strong>. <code class="docutils literal notranslate"><span class="pre">cert.crt</span></code>, <code class="docutils literal notranslate"><span class="pre">ca-bandle.crt</span></code> and
+<code class="docutils literal notranslate"><span class="pre">private.key</span></code></p></li>
+<li><p>The <strong>domain name</strong> for the master API/console</p></li>
 </ul>
 <p>As best practice, and to protect them, your certificate files must be encrypted
-using <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/vault.html">ansible vault</a> <a class="footnote-reference" href="#id3" id="id1">[3]</a>.</p>
+using <a class="reference external" href="https://docs.ansible.com/ansible/latest/user_guide/vault.html">ansible vault</a> <a class="footnote-reference brackets" href="#id3" id="id1">3</a>.</p>
 <p>To deploy your certificates, do the following before deploying your cluster: -</p>
 <ol class="arabic simple">
-<li>Place your encrypted certificate files into a directory called
+<li><p>Place your encrypted certificate files into a directory called
 <code class="docutils literal notranslate"><span class="pre">certificates</span></code> in your deployment configuration directory. For example
 if your deployment configuration is <code class="docutils literal notranslate"><span class="pre">aws_demo</span></code> the files would
-go into <code class="docutils literal notranslate"><span class="pre">deployments/aws_demo/certificates</span></code></li>
-<li>Set the configuration file property <code class="docutils literal notranslate"><span class="pre">okd.certificates.generate_api_cert</span></code>
-to the SSL domain name for the master</li>
-<li>Create a <code class="docutils literal notranslate"><span class="pre">vault-pass.txt</span></code> file containing the vault password you
+go into <code class="docutils literal notranslate"><span class="pre">deployments/aws_demo/certificates</span></code></p></li>
+<li><p>Set the configuration file property <code class="docutils literal notranslate"><span class="pre">okd.certificates.generate_api_cert</span></code>
+to the SSL domain name for the master</p></li>
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">vault-pass.txt</span></code> file containing the vault password you
 used to encrypt your certificates and place this in your deployment
-directory (e.g. in <code class="docutils literal notranslate"><span class="pre">deployments/aws_demo</span></code>) <a class="footnote-reference" href="#id4" id="id2">[4]</a></li>
+directory (e.g. in <code class="docutils literal notranslate"><span class="pre">deployments/aws_demo</span></code>) <a class="footnote-reference brackets" href="#id4" id="id2">4</a></p></li>
 </ol>
-<table class="docutils footnote" frame="void" id="id3" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[3]</a></td><td>Ansible vault is available in the OKD Orchestrator’s container image.
+<dl class="footnote brackets">
+<dt class="label" id="id3"><span class="brackets"><a class="fn-backref" href="#id1">3</a></span></dt>
+<dd><p>Ansible vault is available in the OKD Orchestrator’s container image.
 The files will be automatically decrypted as they are sent to the
-Bastion/Master for the OKD installation process.</td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id4" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[4]</a></td><td>You can commit your certificates to revision control as they are
+Bastion/Master for the OKD installation process.</p>
+</dd>
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id2">4</a></span></dt>
+<dd><p>You can commit your certificates to revision control as they are
 encrypted but the <code class="docutils literal notranslate"><span class="pre">vault-pass.txt</span></code> file is the one thing you
-do not commit. This remains a local file.</td></tr>
-</tbody>
-</table>
+do not commit. This remains a local file.</p>
+</dd>
+</dl>
 </div>
 </div>
 

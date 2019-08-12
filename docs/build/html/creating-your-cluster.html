@@ -179,10 +179,10 @@ the value for:</p>
 </pre></div>
 </div>
 <p>The default value in the template is valid but it isn’t particularly secure!</p>
-<dl class="docutils">
-<dt>&gt;   You can also create a less-privileged <code class="docutils literal notranslate"><span class="pre">developer</span></code> user by</dt>
-<dd>providing a value for <code class="docutils literal notranslate"><span class="pre">TF_VAR_okd_developer_password</span></code>.
-This is optional, you can leave it blank to avoid creating a <em>developer</em>.</dd>
+<dl class="simple">
+<dt>&gt;   You can also create a less-privileged <code class="docutils literal notranslate"><span class="pre">developer</span></code> user by</dt><dd><p>providing a value for <code class="docutils literal notranslate"><span class="pre">TF_VAR_okd_developer_password</span></code>.
+This is optional, you can leave it blank to avoid creating a <em>developer</em>.</p>
+</dd>
 </dl>
 <p>Now you can start and enter the OKD orchestration container
 with the convenient start script in the root of the project:</p>
@@ -250,9 +250,10 @@ Enter &quot;yes&quot; to INSTALL OpenShift/OKD:
 </div>
 <p>Acknowledge the warning prompt to begin the installation.</p>
 <blockquote class="epigraph">
-<div>You do not need to set any environment variables on the bastion or
+<div><p>You do not need to set any environment variables on the bastion or
 use <code class="docutils literal notranslate"><span class="pre">ssh-agent</span></code> as it and your variables are automatically configured
-on the Bastion when the cluster was created.</div></blockquote>
+on the Bastion when the cluster was created.</p>
+</div></blockquote>
 <p>It may take a significant period of time to install OpenShift, depending on
 the configuration (i.e., the size of the cluster and whether logging,
 metrics, gluster etc. are also being installed). You should allow up to
@@ -266,12 +267,13 @@ via the IP address presented to you when the cluster was created.</p>
 <p>You should be able to login to the OpenShift/OKD console as <code class="docutils literal notranslate"><span class="pre">admin</span></code>
 using the password you supplied in your <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> script.</p>
 <blockquote>
-<div>If you are using a Bastion it is no longer needed once your cluster has
+<div><p>If you are using a Bastion it is no longer needed once your cluster has
 been deployed and so you can <strong>stop</strong> it, if your cloud provider provides
 this functionality and it likely to help will reduce your cluster costs.
 But <strong>do not</strong> <em>delete</em> the Bastion or any other cluster object.
 You <strong>must</strong> destroy the Cluster using the orchestrator.
-So feel free to <strong>stop</strong> the instance, but <strong>do not</strong> delete it.</div></blockquote>
+So feel free to <strong>stop</strong> the instance, but <strong>do not</strong> delete it.</p>
+</div></blockquote>
 <p>When you’re finished with the cluster you can follow the
 <a class="reference internal" href="destroying-your-cluster.html"><span class="doc">Destroying a Cluster</span></a> guide to delete it.</p>
 </div>

@@ -182,13 +182,13 @@ the project’s <code class="docutils literal notranslate"><span class="pre">ans
 <p>In order to be recognised by the orchestrator the playbook must comply with
 the following requirements: -</p>
 <ol class="arabic simple">
-<li>Provide the playbook file
-<code class="docutils literal notranslate"><span class="pre">ansible/post-okd/playbooks/&lt;playbook-name&gt;/deploy.yaml</span></code></li>
-<li>Accept OKD URL and administrator details in the variables
-<code class="docutils literal notranslate"><span class="pre">okd_api_hostname</span></code>, <code class="docutils literal notranslate"><span class="pre">okd_admin</span></code> and <code class="docutils literal notranslate"><span class="pre">okd_admin_password</span></code></li>
-<li>Accept OKD deployment name the variable <code class="docutils literal notranslate"><span class="pre">okd_deployment</span></code></li>
-<li>Ideally it will be implemented using an Ansible <strong>Role</strong>, with the Role
-located in <code class="docutils literal notranslate"><span class="pre">ansible/post-okd/roles/&lt;playbook-name&gt;</span></code></li>
+<li><p>Provide the playbook file
+<code class="docutils literal notranslate"><span class="pre">ansible/post-okd/playbooks/&lt;playbook-name&gt;/deploy.yaml</span></code></p></li>
+<li><p>Accept OKD URL and administrator details in the variables
+<code class="docutils literal notranslate"><span class="pre">okd_api_hostname</span></code>, <code class="docutils literal notranslate"><span class="pre">okd_admin</span></code> and <code class="docutils literal notranslate"><span class="pre">okd_admin_password</span></code></p></li>
+<li><p>Accept OKD deployment name the variable <code class="docutils literal notranslate"><span class="pre">okd_deployment</span></code></p></li>
+<li><p>Ideally it will be implemented using an Ansible <strong>Role</strong>, with the Role
+located in <code class="docutils literal notranslate"><span class="pre">ansible/post-okd/roles/&lt;playbook-name&gt;</span></code></p></li>
 </ol>
 <p>If you follow the above rules the <code class="docutils literal notranslate"><span class="pre">deploy.yaml</span></code> playbook for a <code class="docutils literal notranslate"><span class="pre">my-app</span></code>
 playbook, at its simplest, will look like this:</p>
@@ -229,8 +229,9 @@ values for them are defined using a <code class="docutils literal notranslate"><
 </pre></div>
 </div>
 <blockquote class="epigraph">
-<div>The variables are passed to your playbook by the orchestrator using the
-<code class="docutils literal notranslate"><span class="pre">--extra-vars</span></code> command-line option.</div></blockquote>
+<div><p>The variables are passed to your playbook by the orchestrator using the
+<code class="docutils literal notranslate"><span class="pre">--extra-vars</span></code> command-line option.</p>
+</div></blockquote>
 </div>
 </div>
 

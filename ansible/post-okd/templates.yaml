@@ -57,6 +57,6 @@
   - name: Deploy configuration templates
     shell: oc create -f {{ item }} -n {{ template_namespace }}
     with_fileglob:
-      - "../../deployments/{{ okd_deployment }}/templates/*"
+    - "../../deployments/{{ okd_deployment }}/templates/*"
     when:
     - template_namespace is defined

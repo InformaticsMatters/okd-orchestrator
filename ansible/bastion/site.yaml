@@ -162,7 +162,7 @@
       dest: "{{ ansible_env.HOME }}/okd-orchestrator/{{ item }}"
       mode: 0755
     loop:
-      - create.py
+    - create.py
 
   # Optional user-provided certificate information.
   #          -------------

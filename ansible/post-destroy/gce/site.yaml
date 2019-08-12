@@ -31,14 +31,14 @@
       auth_kind: serviceaccount
       service_account_file: ../../../gce-credentials.json
       scopes:
-        - https://www.googleapis.com/auth/cloud-platform
+      - https://www.googleapis.com/auth/cloud-platform
       project: "{{ lookup('env','TF_VAR_gce_project') }}"
       zone: "{{ gce_zone }}"
       name: "{{ item.name }}"
       state: absent
     when:
-      - item.name is defined
-      - item.name is match("kubernetes-dynamic-pvc-.*")
+    - item.name is defined
+    - item.name is match("kubernetes-dynamic-pvc-.*")
     with_items:
-      - "{{ vol_info['items'] }}"
+    - "{{ vol_info['items'] }}"
 

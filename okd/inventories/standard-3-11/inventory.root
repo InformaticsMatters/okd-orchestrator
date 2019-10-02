@@ -19,7 +19,7 @@ all:
     OSEv3:
 
       ###################
-      # OSEv3 Variables #
+      # OSEv3 Variables #
       ###################
 
       vars:
@@ -53,7 +53,7 @@ all:
 
         # Enable htpasswd authentication.
         # There is no htpasswd file here, users are created
-        # by the 'ansible/post-okd/site.yaml' playbook
+        # by the 'ansible/post-okd/site.yaml' playbook
         # once the cluster has been installed.
         openshift_master_identity_providers: [
             { 'name': 'htpasswd_auth',
@@ -66,10 +66,10 @@ all:
         openshift_docker_insecure_registries: registry.access.redhat.com
         openshift_master_cluster_public_hostname: ${public_hostname}
         openshift_master_default_subdomain: ${default_subdomain}
-        # Be aware that the router's ROUTER_SERVICE_HTTPS_PORT variable
+        # Be aware that the router's ROUTER_SERVICE_HTTPS_PORT variable
         # is likely to be set to 443 by default. So if the router can reside
-        # on the same host as the API service you'll need to avoid 443
-        # (i.e. if you combine the master and infrastructure nodes)
+        # on the same host as the API service you'll need to avoid 443
+        # (i.e. if you combine the master and infrastructure nodes)
         openshift_master_api_port: {{ cluster.api_port }}
         openshift_master_console_port: {{ cluster.api_port }}
 

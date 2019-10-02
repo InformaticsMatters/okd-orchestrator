@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'The OKD Orchestrator'
-copyright = u'2018, OpenRiskNet'
+copyright = u'2019, OpenRiskNet'
 author = u'Alan Christie'
 
 # The short X.Y version

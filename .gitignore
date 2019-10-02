@@ -19,7 +19,7 @@ yacker/**/*.json
 
 # Provider Variables
 provider-env/setenv.sh
-provider-env/setenv-aws.sh
+provider-env/setenv-aws*.sh
 provider-env/setenv-gce.sh
 provider-env/setenv-os.sh
 

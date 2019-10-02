@@ -68,7 +68,9 @@ other...
     based on your ``my_machines`` definition without resorting to configuring
     the Bastion. If so you will need to copy the generated ``inventory.yaml``
     file to the Bastion for subsequent manual deployment of the OK platform.
-    You can run *just plan* by adding ``--just-plan`` to ``create.py``:
-    ``./create.py --cluster --just-plan <deployment-name>``. Copy the generated
-    template file (which may be `okd/inventories/standard-os-3-11`) to your
-    bastion (in a similar location).
+    You can run *just plan* by adding ``--just-plan`` to ``create.py``: -
+
+    ``./create.py --cluster --just-plan <deployment-name>``
+
+    Copy the generated template file (which may be ``okd/inventories/standard-os-3-11``)
+    to your bastion (in a similar location).

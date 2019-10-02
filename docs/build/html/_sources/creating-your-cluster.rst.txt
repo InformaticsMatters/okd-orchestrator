@@ -25,7 +25,9 @@ the value for::
 
 The default value in the template is valid but it isn't particularly secure!
 
->   You can also create a less-privileged ``developer`` user by
+.. epigraph::
+
+    You can also create a less-privileged ``developer`` user by
     providing a value for ``TF_VAR_okd_developer_password``.
     This is optional, you can leave it blank to avoid creating a *developer*.
 

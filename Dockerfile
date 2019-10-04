@@ -30,6 +30,7 @@ COPY requirements.txt /tmp/
 RUN apt-get -y update && \
     apt-get install -y jq unzip graphviz vim less \
         apache2-utils default-jdk && \
+    pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt --default-timeout=60
 
 # Install Terraform

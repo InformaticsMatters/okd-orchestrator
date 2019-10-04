@@ -1,6 +1,9 @@
 # Expected ssh private key-pair files
 *okdo-keypair
 *okdo-keypair.pub
+# And typical backups
+*okdo-keypair.backup
+*okdo-keypair.pub.backup
 
 # Protect the user's SSL certificates
 # and provider-specific root-files
@@ -18,10 +21,8 @@ yacker/**/*.json
 .packer.d/
 
 # Provider Variables
-provider-env/setenv.sh
-provider-env/setenv-aws*.sh
-provider-env/setenv-gce.sh
-provider-env/setenv-os.sh
+provider-env/setenv*
+!provider-env/setenv*template.sh
 
 # Terraform material...
 terraform/aws/bastion.tf

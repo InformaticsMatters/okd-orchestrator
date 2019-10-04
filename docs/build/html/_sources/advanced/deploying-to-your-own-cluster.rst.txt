@@ -53,11 +53,13 @@ Deploying OKD
 With a ``my_machines`` section populated, the cluster setup is like any
 other...
 
--   Craft a suitable ``setenv.sh``
+-   Craft a suitable ``setenv.sh`` (in ``provider-env``)
 -   Start and enter the OKD container with ``./okdo-start.sh``
 -   Run ``./create.py --cluster``. You will need to add the name of the
-    relevant deployment if the orchestrator has more than one.
--   When this is complete, hop onto the *Bastion*, move to the
+    relevant deployment if the orchestrator finds more than one in the
+    ``deployments`` directory.
+-   When this is complete, hop onto the *Bastion* (from the container you
+    should just need to ``ssh centos@<bastion_ip>``) and then move to the
     ``okd-orchestrator`` directory that will have been created and run
     ``./create.py --okd``
 

@@ -216,11 +216,13 @@ the annotated <code class="docutils literal notranslate"><span class="pre">my_ma
 <p>With a <code class="docutils literal notranslate"><span class="pre">my_machines</span></code> section populated, the cluster setup is like any
 other…</p>
 <ul class="simple">
-<li><p>Craft a suitable <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code></p></li>
+<li><p>Craft a suitable <code class="docutils literal notranslate"><span class="pre">setenv.sh</span></code> (in <code class="docutils literal notranslate"><span class="pre">provider-env</span></code>)</p></li>
 <li><p>Start and enter the OKD container with <code class="docutils literal notranslate"><span class="pre">./okdo-start.sh</span></code></p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">./create.py</span> <span class="pre">--cluster</span></code>. You will need to add the name of the
-relevant deployment if the orchestrator has more than one.</p></li>
-<li><p>When this is complete, hop onto the <em>Bastion</em>, move to the
+relevant deployment if the orchestrator finds more than one in the
+<code class="docutils literal notranslate"><span class="pre">deployments</span></code> directory.</p></li>
+<li><p>When this is complete, hop onto the <em>Bastion</em> (from the container you
+should just need to <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">centos&#64;&lt;bastion_ip&gt;</span></code>) and then move to the
 <code class="docutils literal notranslate"><span class="pre">okd-orchestrator</span></code> directory that will have been created and run
 <code class="docutils literal notranslate"><span class="pre">./create.py</span> <span class="pre">--okd</span></code></p></li>
 </ul>

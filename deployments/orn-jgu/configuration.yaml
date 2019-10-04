@@ -1,0 +1,87 @@
+---
+
+# --------------------------------------------------------------------------- #
+# An orchestrator deployment configuration file (version 1).                  #
+#                                                                             #
+# Refer to the 'compact-aws-frankfurt-3-11' deployment configuration          #
+# for a detailed discussion of the  properties defined in this file.          #
+# --------------------------------------------------------------------------- #
+
+#
+# Do Not Use      =--->   U N D E R  C O N S T R U C T I O N   <---=
+#
+
+version: 1
+
+name: ORN JGU Deployment (OKD 3.11)
+description: >
+  The deployment for the University of Mainz site.
+
+# --- cluster -----------------------------------------------------------------
+
+cluster:
+
+  id: orn-jgu-311
+
+  name_tag: orn
+  public_hostname: jgu.openrisknet.org
+  default_subdomain: apps.jgu.openrisknet.org
+  api_port: 443
+
+  master:
+    count: 1
+    is_infra: no
+    is_bastion: no
+    is_compute_node: no
+
+  infra:
+    count: 1
+    is_compute_node: no
+
+  nodes:
+  - count: 3
+    node_group: compute
+
+  glusterfs:
+    count: 0
+
+okd:
+
+  ansible_tag: openshift-ansible-3.11.146-1
+  ansible_version: 2.7.13
+  play:
+#  - openshift-glusterfs/uninstall
+#  - adhoc/uninstall
+  - prerequisites
+  - deploy_cluster
+
+  post_okd:
+  - play: acme-controller
+
+  enable:
+#  - asb
+#  - tsb
+#  - metrics
+#  - prometheus
+
+  certificates:
+    generate_api_cert: yes
+
+  inventory_dir: standard-os-3-11
+
+# --- my_machines -------------------------------------------------------------
+
+my_machines:
+
+  cli_node: cloudv200.zdv.Uni-Mainz.DE
+  bastion: cloudv198.zdv.Uni-Mainz.DE
+
+  master1: cloudv200.zdv.Uni-Mainz.DE
+
+  infra1: cloudv199.zdv.Uni-Mainz.DE
+
+  node001: cloudv201.zdv.Uni-Mainz.DE
+  node002: cloudv202.zdv.Uni-Mainz.DE
+  node003: cloudv203.zdv.Uni-Mainz.DE
+
+# -----------------------------------------------------------------------------

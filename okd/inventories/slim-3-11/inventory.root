@@ -1,5 +1,12 @@
 ---
 
+{#-
+    The ROOT jinja2 OpenShift/OKD inventory file (YAML).
+    Here we define all common variables and provide 'blocks'
+    to declare the hosts. Blocks that can be written-to
+    from templates that inherit from here.
+#}
+
 # This is an auto-generated OpenShift/OKD Inventory File.
 # Edit this file with extreme caution.
 # It belongs to and is written by the OKD Orchestrator
@@ -12,12 +19,12 @@ all:
     OSEv3:
 
       ###################
-      # OSEv3 Variables #
+      # OSEv3 Variables #
       ###################
 
       vars:
 
-        ansible_ssh_user: centos
+        ansible_ssh_user: {{ cluster.ssh_user }}
         ansible_become: yes
 
         # General
@@ -51,7 +58,7 @@ all:
 
         # Enable htpasswd authentication.
         # There is no htpasswd file here, users are created
-        # by the 'ansible/post-okd/site.yaml' playbook
+        # by the 'ansible/post-okd/site.yaml' playbook
         # once the cluster has been installed.
         openshift_master_identity_providers: [
             { 'name': 'htpasswd_auth',
@@ -62,16 +69,16 @@ all:
 
         openshift_docker_additional_registries: registry.access.redhat.com
         openshift_docker_insecure_registries: registry.access.redhat.com
-        openshift_master_cluster_public_hostname: orn-master.informaticsmatters.com
-        openshift_master_default_subdomain: orn.informaticsmatters.com
-        # Be aware that the router's ROUTER_SERVICE_HTTPS_PORT variable
+        openshift_master_cluster_public_hostname: ${public_hostname}
+        openshift_master_default_subdomain: ${default_subdomain}
+        # Be aware that the router's ROUTER_SERVICE_HTTPS_PORT variable
         # is likely to be set to 443 by default. So if the router can reside
-        # on the same host as the API service you'll need to avoid 443
-        # (i.e. if you combine the master and infrastructure nodes)
-        openshift_master_api_port: 443
-        openshift_master_console_port: 443
+        # on the same host as the API service you'll need to avoid 443
+        # (i.e. if you combine the master and infrastructure nodes)
+        openshift_master_api_port: {{ cluster.api_port }}
+        openshift_master_console_port: {{ cluster.api_port }}
 
-
+{% if okd.certificates and okd.certificates.generate_api_cert %}
         # Certificate definitions.
         # At the moment they are created by bastion and pre-okd playbooks
         # using certbot if the user has set generate_api_cert
@@ -80,12 +87,16 @@ all:
               'keyfile': "/home/centos/privkey.pem" }
         ]
         openshift_master_overwrite_named_certificates: true
+{%- endif %}
 
         # Metrics
         # -------
-
+{% if okd.enable and 'metrics' in okd.enable %}
+        openshift_metrics_install_metrics: true
+{%- else %}
         openshift_metrics_install_metrics: false
-        openshift_metrics_hawkular_hostname: metrics.apps.jgu.openrisknet.org
+{%- endif %}
+        openshift_metrics_hawkular_hostname: metrics.${default_subdomain}
         openshift_hosted_metrics_image_version: v3.11
         openshift_metrics_cassandra_storage_type: dynamic
         openshift_metrics_cassandra_pvc_size: 10Gi
@@ -95,33 +106,46 @@ all:
 
         # Logging
         # -------
-
+{% if okd.enable and 'logging' in okd.enable %}
+        openshift_logging_install_logging: true
+{%- else %}
         openshift_logging_install_logging: false
+{%- endif %}
         openshift_logging_es_nodeselector: {'node-role.kubernetes.io/infra': 'true'}
         openshift_logging_storage_volume_size: 10Gi
 
         # Prometheus
         # ----------
-
+{% if okd.enable and 'prometheus' in okd.enable %}
+        openshift_cluster_monitoring_operator_install: true
+        openshift_cluster_monitoring_operator_prometheus_storage_enabled: true
+        openshift_cluster_monitoring_operator_prometheus_storage_capacity: 10Gi
+        openshift_cluster_monitoring_operator_alertmanager_storage_enabled: true
+        openshift_cluster_monitoring_operator_alertmanager_storage_capacity: 2Gi
+{%- else %}
         openshift_cluster_monitoring_operator_install: false
         openshift_cluster_monitoring_operator_prometheus_storage_enabled: false
         openshift_cluster_monitoring_operator_alertmanager_storage_enabled: false
+{%- endif %}
 
         # Service Brokers
         # ---------------
 
-
+{% if okd.enable and 'tsb' in okd.enable %}
+        template_service_broker_install: true
+{%- else %}
         template_service_broker_install: false
+{%- endif %}
+
+{%- if okd.enable and 'asb' in okd.enable %}
+        ansible_service_broker_install: true
+        ansible_service_broker_image_prefix: registry.access.redhat.com/openshift3/ose-
+        ansible_service_broker_registry_url: registry.access.redhat.com
+{%- else %}
         ansible_service_broker_install: false
-        # Gluster FS
-        # ----------
+{%- endif %}
 
-        openshift_storage_glusterfs_storageclass: true
-        openshift_storage_glusterfs_storageclass_default: false
-        openshift_storage_glusterfs_block_deploy: true
-        openshift_storage_glusterfs_block_host_vol_size: 100
-        openshift_storage_glusterfs_wipe: true
-
+        # Use NFS volume for OpenShift registry:
         openshift_hosted_registry_storage_kind: nfs
         openshift_hosted_registry_storage_access_modes: ['ReadWriteMany']
         openshift_hosted_registry_storage_nfs_directory: /nfs1
@@ -133,6 +157,8 @@ all:
         # -----------
 
         openshift_node_groups: [
+{%- block node_groups %}
+{%- endblock %}
             { 'name': 'node-config-compute',
               'labels': ['node-role.kubernetes.io/compute=true'] },
             { 'name': 'node-config-compute-storage',
@@ -163,34 +189,24 @@ all:
       # from terraform templates
 
       children:
-        masters:
-          hosts:
 
-            cloudv200.zdv.Uni-Mainz.DE:
+{%- block masters %}
+{%- endblock %}
 
+{%- block etcd %}
+{%- endblock %}
 
-        etcd:
-          hosts:
-            cloudv200.zdv.Uni-Mainz.DE:
+{%- block lb %}
+{%- endblock %}
 
-        nfs:
-          hosts:
-            cloudv199.zdv.Uni-Mainz.DE:
+{%- block nfs %}
+{%- endblock %}
 
-        nodes:
-          hosts:
-            cloudv200.zdv.Uni-Mainz.DE:
-              openshift_node_group_name: 'node-config-master'
-            cloudv199.zdv.Uni-Mainz.DE:
-              openshift_node_group_name: 'node-config-infra'
-            cloudv201.zdv.Uni-Mainz.DE:
-              openshift_node_group_name: 'node-config-compute'
-            cloudv202.zdv.Uni-Mainz.DE:
-              openshift_node_group_name: 'node-config-compute'
-            cloudv203.zdv.Uni-Mainz.DE:
-              openshift_node_group_name: 'node-config-compute'
+{%- block nodes %}
+{%- endblock %}
 
-
+{%- block glusterfs %}
+{%- endblock %}
 
     ###############
     # Other Hosts #
@@ -201,4 +217,4 @@ all:
 
     cli-node:
       hosts:
-        cloudv200.zdv.Uni-Mainz.DE:
+        ${cli_node}:

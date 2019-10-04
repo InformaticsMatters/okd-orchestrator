@@ -1,0 +1,92 @@
+{% extends 'inventory.root' %}
+
+{# --- masters ------------------------------------------------------------- #}
+
+{% block masters %}
+        masters:
+          hosts:
+{% for item in range(1, cluster.master.count + 1) %}
+            ${master{{ item }}}:
+{% endfor %}
+{% endblock %}
+
+{# --- etcd ---------------------------------------------------------------- #}
+
+{% block etcd %}
+        etcd:
+          hosts:
+            ${master1}:
+{% endblock %}
+
+{# --- lb ------------------------------------------------------------------ #}
+
+{# --- nfs ----------------------------------------------------------------- #}
+
+{# --- nodes --------------------------------------------------------------- #}
+
+{% block nodes %}
+        nodes:
+          hosts:
+{%- for item in range(cluster.master.count) %}
+            ${master{{ '%d'|format(item + 1) }}}:
+{%- if cluster.master.is_infra is defined and cluster.master.is_infra %}
+{%- if cluster.master.is_compute_node is defined and cluster.master.is_compute_node %}
+              openshift_node_group_name: 'node-config-all-in-one'
+{%- else %}
+              openshift_node_group_name: 'node-config-master-infra'
+{%- endif %}
+{%- else %}
+{%- if cluster.master.is_compute_node is defined and cluster.master.is_compute_node %}
+              openshift_node_group_name: 'node-config-master-compute'
+{%- else %}
+              openshift_node_group_name: 'node-config-master'
+{%- endif %}
+{%- endif %}
+{%- endfor -%}
+
+{% if cluster.master.is_infra is not defined or not cluster.master.is_infra %}
+{%- for item in range(cluster.infra.count) %}
+            ${infra{{ '%d'|format(item + 1) }}}:
+{%- if cluster.infra.is_compute_node is defined and cluster.infra.is_compute_node %}
+              openshift_node_group_name: 'node-config-infra-compute'
+{%- else %}
+              openshift_node_group_name: 'node-config-infra'
+{%- endif %}
+{%- endfor %}
+{%- endif %}
+
+{%- set node_id = namespace(a=1) -%}
+{%- for node in cluster.nodes %}
+{%- for item in range(node.count) %}
+            ${node{{ '%03d'|format(node_id.a) }}}:
+              openshift_node_group_name: 'node-config-{{ node.node_group }}'
+{%- set node_id.a = node_id.a + 1 -%}
+{%- endfor %}
+{%- endfor %}
+
+{%- if cluster.glusterfs and cluster.glusterfs.count %}
+{%- for item in range(cluster.glusterfs.count) %}
+            ${glusterfs{{ '%d'|format(item + 1) }}}:
+              openshift_node_group_name: 'node-config-compute-storage'
+{%- endfor %}
+{%- endif %}
+{% endblock %}
+
+{# --- node_groups --------------------------------------------------------- #}
+
+{%- block node_groups %}
+{%- if cluster.node_groups is defined and cluster.node_groups -%}
+{%- for node_group in cluster.node_groups %}
+            { 'name': 'node-config-{{ node_group.name }}',
+{%- if node_group.is_compute_node %}
+              'labels': ['node-role.kubernetes.io/compute=true',
+{%- else %}
+              'labels': [
+{%- endif %}
+{%- for label in node_group.labels %}
+                         '{{ label }}'{{ "," if not loop.last }}
+{%- endfor -%}
+                        ] },
+{%- endfor -%}
+{%- endif %}
+{%- endblock %}

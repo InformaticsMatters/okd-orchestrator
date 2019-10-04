@@ -7,10 +7,6 @@
 # for a detailed discussion of the  properties defined in this file.          #
 # --------------------------------------------------------------------------- #
 
-#
-# Do Not Use      =--->   U N D E R  C O N S T R U C T I O N   <---=
-#
-
 version: 1
 
 name: ORN JGU Deployment (OKD 3.11)
@@ -24,9 +20,9 @@ cluster:
   id: orn-jgu-311
 
   name_tag: orn
-  public_hostname: jgu.openrisknet.org
-  default_subdomain: apps.jgu.openrisknet.org
-  api_port: 443
+  public_hostname: orn-master.informaticsmatters.com
+  default_subdomain: apps.orn-master.informaticsmatters.com
+  api_port: 8443
 
   master:
     count: 1
@@ -47,7 +43,7 @@ cluster:
 
 okd:
 
-  ansible_tag: openshift-ansible-3.11.146-1
+  ansible_tag: openshift-ansible-3.11.149-1
   ansible_version: 2.7.13
   play:
 #  - openshift-glusterfs/uninstall
@@ -67,7 +63,7 @@ okd:
   certificates:
     generate_api_cert: yes
 
-  inventory_dir: standard-os-3-11
+  inventory_dir: slim-3-11
 
 # --- my_machines -------------------------------------------------------------
 

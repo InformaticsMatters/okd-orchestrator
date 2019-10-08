@@ -57,7 +57,7 @@ okd:
   certificates:
     generate_api_cert: yes
 
-  inventory_dir: slim-3-11
+  inventory_dir: nfs-3-11
 
 # --- my_machines -------------------------------------------------------------
 

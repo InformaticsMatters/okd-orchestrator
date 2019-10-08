@@ -21,8 +21,8 @@ cluster:
 
   name_tag: orn
   public_hostname: orn-master.informaticsmatters.com
-  default_subdomain: apps.orn-master.informaticsmatters.com
-  api_port: 8443
+  default_subdomain: orn.informaticsmatters.com
+  api_port: 443
 
   master:
     count: 1
@@ -38,12 +38,9 @@ cluster:
   - count: 3
     node_group: compute
 
-  glusterfs:
-    count: 0
-
 okd:
 
-  ansible_tag: openshift-ansible-3.11.149-1
+  ansible_tag: openshift-ansible-3.11.152-1
   ansible_version: 2.7.13
   play:
 #  - openshift-glusterfs/uninstall
@@ -55,10 +52,7 @@ okd:
   - play: acme-controller
 
   enable:
-#  - asb
-#  - tsb
-#  - metrics
-#  - prometheus
+  # Nothing
 
   certificates:
     generate_api_cert: yes
@@ -69,15 +63,15 @@ okd:
 
 my_machines:
 
-  cli_node: cloudv200.zdv.Uni-Mainz.DE
-  bastion: cloudv198.zdv.Uni-Mainz.DE
+  cli_node: cloudv200.zdv.uni-mainz.de
+  bastion: cloudv198.zdv.uni-mainz.de
 
-  master1: cloudv200.zdv.Uni-Mainz.DE
+  master1: cloudv200.zdv.uni-mainz.de
 
-  infra1: cloudv199.zdv.Uni-Mainz.DE
+  infra1: cloudv199.zdv.uni-mainz.de
 
-  node001: cloudv201.zdv.Uni-Mainz.DE
-  node002: cloudv202.zdv.Uni-Mainz.DE
-  node003: cloudv203.zdv.Uni-Mainz.DE
+  node001: cloudv201.zdv.uni-mainz.de
+  node002: cloudv202.zdv.uni-mainz.de
+  node003: cloudv203.zdv.uni-mainz.de
 
 # -----------------------------------------------------------------------------

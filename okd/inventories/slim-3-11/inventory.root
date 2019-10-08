@@ -27,6 +27,21 @@ all:
         ansible_ssh_user: {{ cluster.ssh_user }}
         ansible_become: yes
 
+        # Following required (for some reason) for JGU installation.
+        # etcd starts but it listens on a specific address
+        # and API cannot reach it because it connects to localhost (127.0.0.1).
+        # See: https://github.com/openshift/openshift-ansible/issues/6986
+        etcd_listen_client_urls: 'https://0.0.0.0:2379'
+
+        # The use of NFS for the core OpenShift Container Platform components
+        # is not recommended, as NFS (and the NFS Protocol) does not provide
+        # the proper consistency needed for the applications that make up the
+        # OpenShift Container Platform infrastructure.
+        #
+        # Enable unsupported configurations, things that will yield a partially
+        # functioning cluster but would not be supported for production use
+        openshift_enable_unsupported_configurations: yes
+
         # General
         # -------
 
@@ -35,7 +50,7 @@ all:
         openshift_image_tag: v3.11.0
         openshift_pkg_version: -3.11.0
 
-        openshift_master_dynamic_provisioning_enabled: false
+        openshift_master_dynamic_provisioning_enabled: no
 
         # A fix for 3.11 to avoid problems with missing Centos repos
         # (not fixed by the prerequisites playbook)...
@@ -48,7 +63,7 @@ all:
         ]
 
         openshift_skip_deprecation_check: yes
-        openshift_clock_enabled: true
+        openshift_clock_enabled: yes
 
         openshift_disable_check: >-
             disk_availability,
@@ -91,61 +106,25 @@ all:
 
         # Metrics
         # -------
-{% if okd.enable and 'metrics' in okd.enable %}
-        openshift_metrics_install_metrics: true
-{%- else %}
-        openshift_metrics_install_metrics: false
-{%- endif %}
-        openshift_metrics_hawkular_hostname: metrics.${default_subdomain}
-        openshift_hosted_metrics_image_version: v3.11
-        openshift_metrics_cassandra_storage_type: dynamic
-        openshift_metrics_cassandra_pvc_size: 10Gi
-        openshift_metrics_cassandra_limits_memory: 4Gi
-        openshift_metrics_duration: 4
-        openshift_metrics_resolution: 30s
+        openshift_metrics_install_metrics: no
 
         # Logging
         # -------
-{% if okd.enable and 'logging' in okd.enable %}
-        openshift_logging_install_logging: true
-{%- else %}
-        openshift_logging_install_logging: false
-{%- endif %}
-        openshift_logging_es_nodeselector: {'node-role.kubernetes.io/infra': 'true'}
-        openshift_logging_storage_volume_size: 10Gi
+        openshift_logging_install_logging: no
 
         # Prometheus
         # ----------
-{% if okd.enable and 'prometheus' in okd.enable %}
-        openshift_cluster_monitoring_operator_install: true
-        openshift_cluster_monitoring_operator_prometheus_storage_enabled: true
-        openshift_cluster_monitoring_operator_prometheus_storage_capacity: 10Gi
-        openshift_cluster_monitoring_operator_alertmanager_storage_enabled: true
-        openshift_cluster_monitoring_operator_alertmanager_storage_capacity: 2Gi
-{%- else %}
-        openshift_cluster_monitoring_operator_install: false
-        openshift_cluster_monitoring_operator_prometheus_storage_enabled: false
-        openshift_cluster_monitoring_operator_alertmanager_storage_enabled: false
-{%- endif %}
+        openshift_cluster_monitoring_operator_install: no
 
         # Service Brokers
         # ---------------
+        template_service_broker_install: no
+        ansible_service_broker_install: no
+        # To avoid "Wait for API Server rollout success" lockup...
+        openshift_enable_service_catalog: no
 
-{% if okd.enable and 'tsb' in okd.enable %}
-        template_service_broker_install: true
-{%- else %}
-        template_service_broker_install: false
-{%- endif %}
-
-{%- if okd.enable and 'asb' in okd.enable %}
-        ansible_service_broker_install: true
-        ansible_service_broker_image_prefix: registry.access.redhat.com/openshift3/ose-
-        ansible_service_broker_registry_url: registry.access.redhat.com
-{%- else %}
-        ansible_service_broker_install: false
-{%- endif %}
-
-        # Use NFS volume for OpenShift registry:
+        # Use NFS volume for the OpenShift registry...
+        # (on the first infrastructure node)
         openshift_hosted_registry_storage_kind: nfs
         openshift_hosted_registry_storage_access_modes: ['ReadWriteMany']
         openshift_hosted_registry_storage_nfs_directory: /nfs1

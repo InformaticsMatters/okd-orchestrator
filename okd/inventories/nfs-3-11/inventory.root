@@ -106,12 +106,12 @@ all:
 
         # Metrics
         # -------
+        openshift_metrics_hawkular_hostname: metrics.${default_subdomain}
 {% if okd.enable and 'metrics' in okd.enable %}
         openshift_metrics_install_metrics: yes
 {%- else %}
         openshift_metrics_install_metrics: no
 {%- endif %}
-        openshift_metrics_hawkular_hostname: metrics.${default_subdomain}
         openshift_metrics_storage_kind: nfs
         openshift_metrics_storage_access_modes: ['ReadWriteOnce']
         openshift_metrics_storage_nfs_directory: /exports

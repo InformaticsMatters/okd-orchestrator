@@ -27,6 +27,14 @@ all:
         ansible_ssh_user: {{ cluster.ssh_user }}
         ansible_become: yes
 
+        # General
+        # -------
+
+        openshift_deployment_type: origin
+        openshift_release: v3.11
+        openshift_image_tag: v3.11.0
+        openshift_pkg_version: -3.11.0
+
         # Following required (for some reason) for JGU installation.
         # etcd starts but it listens on a specific address
         # and API cannot reach it because it connects to localhost (127.0.0.1).
@@ -41,14 +49,6 @@ all:
         # Enable unsupported configurations, things that will yield a partially
         # functioning cluster but would not be supported for production use
         openshift_enable_unsupported_configurations: yes
-
-        # General
-        # -------
-
-        openshift_deployment_type: origin
-        openshift_release: v3.11
-        openshift_image_tag: v3.11.0
-        openshift_pkg_version: -3.11.0
 
         openshift_master_dynamic_provisioning_enabled: no
 
@@ -106,7 +106,18 @@ all:
 
         # Metrics
         # -------
+{% if okd.enable and 'metrics' in okd.enable %}
+        openshift_metrics_install_metrics: yes
+{%- else %}
         openshift_metrics_install_metrics: no
+{%- endif %}
+        openshift_metrics_hawkular_hostname: metrics.${default_subdomain}
+        openshift_metrics_storage_kind: nfs
+        openshift_metrics_storage_access_modes: ['ReadWriteOnce']
+        openshift_metrics_storage_nfs_directory: /exports
+        openshift_metrics_storage_nfs_options: '*(rw,root_squash)'
+        openshift_metrics_storage_volume_name: metrics
+        openshift_metrics_storage_volume_size: 40Gi
 
         # Logging
         # -------
@@ -123,11 +134,13 @@ all:
         # To avoid "Wait for API Server rollout success" lockup...
         openshift_enable_service_catalog: no
 
+        # Registry
+        # --------
         # Use NFS volume for the OpenShift registry...
         # (on the first infrastructure node)
         openshift_hosted_registry_storage_kind: nfs
         openshift_hosted_registry_storage_access_modes: ['ReadWriteMany']
-        openshift_hosted_registry_storage_nfs_directory: /nfs1
+        openshift_hosted_registry_storage_nfs_directory: /exports
         openshift_hosted_registry_storage_nfs_options: '*(rw,root_squash)'
         openshift_hosted_registry_storage_volume_name: registry
         openshift_hosted_registry_storage_volume_size: 200Gi

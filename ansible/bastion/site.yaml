@@ -64,6 +64,14 @@
     - .ansible/tmp
     - okd-orchestrator/okd/inventories/{{ inventory_dir }}
 
+  - name: Install epel-release
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+    - epel-release
+    become: yes
+
   - name: Install system packages
     yum:
       name: "{{ item }}"
@@ -72,8 +80,9 @@
     - libselinux-python
     - python-passlib
     - git
-    - epel-release
     - python-pip
+    - httpd-tools
+    - java-1.8.0-openjdk-headless
     become: yes
 
   # Add files...

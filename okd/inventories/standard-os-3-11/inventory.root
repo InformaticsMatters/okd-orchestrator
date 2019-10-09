@@ -35,6 +35,18 @@ all:
         openshift_image_tag: v3.11.0
         openshift_pkg_version: -3.11.0
 
+        # Following required (for some reason) for JGU installation.
+        # etcd starts but it listens on a specific address
+        # and API cannot reach it because it connects to localhost (127.0.0.1).
+        # See: https://github.com/openshift/openshift-ansible/issues/6986
+        etcd_listen_client_urls: 'https://0.0.0.0:2379'
+
+        # Following required (for some reason) for JGU installation.
+        # etcd starts but it listens on a specific address
+        # and API cannot reach it because it connects to localhost (127.0.0.1).
+        # See: https://github.com/openshift/openshift-ansible/issues/6986
+        etcd_listen_client_urls: 'https://0.0.0.0:2379'
+
         openshift_master_dynamic_provisioning_enabled: true
 
         # A fix for 3.11 to avoid problems with missing Centos repos

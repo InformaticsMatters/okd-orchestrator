@@ -52,7 +52,7 @@ okd:
   - play: acme-controller
 
   enable:
-  # Nothing
+#  - metrics
 
   certificates:
     generate_api_cert: yes

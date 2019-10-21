@@ -16,7 +16,7 @@
 # Refer to the project's documention for a detailed discussion of
 # the orchestrator.
 
-FROM python:3.7.4
+FROM python:3.7.5
 
 ARG terraform_version=0.11.14
 ARG packer_version=1.4.2

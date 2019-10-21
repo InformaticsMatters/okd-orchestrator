@@ -54,8 +54,12 @@ okd:
   post_okd:
   - play: acme-controller
 
+  storage:
+    metrics: 40Gi
+    registry: 200Gi
+
   enable:
-#  - metrics
+  - metrics
 
   certificates:
     generate_api_cert: yes

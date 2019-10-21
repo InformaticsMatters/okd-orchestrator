@@ -111,7 +111,7 @@ all:
         openshift_metrics_hawkular_hostname: metrics.${default_subdomain}
         openshift_hosted_metrics_image_version: v3.11
         openshift_metrics_cassandra_storage_type: dynamic
-        openshift_metrics_cassandra_pvc_size: 10Gi
+        openshift_metrics_cassandra_pvc_size: {{ okd.storage.metrics|default('10Gi') }}
         openshift_metrics_cassandra_limits_memory: 4Gi
         openshift_metrics_duration: 4
         openshift_metrics_resolution: 30s
@@ -124,16 +124,16 @@ all:
         openshift_logging_install_logging: false
 {%- endif %}
         openshift_logging_es_nodeselector: {'node-role.kubernetes.io/infra': 'true'}
-        openshift_logging_storage_volume_size: 10Gi
+        openshift_logging_storage_volume_size: {{ okd.storage.logging|default('10Gi',True) }}
 
         # Prometheus
         # ----------
 {% if okd.enable and 'prometheus' in okd.enable %}
         openshift_cluster_monitoring_operator_install: true
         openshift_cluster_monitoring_operator_prometheus_storage_enabled: true
-        openshift_cluster_monitoring_operator_prometheus_storage_capacity: 10Gi
+        openshift_cluster_monitoring_operator_prometheus_storage_capacity: {{ okd.storage.prometheus|default('10Gi') }}
         openshift_cluster_monitoring_operator_alertmanager_storage_enabled: true
-        openshift_cluster_monitoring_operator_alertmanager_storage_capacity: 2Gi
+        openshift_cluster_monitoring_operator_alertmanager_storage_capacity: {{ okd.storage.alertmanager|default('2Gi') }}
 {%- else %}
         openshift_cluster_monitoring_operator_install: false
         openshift_cluster_monitoring_operator_prometheus_storage_enabled: false
@@ -185,7 +185,7 @@ all:
         openshift_hosted_registry_storage_kind: openstack
         openshift_hosted_registry_storage_access_modes: ['ReadWriteOnce']
         openshift_hosted_registry_storage_openstack_filesystem: xfs
-        openshift_hosted_registry_storage_volume_size: 100Gi
+        openshift_hosted_registry_storage_volume_size: {{ okd.storage.registry|default('200Gi') }}
 
         # Node Groups
         # -----------

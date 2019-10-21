@@ -323,6 +323,21 @@ okd:
   post_okd:
   - play: acme-controller
 
+  # Storage volumes for OKD services.
+  # If undefined defaults
+  # (defined in the respective okd.inventories template files)
+  # will be used.
+  #
+  # We support storage definitions for: -
+  # - alertmanager
+  # - logging
+  # - metrics
+  # - prometheus
+  # - registry
+  storage:
+    metrics: 40Gi
+    registry: 200Gi
+
   # What additional OpenShift/OKD services should be enabled?
   # Add services to this list like metrics with something like:
   #

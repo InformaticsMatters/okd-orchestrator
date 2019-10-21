@@ -117,7 +117,7 @@ all:
         openshift_metrics_storage_nfs_directory: /exports
         openshift_metrics_storage_nfs_options: '*(rw,root_squash)'
         openshift_metrics_storage_volume_name: metrics
-        openshift_metrics_storage_volume_size: 40Gi
+        openshift_metrics_storage_volume_size: {{ okd.storage.metrics|default('10Gi') }}
 
         # Logging
         # -------
@@ -143,7 +143,7 @@ all:
         openshift_hosted_registry_storage_nfs_directory: /exports
         openshift_hosted_registry_storage_nfs_options: '*(rw,root_squash)'
         openshift_hosted_registry_storage_volume_name: registry
-        openshift_hosted_registry_storage_volume_size: 200Gi
+        openshift_hosted_registry_storage_volume_size: {{ okd.storage.registry|default('200Gi') }}
 
         # Node Groups
         # -----------

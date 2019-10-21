@@ -34,6 +34,9 @@ cluster:
     count: 1
     is_compute_node: no
 
+  nfs:
+    machine: infra1
+
   nodes:
   - count: 3
     node_group: compute

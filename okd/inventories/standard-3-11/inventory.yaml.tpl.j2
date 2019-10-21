@@ -22,6 +22,14 @@
 
 {# --- nfs ----------------------------------------------------------------- #}
 
+{% block nfs %}
+{% if cluster.nfs is defined and cluster.nfs.machine is defined %}
+        nfs:
+          hosts:
+            {{ '${' }}{{ cluster.nfs.machine }}{{ '}:' }}
+{% endif %}
+{% endblock %}
+
 {# --- nodes --------------------------------------------------------------- #}
 
 {% block nodes %}

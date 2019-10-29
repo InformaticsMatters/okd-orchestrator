@@ -129,6 +129,9 @@ all:
 
         # Service Brokers
         # ---------------
+        openshift_service_catalog_image_version: v3.11
+        openshift_enable_service_catalog: yes
+
 {% if okd.enable and 'tsb' in okd.enable %}
         template_service_broker_install: yes
 {%- else %}
@@ -142,9 +145,6 @@ all:
 {%- else %}
         ansible_service_broker_install: no
 {%- endif %}
-
-        # To avoid "Wait for API Server rollout success" lockup...
-        openshift_enable_service_catalog: no
 
         # Registry
         # --------

@@ -20,8 +20,8 @@ cluster:
   id: orn-jgu-311
 
   name_tag: orn
-  public_hostname: orn-master.informaticsmatters.com
-  default_subdomain: orn.informaticsmatters.com
+  public_hostname: okd.informaticsmatters.com
+  default_subdomain: okd.informaticsmatters.com
   api_port: 443
 
   master:
@@ -60,6 +60,8 @@ okd:
 
   enable:
   - metrics
+  - tsb
+  - asb
 
   certificates:
     generate_api_cert: yes

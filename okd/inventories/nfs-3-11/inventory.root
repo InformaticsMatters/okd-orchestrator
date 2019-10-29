@@ -129,8 +129,20 @@ all:
 
         # Service Brokers
         # ---------------
+{% if okd.enable and 'tsb' in okd.enable %}
+        template_service_broker_install: yes
+{%- else %}
         template_service_broker_install: no
+{%- endif %}:wq
+
+{% if okd.enable and 'asb' in okd.enable %}
+        ansible_service_broker_install: yes
+        ansible_service_broker_image_prefix: registry.access.redhat.com/openshift3/ose-
+        ansible_service_broker_registry_url: registry.access.redhat.com
+{%- else %}
         ansible_service_broker_install: no
+{%- endif %}
+
         # To avoid "Wait for API Server rollout success" lockup...
         openshift_enable_service_catalog: no
 

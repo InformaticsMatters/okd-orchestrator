@@ -133,7 +133,7 @@ all:
         template_service_broker_install: yes
 {%- else %}
         template_service_broker_install: no
-{%- endif %}:wq
+{%- endif %}
 
 {% if okd.enable and 'asb' in okd.enable %}
         ansible_service_broker_install: yes

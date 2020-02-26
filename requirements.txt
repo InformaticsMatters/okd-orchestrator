@@ -1,7 +1,7 @@
 # You'll need Python3 to work outside the container.
 # You'll also need suitable installations of Packer and Terraform.
 
-ansible == 2.7.13
+ansible == 2.7.16
 awscli == 1.16.198
 boto == 2.49.0
 boto3 == 1.9.188

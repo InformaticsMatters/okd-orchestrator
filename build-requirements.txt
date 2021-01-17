@@ -1,6 +1,7 @@
 # Stuff supporting built/test etc.
 # i.e. non-runtime stuff like document generation and unit test modules.
 
+docker-compose == 1.27.4
 flake8 == 3.7.8
 Sphinx == 2.2.0
 sphinx_rtd_theme == 0.4.3

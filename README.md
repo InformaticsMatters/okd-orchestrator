@@ -1,6 +1,6 @@
 # The OKD Orchestrator
 
-[![Build Status](https://travis-ci.org/InformaticsMatters/okd-orchestrator.svg?branch=master)](https://travis-ci.org/InformaticsMatters/okd-orchestrator)
+![build](https://github.com/InformaticsMatters/okd-orchestrator/workflows/build/badge.svg)
 
 A project sponsored by OpenRiskNet and hosted on [GitHub].
 

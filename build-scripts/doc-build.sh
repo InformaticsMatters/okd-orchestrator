@@ -2,3 +2,4 @@
 
 cd docs
 ./make-docs.sh
+cd ..

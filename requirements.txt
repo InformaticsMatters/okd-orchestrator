@@ -12,5 +12,5 @@ matildapeak-yacker == 2019.1
 munch == 2.3.2
 passlib == 1.7.1
 pyOpenSSL == 19.0.0
-pyyaml == 3.13
+pyyaml == 5.4
 requests == 2.22.0
